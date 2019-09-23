@@ -1,12 +1,14 @@
-package com.tool;
+package com.model;
 
 import java.io.File;
 
-public class ImageUtil extends Util implements ImageUtils{
+import com.models.Utils_Image;
+
+public class Util_Image extends Util implements Utils_Image{
 	private String path;
 
 	//	进行图像处理的接口内容;
-	public ImageUtil() {
+	public Util_Image() {
 		this.path=Util.PATH;
 	}
 	

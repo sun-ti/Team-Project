@@ -1,23 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>ExtractLoadV01</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
-  <servlet>
-		<servlet-name>QueryServlet</servlet-name>
-		<servlet-class>com.controller.QueryServlet</servlet-class>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>ExtractLoadV01</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<servlet>
+		<servlet-name>QueryServlet_Monitor</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Monitor</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>QueryServlet</servlet-name>
-		<url-pattern>/Query</url-pattern>
+		<servlet-name>QueryServlet_Monitor</servlet-name>
+		<url-pattern>/Monitor</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>QueryServlet_Permission</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Permission</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_Permission</servlet-name>
+		<url-pattern>/Permission</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>QueryServlet_Role</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Role</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_Role</servlet-name>
+		<url-pattern>/Role</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>QueryServlet_User</servlet-name>
+		<servlet-class>com.controller.QueryServlet_User</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_User</servlet-name>
+		<url-pattern>/User</url-pattern>
+	</servlet-mapping>
+
 	<filter>
 		<filter-name>WebFilter</filter-name>
 		<filter-class>com.controller.WebFilter</filter-class>
@@ -26,5 +60,5 @@
 		<filter-name>WebFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 </web-app>

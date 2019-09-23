@@ -1,4 +1,4 @@
-package com.tool;
+package com.model;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.models.Utils;
 
 /**
  * @author Lenovo
@@ -28,29 +30,15 @@ public class Util implements Utils{
 	public String TAG_1="%";
 	public String TAG_2="\\";
 	
+	//	计时的标签参数;
 	public String tag; 
 	private long t1;
 	private long t2;
-	
-	//	IP地址;
-	private String ip;
-	//	端口号;
-	private int    port;
-	//	项目名称;
-	private String project;
-	
-	
-	//	参数的内容;
-	private HttpServletRequest request;
-	
+
 	
 	//	构造函数的内容;
 	public Util() {
 		
-	}
-	public Util(HttpServletRequest request) {
-		this.request=request;
-		getHttpUrl();
 	}
 	
 	public String getTag() {
@@ -72,7 +60,7 @@ public class Util implements Utils{
 	}
 	
 	//	结束进行程序的相应的操作;
-	public void tagEndStartModule() {
+	public void tagEndModule() {
 		System.out.println("--------------------------------");
 		System.out.println("'"+this.tag+"'功能-结束运行!");
 		this.t2=System.currentTimeMillis();
@@ -122,27 +110,5 @@ public class Util implements Utils{
 		String currenttime 			= dateFormat.format(ltime); 
 		return currenttime;
 	}
-	//	进行IP地址内容的相应信息的配置;
-	@Override
-	public void getHttpUrl() {
-		//	服务器地址
-		this.ip		=	this.request.getServerName(); 
-		//	端口号
-        this.port	=	this.request.getServerPort(); 
-        //	项目名称
-        this.project= 	this.request.getContextPath();
-	}
-	
-	//	参数的调用;
-	public String getIp() {
-		return ip;
-	}
-	public int getPort() {
-		return port;
-	}
-	public String getProject() {
-		return project;
-	}
-	
 	
 }

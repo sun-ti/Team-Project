@@ -8,7 +8,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.model.Util_Net;
 
 public class WebFilter implements Filter{
 
@@ -24,17 +27,15 @@ public class WebFilter implements Filter{
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
-		HttpServletResponse resp=(HttpServletResponse) response;
-		resp.setHeader("Access-Control-Allow-Headers", "*");
-		//允许所有的方法访问  如post , get方法
-		resp.setHeader("Access-Control-Allow-Method", "GET,POST,PUT,DELETE");
-//		resp.setHeader("Access-Control-Allow-Method", "*");
-		//允许所有的域
-		resp.setHeader("Access-Control-Allow-Origin","*");
-		//放行
-		chain.doFilter(request, resp);
+		
+		HttpServletRequest  res 	= (HttpServletRequest) request;
+		HttpServletResponse resp	= (HttpServletResponse) response;
+		Util_Net			util_Net= new Util_Net(res,resp);
+		// 设置过滤内容;
+		util_Net.setWebFilter();
+		
+		// 添加过滤器;
+		chain.doFilter(res, resp);
 	}
 
 	@Override
