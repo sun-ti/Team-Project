@@ -1,0 +1,160 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+    <style>
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<div>
+    <div class="layui-row" style="width: 1000">
+        <div class="layui-col-md6">
+            <div class="layui-btn-group">
+                <button type="button" class="layui-btn layui-btn-primary" onclick="roleAdd()">增加</button>
+                <!--        TODO 用户编辑-->
+                <button type="button" class="layui-btn layui-btn-disabled">编辑</button>
+                <button type="button" class="layui-btn layui-btn-disabled" onclick="roleDelete()">删除</button>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            搜索角色：
+            <div class="layui-inline">
+                <input class="layui-input" name="id" id="searchValue" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
+        </div>
+    </div>
+
+
+    <table id="roleTable" lay-filter="table"></table>
+
+    <script type="text/html" id="roleTool">
+        <a class="layui-btn layui-btn-xs" lay-event="pCheck">权限管理</a>
+    </script>
+    <script src="../layui.js"></script>
+    <script th:inline="none">
+        layui.use(['table', 'layer'], function () {
+            var table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#roleTable'
+                , url: 'roleList' //数据接口
+                , page: true //开启分页
+                // , initSort: {
+                //     field: 'autoId'
+                //     , type: 'asc'
+                // }
+                , width: 1000
+                , limits: [10]
+                , cols: [[ //表头
+                    {type: 'checkbox'}
+                    , {type: 'numbers', title: '序号'}
+                    // , {field: 'autoId', title: '序号', sort: true}
+                    , {field: 'roleName', title: '角色名'}
+                    , {field: 'createTime', title: '创建时间', sort: true}
+                    , {fixed: 'right', width: 150, align: 'center', toolbar: '#roleTool'}
+                ]]
+            });
+
+            // 搜索时重载
+            var $ = layui.$, active = {
+                reload: function () {
+                    var searchValue = $('#searchValue');
+
+                    //执行重载
+                    table.reload('roleTable', {
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            roleName: searchValue.val()
+                        }
+                    }, 'data');
+                }
+            };
+            // 搜索按钮响应
+            $('#searchBtn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+                $('#searchValue').val("");
+            });
+
+            // 权限查看响应
+            table.on('tool(table)', function (obj) {
+                var data = obj.data;
+                var layEvent = obj.event;
+                var tr = obj.tr;
+                console.log(data);
+                if (layEvent === 'pCheck') {
+                    var layer = layui.layer;
+                    layer.open({
+                        type: 1
+                        , title: '权限设置'
+                        , shadeClose: true
+                        , offset: ['100px', '200px']
+                        , area: ['auto', '370px']
+                        // , btn: '提交修改'
+                        , content: '<div style="padding: 10px"><table id="pList" lay-filter="innerTable"></table></div>'
+                        , success: function (layero, index) {
+                            table = $.extend(table, {config: {checkName: 'isPermitted'}});
+                            table.render({
+                                elem: '#pList'
+                                , id: 'pList'
+                                , url: '/permission/permissionList'
+                                , page: true
+                                , limit: 5
+                                , width: 600
+                                , height: 280
+                                , where: {
+                                    roleUuid: data['roleUuid']
+                                    , toGetRolePermission: 'true'
+                                }
+                                , cols: [[
+                                    {type: 'checkbox'}
+                                    , {field: 'name', title: '权限名称'}
+                                    , {field: 'url', title: '入口地址'}
+                                    , {field: 'parentName', title: '上级权限'}
+                                    , {
+                                        field: 'type', title: '类型', templet: function (data) {
+                                            if (data.type == '2') {
+                                                return "<span>导航</span>";
+                                            } else if (data.type == '3') {
+                                                return "<span>菜单</span>";
+                                            }
+                                        }
+                                    }
+                                ]]
+                                , done: function (res, curr, count) {
+                                    // console.log(res);
+                                }
+                            });
+
+                            table.on('checkbox(innerTable)', function (obj) {
+                                // console.log(obj.checked); //当前是否选中状态
+                                // console.log(obj.data); //选中行的相关数据
+                                // console.log(obj.type); //如果触发的是全选，则为：all，如果触发的是单选，则为：one
+                                $.ajax({
+                                    type: "post"
+                                    , dataType: "json"
+                                    , url: "changeRolePermission"
+                                    , data: {
+                                        roleUuid: data['roleUuid']
+                                        , permissionUuid: obj.data['uuid']
+                                        , isAdd: obj.checked
+                                    }
+                                });
+                            })
+                        }
+                    })
+                }
+            })
+        });
+
+
+    </script>
+</div>
+</html>

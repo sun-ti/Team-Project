@@ -1,0 +1,58 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+</head>
+<div>
+    <form class="layui-form layui-form-pane" id="addForm" th:object="${user}" action="" method="post"
+          style="width: 500px; position: relative; left:25%;padding-top: 220px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户帐号</label>
+            <div class="layui-input-inline">
+                <input type="text" th:field="*{username}" lay-verify="required"
+                       placeholder="请输入用户名" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input type="password" th:field="*{password}" lay-verify="required"
+                       placeholder="请输入密码" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择用户角色</label>
+            <div class="layui-input-block">
+                <select th:field="*{roleUuid}" lay-verify="required">
+                    <option th:each="role:${roleList}" th:value="${role.uuid}">[[${role.roleName}]]</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addUser">确认</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script src="../layui.js"></script>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(addUser)', function (data) {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload(); // 刷新父页面
+            });
+        })
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+
+        });
+    </script>
+</div>
+</html>

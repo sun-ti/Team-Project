@@ -1,0 +1,112 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+    <style>
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<div>
+    <div class="layui-row" style="width: 1000">
+        <div class="layui-col-md6">
+            <div class="layui-btn-group">
+                <button type="button" class="layui-btn layui-btn-primary" onclick="permissionAdd()">增加</button>
+                <button type="button" class="layui-btn layui-btn-primary">编辑</button>
+                <button type="button" class="layui-btn layui-btn-primary">删除</button>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            搜索权限：
+            <div class="layui-inline">
+                <input class="layui-input" name="id" id="searchValue" autocomplete="off">
+            </div>
+            <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
+        </div>
+    </div>
+
+    <table id="permissionTable" lay-filter="table"></table>
+    <script src="../layui.js"></script>
+    <script th:inline="none">
+        layui.use('table', function () {
+            var table = layui.table;
+            //第一个实例
+            table.render({
+                elem: '#permissionTable'
+                , url: 'permissionList' //数据接口
+                , page: true //开启分页
+                , initSort: {
+                    field: 'autoId'
+                    , type: 'asc'
+                }
+                , width: 1000
+                // , height: 470
+                , limits: [10]
+                , cols: [[ //表头
+                    {type: 'checkbox'}
+                    , {field: 'autoId', title: '序号', sort: true}
+                    , {field: 'name', title: '权限名称'}
+                    , {field: 'url', title: '入口地址'}
+                    , {field: 'parentName', title: '上级权限'}
+                    , {
+                        field: 'type', title: '类型', templet: function (data) {
+                            if (data.type == '2') {
+                                return "<span>导航</span>";
+                            } else if (data.type == '3') {
+                                return "<span>菜单</span>";
+                            }
+                        }
+                    }
+                    // , {
+                    //     field: 'delFlag', title: '状态', templet: function (data) {
+                    //         if (data.delFlag == '0') {
+                    //             return "<span>正常</span>";
+                    //         } else {
+                    //             return "<span>已删除</span>"
+                    //         }
+                    //     }
+                    // }
+                    , {field: 'createTime', title: '创建时间', sort: true}
+                ]]
+            });
+
+            // 搜索时重载
+            var $ = layui.$, active = {
+                reload: function () {
+                    var searchValue = $('#searchValue');
+
+                    //执行重载
+                    table.reload('permissionTable', {
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            permissionName: searchValue.val()
+                        }
+                    }, 'data');
+                }
+            };
+
+            $('#searchBtn').on('click', function () {
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+        });
+
+        function permissionAdd() {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                layer.open({
+                    type: 2
+                    , title: '添加权限'
+                    , content: 'add'
+                    , area: ['100%', '100%']
+                });
+            });
+        }
+    </script>
+</div>
+</html>

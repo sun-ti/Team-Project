@@ -1,0 +1,62 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+</head>
+<div>
+    <form class="layui-form layui-form-pane" id="addForm" th:object="${permission}" action="" method="post"
+          style="width: 500px; position: relative; left:25%;padding-top: 220px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限名称</label>
+            <div class="layui-input-inline">
+                <input type="text" th:field="*{name}" lay-verify="required"
+                       placeholder="" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">入口地址</label>
+            <div class="layui-input-inline">
+                <input type="text" th:field="*{url}"
+                       placeholder="" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">上级权限</label>
+            <div class="layui-input-block">
+                <select th:field="*{parentUuid}" lay-verify="required">
+                    <option th:each="permission:${permissionList}" th:value="${permission.uuid}">[[${permission.name}]]</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权限类型</label>
+            <div class="layui-input-block">
+                <select th:field="*{type}" lay-verify="required">
+                    <option value="2">导航</option>
+                    <option value="3">菜单</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addPermission">确认</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script src="../layui.js"></script>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(addPermission)', function (data) {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload(); // 刷新父页面
+            });
+        });
+    </script>
+</div>
+</html >

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>天津石油加油站智能视频监控及预警分析云平台</title>
+    <link rel="stylesheet" href="./css/layui.css">
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">加油站智能云平台</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <!--        <ul class="layui-nav layui-layout-left">-->
+        <!--            <li class="layui-nav-item"><a href="">控制台</a></li>-->
+        <!--            <li class="layui-nav-item"><a href="">商品管理</a></li>-->
+        <!--            <li class="layui-nav-item"><a href="">用户</a></li>-->
+        <!--            <li class="layui-nav-item">-->
+        <!--                <a href="javascript:;">其它系统</a>-->
+        <!--                <dl class="layui-nav-child">-->
+        <!--                    <dd><a href="">邮件管理</a></dd>-->
+        <!--                    <dd><a href="">消息管理</a></dd>-->
+        <!--                    <dd><a href="">授权管理</a></dd>-->
+        <!--                </dl>-->
+        <!--            </li>-->
+        <!--        </ul>-->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+                <a href="javascript:;">
+                    [[${session.username}]]
+                </a>
+                <dl class="layui-nav-child">
+                    <dd><a href="">基本资料</a></dd>
+                    <dd><a href="">安全设置</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item"><a href="logout">退出</a></li>
+        </ul>
+    </div>
+
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item" th:each="menu:${menuList}" th:if="${#strings.isEmpty(menu.parentUuid)}">
+                    <a href="javascript:;" lay-href="test1" th:id="${menu.uuid}"
+                       th:type="${menu.type}">[[${menu.name}]]</a>
+                    <dl class="layui-nav-child">
+                        <dd th:each="childMenu:${menuList}" th:if="${childMenu.parentUuid} eq ${menu.uuid}"><a
+                                th:lay-href="${childMenu.url}" href="javascript:;" th:id="${childMenu.uuid}"
+                                th:type="${childMenu.type}" style="padding-left: 30px">[[${childMenu.name}]]</a>
+                            <ol class="layui-nav-child layui-bg-blue" th:if="${childMenu.type} eq 2">
+                                <li th:each="thirdMenu:${menuList}"
+                                    th:if="${thirdMenu.parentUuid} eq ${childMenu.uuid}">
+                                    <a href="javascript:;" th:lay-href="${thirdMenu.url}" th:id="${thirdMenu.uuid}"
+                                       th:type="${thirdMenu.type}" style="padding-left: 40px">[[${thirdMenu.name}]]</a>
+                                </li>
+                            </ol>
+                        </dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="layui-tab" lay-allowClose="true" lay-filter="demo">
+            <ul class="layui-tab-title">
+                <li class="layui-this" lay-id="111">欢迎页</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">欢迎来到天津石油加油站智能视频监控及预警分析云平台</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <!-- 底部固定区域 -->
+        ©
+    </div>
+</div>
+<script src="./layui.js"></script>
+<script th:inline="javascript">
+    //JavaScript代码区域
+    var a = "" +/*[[@{/index}]]*/;
+    layui.use(['jquery', 'element'], function () {
+        var $ = layui.jquery;
+        var element = layui.element;
+        element.on('nav(test)', function (data) {
+            var exist = $(".layui-tab-title li[lay-id='" + data[0].id + "']").length; //判断是否存在tab
+            if ($(this).attr("type") == "3" && exist == 0) {
+                var content = '<iframe style="height: 90%;width: 100%;position: absolute" src="' +
+                    $(this).attr("lay-href") +
+                    '" scrolling="no" frameborder="0"></iframe>';
+
+                element.tabAdd('demo', {
+                    title: data[0].text
+                    , content: content
+                    , id: data[0].id
+                });
+                FrameWH();
+                $(".layui-tab").css("top", "100px");
+
+                function FrameWH() {
+                    var h = $(window).height() - 100;
+                    $("iframe").css("height", h + "px");
+                }
+
+                $("window").resize(function () {
+                    FrameWH();
+                });
+            }
+
+            element.tabChange('demo', data[0].id);
+        });
+    });
+</script>
+</body>
+</html>

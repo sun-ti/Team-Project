@@ -1,0 +1,137 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+    <style>
+        .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+</head>
+<div>
+
+    <div class="layui-inline">
+        <input type="text" class="layui-input" id="searchTimeRange" placeholder="请选择搜索时间范围">
+    </div>
+    <button type="button" class="layui-btn">搜索</button>
+
+    <table id="table" lay-filter="table"></table>
+
+    <script type="text/html" id="monitorinfoTool">
+        <a class="layui-btn layui-btn-xs" lay-event="image1View">查看照片1</a>
+        <a class="layui-btn layui-btn-xs" lay-event="image2View">查看照片2</a>
+        <a class="layui-btn layui-btn-xs" lay-event="msgView">查看信息</a>
+    </script>
+    <script src="../layui.js"></script>
+    <script th:inline="none">
+        layui.use(['table', 'layer', 'laydate', 'carousel'], function () {
+            var carousel = layui.carousel;
+            var table = layui.table;
+            var laydate = layui.laydate;
+            //第一个实例
+            table.render({
+                elem: '#table'
+                , url: 'humanFlowList' // 数据接口
+                , page: true // 开启分页
+                , width: 1000
+                , limits: [10]
+                , cols: [[ //表头
+                    {type: 'numbers', title: '序号'}
+                    , {
+                        field: 'createTime', title: '记录时间', sort: true, templet: function (data) {
+                            return layui.util.toDateString(data.createTime);
+                        }
+                    }
+                    , {field: 'stationId', title: '站点名称'}
+                    , {field: 'deviceIp', title: '设备 IP 地址'}
+                    , {fixed: 'right', minWidth: 280, align: 'center', toolbar: '#monitorinfoTool'}
+                ]]
+            });
+
+
+            laydate.render({
+                elem: '#searchTimeRange'
+                , range: true
+                , done: function (value, date, endDate) {
+                    if (value != null) {
+                        table.reload('table', {
+                            page: {curr: 1}
+                            , where: {
+                                startDate: value
+                                , endDate: endDate
+                            }
+                        });
+                    }
+                }
+            });
+
+            // // 搜索时重载
+            // var $ = layui.$, active = {
+            //     reload: function () {
+            //         var searchValue = $('#searchValue');
+            //
+            //         //执行重载
+            //         table.reload('roleTable', {
+            //             page: {
+            //                 curr: 1 //重新从第 1 页开始
+            //             }
+            //             , where: {
+            //                 roleName: searchValue.val()
+            //             }
+            //         }, 'data');
+            //     }
+            // };
+            // // 搜索按钮响应
+            // $('#searchBtn').on('click', function () {
+            //     var type = $(this).data('type');
+            //     active[type] ? active[type].call(this) : '';
+            //     $('#searchValue').val("");
+            // });
+
+            table.on('tool(table)', function (obj) {
+                var data = obj.data;
+                var layEvent = obj.event;
+                var tr = obj.tr;
+
+                var layer = layui.layer;
+
+                var image1 = '<img style="padding: 10px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569064690973&di=c9a6859109dabfff239d63e828e0c797&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F66%2F66%2F31300542599495140677667021668_140.jpg"/>';
+                var image2 = '<img style="padding: 10px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569131418310&di=1f2f27b1fce9a0633bce181e570e755d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F14%2F20150914203139_xdXjB.jpeg"/>';
+
+                var content = '<div class="layui-carousel" id="imageView"><div carousel-item>' +
+                    '<div>' + image1 + '</div>' +
+                    '<div>' + image2 + '</div>' +
+                    '</div></div>';
+                if (layEvent === 'image1View') {
+                } else if (layEvent === 'image2View') {
+                } else if (layEvent === 'msgView') {
+                    content = '<div style="padding: 10px"><p>' + obj.data['infoData'] + '</p></div>'
+                }
+                layer.open({
+                    type: 1
+                    , offset: ['20px', '200px']
+                    , shadeClose: true
+                    , title: false
+                    , content: content
+                    , success: function (layero, index) {
+                        // layer.style(index, {
+                        //     background: 'transparent'
+                        // });
+                        carousel.render({
+                            elem: '#imageView'
+                            // , width: '400px'
+                            // , height: '400px'
+                            , arrow: 'always'
+                            , autoplay: false
+                        });
+                    }
+                });
+            })
+        });
+
+
+    </script>
+</div>
+</html>
