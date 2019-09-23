@@ -15,7 +15,7 @@
     <div class="layui-inline">
         <input type="text" class="layui-input" id="searchTimeRange" placeholder="请选择搜索时间范围">
     </div>
-    <button type="button" class="layui-btn">搜索</button>
+
 
     <table id="table" lay-filter="table"></table>
 
@@ -34,7 +34,7 @@
 
             table.render({
                 elem: '#table'
-                , url: 'http://192.168.3.120:8080/ExtractLoadV01/Query' // 数据接口
+                , url: 'carPlateList' // 数据接口
                 , page: true // 开启分页
                 , width: 1000
                 , limits: [10]
@@ -49,57 +49,29 @@
                     , {field: 'deviceip', title: '设备 IP 地址'}
                     , {fixed: 'right', minWidth: 280, align: 'center', toolbar: '#monitorinfoTool'}
                 ]]
-                , where: {
-                    lcommand: 12368
-                }
                 , response: {
                     statusCode: 200
                 }
             });
 
-
+            // 时间选择组件
             laydate.render({
                 elem: '#searchTimeRange'
                 , range: true
-                // , btns: ['clear', 'now', 'confirm']
                 , max: 0
                 , done: function (value, date, endDate) {
-                    console.log(date.year + "-" + date.month + "-" + date.date + " " + date.hours + ":" + date.minutes + ":" + date.seconds);
                     console.log(value);
                     if (value != null) {
                         table.reload('table', {
                             page: {curr: 1}
                             , where: {
-                                startDate: value
-                                , endDate: endDate
+                                dateRange: value
                             }
                         });
                     }
                 }
             });
 
-            // // 搜索时重载
-            // var $ = layui.$, active = {
-            //     reload: function () {
-            //         var searchValue = $('#searchValue');
-            //
-            //         //执行重载
-            //         table.reload('roleTable', {
-            //             page: {
-            //                 curr: 1 //重新从第 1 页开始
-            //             }
-            //             , where: {
-            //                 roleName: searchValue.val()
-            //             }
-            //         }, 'data');
-            //     }
-            // };
-            // // 搜索按钮响应
-            // $('#searchBtn').on('click', function () {
-            //     var type = $(this).data('type');
-            //     active[type] ? active[type].call(this) : '';
-            //     $('#searchValue').val("");
-            // });
 
             table.on('tool(table)', function (obj) {
                 var data = obj.data;

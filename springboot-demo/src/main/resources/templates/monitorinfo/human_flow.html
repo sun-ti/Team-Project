@@ -26,11 +26,12 @@
     </script>
     <script src="../layui.js"></script>
     <script th:inline="none">
-        layui.use(['table', 'layer', 'laydate', 'carousel'], function () {
+        layui.use(['table', 'layer', 'laydate', 'carousel', 'util'], function () {
             var carousel = layui.carousel;
             var table = layui.table;
             var laydate = layui.laydate;
-            //第一个实例
+            var util = layui.util;
+
             table.render({
                 elem: '#table'
                 , url: 'humanFlowList' // 数据接口
@@ -40,21 +41,28 @@
                 , cols: [[ //表头
                     {type: 'numbers', title: '序号'}
                     , {
-                        field: 'createTime', title: '记录时间', sort: true, templet: function (data) {
-                            return layui.util.toDateString(data.createTime);
+                        field: 'datetime', title: '记录时间', sort: true, templet: function (data) {
+                            return layui.util.toDateString(data.datetime);
                         }
                     }
-                    , {field: 'stationId', title: '站点名称'}
-                    , {field: 'deviceIp', title: '设备 IP 地址'}
+                    , {field: 'stationid', title: '站点名称'}
+                    , {field: 'deviceip', title: '设备 IP 地址'}
                     , {fixed: 'right', minWidth: 280, align: 'center', toolbar: '#monitorinfoTool'}
                 ]]
+                , response: {
+                    statusCode: 200
+                }
             });
 
 
             laydate.render({
                 elem: '#searchTimeRange'
                 , range: true
+                // , btns: ['clear', 'now', 'confirm']
+                , max: 0
                 , done: function (value, date, endDate) {
+                    console.log(date.year + "-" + date.month + "-" + date.date + " " + date.hours + ":" + date.minutes + ":" + date.seconds);
+                    console.log(value);
                     if (value != null) {
                         table.reload('table', {
                             page: {curr: 1}
@@ -94,37 +102,43 @@
                 var data = obj.data;
                 var layEvent = obj.event;
                 var tr = obj.tr;
-
                 var layer = layui.layer;
 
-                var image1 = '<img style="padding: 10px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569064690973&di=c9a6859109dabfff239d63e828e0c797&imgtype=0&src=http%3A%2F%2Fa2.att.hudong.com%2F66%2F66%2F31300542599495140677667021668_140.jpg"/>';
-                var image2 = '<img style="padding: 10px" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1569131418310&di=1f2f27b1fce9a0633bce181e570e755d&imgtype=0&src=http%3A%2F%2Fb-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F14%2F20150914203139_xdXjB.jpeg"/>';
+                var image1HTML = '<img style="height:280px;width:600px" src="' + data['pic1'] + '"/>';
+                var image2HTML = '<img style="height:280px;width:600px" src="' + data['pic2'] + '"/>';
 
-                var content = '<div class="layui-carousel" id="imageView"><div carousel-item>' +
-                    '<div>' + image1 + '</div>' +
-                    '<div>' + image2 + '</div>' +
+                var content = '<div class="layui-carousel" id="imageView" style="background: transparent"><div carousel-item>' +
+                    '<div style="background: transparent">' + image1HTML + '</div>' +
+                    '<div style="background: transparent">' + image2HTML + '</div>' +
                     '</div></div>';
+
+                var initImgIndex; // 默认图片
                 if (layEvent === 'image1View') {
+                    initImgIndex = 0;
                 } else if (layEvent === 'image2View') {
+                    initImgIndex = 1;
                 } else if (layEvent === 'msgView') {
-                    content = '<div style="padding: 10px"><p>' + obj.data['infoData'] + '</p></div>'
+                    content = '<div style="padding: 10px"><p>' + obj.data['errMsg'] + '</p></div>'
                 }
                 layer.open({
                     type: 1
-                    , offset: ['20px', '200px']
+                    , offset: ['100px', '200px']
+                    // , shade: 0
                     , shadeClose: true
                     , title: false
                     , content: content
+                    , index: initImgIndex
                     , success: function (layero, index) {
-                        // layer.style(index, {
-                        //     background: 'transparent'
-                        // });
+                        layer.style(index, {
+                            background: 'transparent'
+                        });
                         carousel.render({
                             elem: '#imageView'
                             // , width: '400px'
                             // , height: '400px'
                             , arrow: 'always'
                             , autoplay: false
+                            // , indicator: 'outside'
                         });
                     }
                 });

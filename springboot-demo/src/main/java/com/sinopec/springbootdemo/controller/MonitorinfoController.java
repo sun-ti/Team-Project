@@ -3,6 +3,7 @@ package com.sinopec.springbootdemo.controller;
 import com.sinopec.springbootdemo.entity.Monitorinfo;
 import com.sinopec.springbootdemo.myUtil.LayuiTableResultUtil;
 import com.sinopec.springbootdemo.myUtil.RequiredUtil;
+import com.sinopec.springbootdemo.service.HttpService;
 import com.sinopec.springbootdemo.service.MonitorinfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -23,6 +24,11 @@ public class MonitorinfoController {
     @Autowired
     private MonitorinfoService monitorinfoService;
 
+    @Autowired
+    private HttpService httpService;
+
+    private String monitorinfoType;
+
     @RequestMapping("/human_face")
     public String humanFace() {
         return "monitorinfo/human_face";
@@ -30,27 +36,10 @@ public class MonitorinfoController {
 
     @ResponseBody
     @RequestMapping("/humanFaceList")
-    public LayuiTableResultUtil<List> getHumanFaceList(HttpServletRequest request) throws IOException {
-        RequiredUtil requiredUtil = new RequiredUtil();
-        if (!requiredUtil.Required(request.getParameter("limit").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
-        if (!requiredUtil.Required(request.getParameter("page").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
+    public String getHumanFaceList(HttpServletRequest request) throws IOException {
 
-        int limit = Integer.parseInt(request.getParameter("limit").trim());
-        int page = Integer.parseInt(request.getParameter("page").trim());
-
-        if (request.getParameter("startDate") != null) {
-            System.out.println("yes");
-        }
-        List<Monitorinfo> monitorinfoList = monitorinfoService.getAllHumanFaceInfoPage(limit, page);
-        int infoCount = monitorinfoService.getHumanFaceInfoCount();
-
-        LayuiTableResultUtil<List> list = new LayuiTableResultUtil<>("", monitorinfoList, 0, infoCount);
-
-        return list;
+        monitorinfoType="4370";
+        return getInfo(request);
     }
 
     @RequestMapping("/car_plate")
@@ -60,64 +49,40 @@ public class MonitorinfoController {
 
     @ResponseBody
     @RequestMapping("/carPlateList")
-    public LayuiTableResultUtil<List> getCarPlateList(HttpServletRequest request) throws IOException {
-        RequiredUtil requiredUtil = new RequiredUtil();
-        if (!requiredUtil.Required(request.getParameter("limit").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
-        if (!requiredUtil.Required(request.getParameter("page").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
+    public String getCarPlateList(HttpServletRequest request) throws IOException {
 
-        String url = "http://192.168.3.120:8080/ExtractLoadV01/Query";
-        HttpMethod method = HttpMethod.GET;
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-
-        int limit = Integer.parseInt(request.getParameter("limit").trim());
-        int page = Integer.parseInt(request.getParameter("page").trim());
-
-        params.add("limit", request.getParameter("limit").trim());
-        params.add("page", request.getParameter("page").trim());
-
-        if (request.getParameter("startDate") != null) {
-            System.out.println("yes");
-        }
-
-        List<Monitorinfo> monitorinfoList = monitorinfoService.getAllCarPlateInfoPage(limit, page);
-        int infoCount = monitorinfoService.getCarPlateInfoCount();
-
-        LayuiTableResultUtil<List> list = new LayuiTableResultUtil<>("", monitorinfoList, 0, infoCount);
-
-        return list;
+        monitorinfoType="12368";
+        return getInfo(request);
     }
 
-    @RequestMapping("/humanFlow")
+    @RequestMapping("/human_flow")
     public String humanFlow() {
         return "monitorinfo/human_flow";
     }
 
     @ResponseBody
     @RequestMapping("/humanFlowList")
-    public LayuiTableResultUtil<List> getHumanFlow(HttpServletRequest request) throws IOException {
-        RequiredUtil requiredUtil = new RequiredUtil();
-        if (!requiredUtil.Required(request.getParameter("limit").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
+    public String getHumanFlow(HttpServletRequest request) throws IOException {
+
+        monitorinfoType="4355";
+        return getInfo(request);
+    }
+
+    public String getInfo(HttpServletRequest request){
+
+        String url = "http://192.168.3.120:8080/ExtractLoadV01/Query";
+
+        HttpMethod method = HttpMethod.GET;
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
+        params.add("limit", request.getParameter("limit").trim());
+        params.add("page", request.getParameter("page").trim());
+        params.add("lcommand", monitorinfoType);
+
+        if (request.getParameter("dateRange") != null) {
+            params.add("dateRange",request.getParameter("dateRange"));
         }
-        if (!requiredUtil.Required(request.getParameter("page").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
 
-        int limit = Integer.parseInt(request.getParameter("limit").trim());
-        int page = Integer.parseInt(request.getParameter("page").trim());
-
-        if (request.getParameter("startDate") != null) {
-            System.out.println("yes");
-        }
-        List<Monitorinfo> monitorinfoList = monitorinfoService.getAllHumanFlowInfoPage(limit, page);
-        int infoCount = monitorinfoService.getHumanFlowInfoCount();
-
-        LayuiTableResultUtil<List> list = new LayuiTableResultUtil<>("", monitorinfoList, 0, infoCount);
-
-        return list;
+        return httpService.client(url,method,params);
     }
 }

@@ -37,13 +37,7 @@ public class PermissionController {
     @ResponseBody
     @RequestMapping("/permissionList")
     public LayuiTableResultUtil<List> getPermissionList(HttpServletRequest request) throws IOException {
-        RequiredUtil requiredUtil = new RequiredUtil();
-        if (!requiredUtil.Required(request.getParameter("limit").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
-        if (!requiredUtil.Required(request.getParameter("page").trim())) {
-            return new LayuiTableResultUtil<List>("分页异常", null, 1, 10);
-        }
+
 
         int limit = Integer.parseInt(request.getParameter("limit").trim());
         int page = Integer.parseInt(request.getParameter("page").trim());
