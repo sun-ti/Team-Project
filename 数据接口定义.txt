@@ -1,0 +1,74 @@
+/////////////////////
+//	设备管理>>
+//	新增
+http://localhost:8080/ExtractLoadV01/Device?oper=0&stationid=[must]&name=[must]
+
+//	删除
+http://localhost:8080/ExtractLoadV01/Device?oper=1&uuid=[must]
+
+//	修改
+http://localhost:8080/ExtractLoadV01/Device?oper=2&uuid=[must]&(stationid,name选填，或者都填)
+
+//	查询;
+http://localhost:8080/ExtractLoadV01/Device?oper=3&(autoid,uuid,stationid,name,state,limit,page选填,根据自身需要或者都不填默认为全部查询)
+
+/////////////////////
+//	检测>>
+//	
+
+/////////////////////
+//	权限管理>>
+//	新增
+http://localhost:8080/ExtractLoadV01/Permission?oper=0&name=[must]&url=[must]&type =[must]&parentuuid = [must]
+
+//	删除
+http://localhost:8080/ExtractLoadV01/Permission?oper=1&uuid=[must]
+
+//	修改
+http://localhost:8080/ExtractLoadV01/Permission?oper=2&uuid=[must]&(name,url,type,parentuuid,del选填，或者都填)
+
+//	查询;
+http://localhost:8080/ExtractLoadV01/Permission?oper=3&(autoid,name,url,createtime,uuid,type,parentuuid,del,page,limit选填,根据自身需要或者都不填默认为全部查询);
+
+/////////////////////
+//	角色管理>>
+//	新增
+http://localhost:8080/ExtractLoadV01/Role?oper=0&name=[must]
+
+//	删除
+http://localhost:8080/ExtractLoadV01/Role?oper=1&uuid=[must]
+
+//	修改
+http://localhost:8080/ExtractLoadV01/Role?oper=2&uuid=[must]&name=[must]
+
+//	查询;
+http://localhost:8080/ExtractLoadV01/Role?oper=3&(autoid,name,uuid,del,createtime,page,limit选填,根据自身需要或者都不填默认为全部查询)
+
+/////////////////////
+//	站点管理>>
+//	新增
+http://localhost:8080/ExtractLoadV01/Station?oper=0&stationid=[must]&name=[must]
+
+//	删除
+http://localhost:8080/ExtractLoadV01/Station?oper=1&uuid=[must]
+
+//	修改
+http://localhost:8080/ExtractLoadV01/Station?oper=2&uuid=[must]&(uuid,stationid,name选填，或者都填)
+
+//	查询;
+http://localhost:8080/ExtractLoadV01/Station?oper=3&(autoid,uuid,stationid,name,state,page,limit选填,根据自身需要或者都不填默认为全部查询)
+
+/////////////////////
+//	用户管理>>
+//	新增
+http://localhost:8080/ExtractLoadV01/User?oper=0&username =[must]&password=[must]
+
+//	删除
+http://localhost:8080/ExtractLoadV01/User?oper=1&uuid=[must]
+
+//	修改
+http://localhost:8080/ExtractLoadV01/User?oper=2&uuid=[must]&(username,password选填，或者都填);
+
+//	查询;
+http://localhost:8080/ExtractLoadV01/User?oper=3&(autoid,username,password,createtime,refreshtime,refreshmark,del,uuid,page,limit选填,根据自身需要或者都不填默认为全部查询);
+/////////////////////
