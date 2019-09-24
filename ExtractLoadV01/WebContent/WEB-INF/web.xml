@@ -12,6 +12,7 @@
 		<welcome-file>default.htm</welcome-file>
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
+	<!-- 检测接口 -->
 	<servlet>
 		<servlet-name>QueryServlet_Monitor</servlet-name>
 		<servlet-class>com.controller.QueryServlet_Monitor</servlet-class>
@@ -22,6 +23,7 @@
 		<url-pattern>/Monitor</url-pattern>
 	</servlet-mapping>
 	
+	<!-- 权限接口 -->
 	<servlet>
 		<servlet-name>QueryServlet_Permission</servlet-name>
 		<servlet-class>com.controller.QueryServlet_Permission</servlet-class>
@@ -32,6 +34,7 @@
 		<url-pattern>/Permission</url-pattern>
 	</servlet-mapping>
 	
+	<!-- 角色接口 -->
 	<servlet>
 		<servlet-name>QueryServlet_Role</servlet-name>
 		<servlet-class>com.controller.QueryServlet_Role</servlet-class>
@@ -42,6 +45,7 @@
 		<url-pattern>/Role</url-pattern>
 	</servlet-mapping>
 	
+	<!-- 用户接口 -->
 	<servlet>
 		<servlet-name>QueryServlet_User</servlet-name>
 		<servlet-class>com.controller.QueryServlet_User</servlet-class>
@@ -51,6 +55,30 @@
 		<servlet-name>QueryServlet_User</servlet-name>
 		<url-pattern>/User</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 站点接口 -->
+	<servlet>
+		<servlet-name>QueryServlet_Station</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Station</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_Station</servlet-name>
+		<url-pattern>/Station</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 设备接口 -->
+	<servlet>
+		<servlet-name>QueryServlet_Device</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Device</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_Device</servlet-name>
+		<url-pattern>/Device</url-pattern>
+	</servlet-mapping>
+
+
 
 	<filter>
 		<filter-name>WebFilter</filter-name>

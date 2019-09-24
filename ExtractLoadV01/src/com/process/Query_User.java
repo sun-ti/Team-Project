@@ -135,7 +135,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 				set+=" "+item+",";
 			}
 			
-			set="set"+set+" USER_REFRESH_TIME='"+getCurrentDatetime(System.currentTimeMillis())+"',USER_REFRESH_MARK=1";
+			set="set"+set+" USER_REFRESH_TIME='"+getCurrentDatetime(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss")+"',USER_REFRESH_MARK=1";
 			
 			sql	= "update user "+set+" where USER_UUID='"+uuid+"'";
 		
@@ -148,7 +148,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 	public String add() {
 		String username = null, password = null,sql="";
 		String uuid	    = getUUID();
-		String time		= getCurrentDatetime(System.currentTimeMillis());
+		String time		= getCurrentDatetime(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
 		
 		try {
 			username = util_Net.getRequest().getParameter("username");
@@ -157,8 +157,8 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		sql="insert into user values('"+username+"','"+password+"','"+time+"','"+time+"',0,0,'"+uuid+"')";
+				
+		sql="insert into user (USER_AutoID,USERNAME,PASSWORD,USER_CREATE_TIME,USER_REFRESH_TIME,USER_REFRESH_MARK,USER_DEL,USER_UUID) values('"+username+"','"+password+"','"+time+"','"+time+"',0,0,'"+uuid+"')";
 				
 		return util_Net.sendResult("200", "OK", update(sql), "null");
 	}

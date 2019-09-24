@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.model.Util_Net;
-import com.process.Query_User;
+import com.process.Query_Permission;
 
 /**
  * Servlet implementation class QueryServlet_User
  */
-@WebServlet("/QueryServlet_User")
+@WebServlet("/QueryServlet_Permission")
 public class QueryServlet_Permission extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -30,14 +30,14 @@ public class QueryServlet_Permission extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			//	开头设置;
-			Util_Net 	util_Net   = new Util_Net(request,response);
+			Util_Net 		  util_Net = new Util_Net(request,response);
 			
 			//	设置网络的返回值的相应内容;
 			util_Net.setHttpServletParameter();
-			String 		result	   = "";
-			int 		oper	   = Integer.parseInt(request.getParameter("oper"));
+			String 		      result   = "";
+			int 			  oper	   = Integer.parseInt(request.getParameter("oper"));
 			
-			Query_User  query 	   = new Query_User(util_Net);
+			Query_Permission  query    = new Query_Permission(util_Net);
 			
 			switch (oper) {
 			//	增加

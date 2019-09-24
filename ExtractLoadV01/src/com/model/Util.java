@@ -1,6 +1,7 @@
 package com.model;
 
 import java.io.File;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
 
@@ -75,11 +76,24 @@ public class Util implements Utils{
 	}
 	//	获得相应的时间内容;
 	@Override
-	public String getCurrentDatetime(long ltime) {
-//		long   ltime	   			= System.currentTimeMillis();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
+	public String getCurrentDatetime(long ltime,String format) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);//可以方便地修改日期格式
 		String currenttime 			= dateFormat.format(ltime); 
 		return currenttime;
 	}
 	
+	//	将时间转换为长整型数;
+	@Override
+	public long transDateStr2Long(String date, String format) {
+		long 		result	 = 0;
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		//	结果信息内容;
+		try {
+			result			 = sdf.parse(date).getTime();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 }

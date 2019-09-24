@@ -16,7 +16,7 @@ import com.process.Query_Role;
 /**
  * Servlet implementation class QueryServlet
  */
-@WebServlet("/QueryServlet")
+@WebServlet("/QueryServlet_Role")
 public class QueryServlet_Role extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

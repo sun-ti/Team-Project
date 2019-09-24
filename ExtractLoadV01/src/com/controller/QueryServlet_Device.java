@@ -9,21 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.model.Util_Net;
-import com.process.Query_Station;
+import com.process.Query_Device;
 
 //import net.sf.json.JSONArray;
 
 /**
  * Servlet implementation class QueryServlet
  */
-@WebServlet("/QueryServlet_Station")
-public class QueryServlet_Station extends HttpServlet {
+@WebServlet("/QueryServlet_Device")
+public class QueryServlet_Device extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public QueryServlet_Station() {
+    public QueryServlet_Device() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,7 +41,7 @@ public class QueryServlet_Station extends HttpServlet {
 				String 		   result  = "";
 				int 		   oper	   = Integer.parseInt(request.getParameter("oper"));
 				
-				Query_Station  query   = new Query_Station(util_Net);
+				Query_Device   query   = new Query_Device(util_Net);
 				
 				switch (oper) {
 				//	增加

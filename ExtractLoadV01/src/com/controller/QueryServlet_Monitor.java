@@ -16,7 +16,7 @@ import com.model.Util_Net;
 /**
  * Servlet implementation class QueryServlet
  */
-@WebServlet("/QueryServlet")
+@WebServlet("/QueryServlet_Monitor")
 public class QueryServlet_Monitor extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -33,30 +33,40 @@ public class QueryServlet_Monitor extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		Util_Net 	util_Net   = new Util_Net(request,response);
+		Util_Net 	  util_Net  = new Util_Net(request,response);
+		
 		//	设置网络的返回值的相应内容;
 		util_Net.setHttpServletParameter();
+		String 		  result	= "操作失败";
+		//	获得结果的标签;
+		int 		  oper	    = Integer.parseInt(request.getParameter("oper"));
+		Query_Monitor query		= new Query_Monitor(util_Net);
 		
-		//	进行相应的数据类型;
-		String      lcommand   = null, stationid  = null, deviceip = null,result   = "操作失败", limitcount = null,	currentpage= null;
+		switch (oper) {
 		
-		try {
-			lcommand	 = request.getParameter("lcommand");	
-			deviceip 	 = request.getParameter("deviceip");
-			stationid 	 = request.getParameter("stationid");
+		//	进行所有信息的查询;
+		case 0:
+			result			 = query.query();	
+			break;
 			
-			limitcount	 = request.getParameter("limit");
-			currentpage	 = request.getParameter("page");
-
-			System.out.println("操作正常");
-
-		} catch (Exception e) {
-			System.out.println("异常处理");
-
-		}
+		//	车牌识别-统计;
+		case 1:
+			
+			break;
 		
-		Query_Monitor query_Monitor= new Query_Monitor(util_Net);
-		result					   = query_Monitor.query(lcommand, stationid, deviceip, currentpage, limitcount);
+		//	车流识别-统计;
+		case 2:
+			
+			break;
+			
+		//	人脸识别-统计;
+		case 4:
+			
+			break;
+			
+		default:
+			break;
+		}
 		
 		//	返回相应的数据内容;
         response.getWriter().write(result);

@@ -24,11 +24,30 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		
 	}
 
-	public String query(String lcommand,String stationid,String deviceip,String currentpage,String limitcount) {
+	public String query() {
+		
+		//	进行相应的数据类型;
+		String      lcommand   = null, stationid  = null, deviceip = null,limitcount = null,	currentpage= null;
 		String 		sqlall	   = "";
 		String 		sql	  	   = "";
 		int 		first	   = 1,nlimitcount=10;
 		ArrayList<String> list=new ArrayList<String>();
+		
+		try {
+			lcommand	 = util_Net.getRequest().getParameter("lcommand");	
+			deviceip 	 = util_Net.getRequest().getParameter("deviceip");
+			stationid 	 = util_Net.getRequest().getParameter("stationid");
+			
+			limitcount	 = util_Net.getRequest().getParameter("limit");
+			currentpage	 = util_Net.getRequest().getParameter("page");
+
+			System.out.println("操作正常");
+
+		} catch (Exception e) {
+			System.out.println("异常处理");
+
+		}
+		
 		
 		//	lcommand判断是否存在;
 		if(lcommand!=null&&!lcommand.trim().equals("")) {

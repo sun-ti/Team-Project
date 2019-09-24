@@ -13,7 +13,9 @@ public interface Utils {
 	//	获得UUID的方法;
 	abstract String getUUID();
 	//	获得当前的时间;
-	abstract String getCurrentDatetime(long ltime);
-//	//	进行项目的设置;
+	abstract String getCurrentDatetime(long ltime,String format);
+	//	进行项目的设置;
+	abstract long transDateStr2Long(String date,String format);
+	
 //	abstract void getHttpUrl();
 }

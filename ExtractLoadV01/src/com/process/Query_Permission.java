@@ -169,7 +169,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		
 		String name	=null,url=null,type=null,parentuuid=null,sql="";
 		String uuid	= getUUID();
-		String time = getCurrentDatetime(System.currentTimeMillis());
+		String time = getCurrentDatetime(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
 		try {
 			
 			
@@ -183,7 +183,8 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		} catch (Exception e) {
 
 		}
-		sql="insert into permission values('"+name+"','"+url+"','"+time+"','"+uuid+"',"+type+",'"+parentuuid+"',0)";
+				
+		sql="insert into permission (PERMISSION_AutoID,PERMISSION_NAME,PERMISSION_URL,PERMISSION_CREATE_TIME,PERMISSION_UUID,PERMISSION_TYPE,PERMISSION_PARENT_UUID,PERMISSION_DEL) values('"+name+"','"+url+"','"+time+"','"+uuid+"',"+type+",'"+parentuuid+"',0)";
 		
 		return util_Net.sendResult("200", "OK", update(sql), "null");
 	}

@@ -117,15 +117,15 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		//	uuid;
 		String uuid    = getUUID();
 		//	时间戳;
-		String datetime= getCurrentDatetime(System.currentTimeMillis());
+		String datetime= getCurrentDatetime(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
 		
 		try {
 			name   = util_Net.getRequest().getParameter("name");
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		sql			   = "insert into role values('"+name+"','"+uuid+"',0,'"+datetime+"')";
+				
+		sql			   = "insert into role (ROLE_AutoID,ROLE_NAME,ROLE_UUID,ROLE_DEL,ROLE_CREATE_TIME) values('"+name+"','"+uuid+"',0,'"+datetime+"')";
 		
 		return util_Net.sendResult("200", "OK", update(sql), "null");
 	}

@@ -8,18 +8,19 @@ import com.models.Utils_DBase;
 
 import net.sf.json.JSONArray;
 
-public class Query_Station extends Util_DBase implements Utils_DBase{
+public class Query_Device extends Util_DBase implements Utils_DBase{
 
 	//	网络的操作控件;
 	private Util_Net util_Net;
-	public Query_Station(Util_Net util_Net) {
+	public Query_Device(Util_Net util_Net) {
 		super();
 		this.util_Net=util_Net;
 	}
 	
 	//	进行查询的操作;
 	public String query() {
-		String autoid=null,uuid=null,stationid=null,name=null,state=null,
+
+		String autoid=null,uuid=null,deviceip=null,stationid=null,kind=null,note=null,state=null,
 				currentpage = null, limitcount = null, sqlall = "", sql = "";
 		
 		int first = 1, nlimitcount = 10;
@@ -29,8 +30,10 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 			
 			autoid   = util_Net.getRequest().getParameter("autoid");
 			uuid   	 = util_Net.getRequest().getParameter("uuid");
+			deviceip = util_Net.getRequest().getParameter("deviceip");
 			stationid= util_Net.getRequest().getParameter("stationid");
-			name 	 = util_Net.getRequest().getParameter("name");
+			kind	 = util_Net.getRequest().getParameter("kind");
+			note 	 = util_Net.getRequest().getParameter("note");
 			state 	 = util_Net.getRequest().getParameter("state");
 			
 			
@@ -51,14 +54,22 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 			list.add("uuid='"+uuid+"'");
 		}
 	
+		if(deviceip!=null&&!deviceip.trim().equals("")) {
+			list.add("deviceip='"+deviceip+"'");
+		}
+		
 		if(stationid!=null&&!stationid.trim().equals("")) {
 			list.add("stationid='"+stationid+"'");
 		}
 		
-		if(name!=null&&!name.trim().equals("")) {
-			list.add("name='"+name+"'");
+		if(kind!=null&&!kind.trim().equals("")) {
+			list.add("kind='"+kind+"'");
 		}
 	
+		if(note!=null&&!note.trim().equals("")) {
+			list.add("note='"+note+"'");
+		}
+		
 		if(state!=null&&!state.trim().equals("")) {
 			list.add("state="+state);
 		}
@@ -81,8 +92,8 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		}
 		
 		//	进行相应的查询内容;
-		sql   = "select * from station "+where+" order by datetime1 desc limit "+first+","+nlimitcount;
-		sqlall= "select count(autoid) from station "+where+" order by datetime1 desc";
+		sql   = "select * from device "+where+" order by datetime1 desc limit "+first+","+nlimitcount;
+		sqlall= "select count(autoid) from device "+where+" order by datetime1 desc";
 
 		//	数据库查询操作;
 		JSONArray 	 array = select(sql);
@@ -94,14 +105,15 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 	//	进行修改的操作;
 	public String updateItem() {
 		
-		String uuid=null,stationid=null,name=null,sql="";
+		String uuid=null,deviceip=null,stationid=null,kind=null,note=null,sql="";
 		
 		try {
 		
-			uuid 	   = util_Net.getRequest().getParameter("uuid");
-			stationid  = util_Net.getRequest().getParameter("stationid");
-			name	   = util_Net.getRequest().getParameter("name");
-			
+			uuid   	 = util_Net.getRequest().getParameter("uuid");
+			deviceip = util_Net.getRequest().getParameter("deviceip");
+			stationid= util_Net.getRequest().getParameter("stationid");
+			kind	 = util_Net.getRequest().getParameter("kind");
+			note 	 = util_Net.getRequest().getParameter("note");
 		
 		} catch (Exception e) {
 
@@ -109,14 +121,21 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		
 		//	参数修改;
 		ArrayList<String> list=new ArrayList<String>();
-		if(name!=null&&!name.trim().equals("")) {
-			list.add("name='"+name+"'");
+		if(deviceip!=null&&!deviceip.trim().equals("")) {
+			list.add("deviceip='"+deviceip+"'");
 		}
 		
 		if(stationid!=null&&!stationid.trim().equals("")) {
 			list.add("stationid='"+stationid+"'");
 		}
 
+		if(kind!=null&&!kind.trim().equals("")) {
+			list.add("kind="+kind);
+		}
+		
+		if(note!=null&&!note.trim().equals("")) {
+			list.add("note='"+note+"'");
+		}
 		String set="";
 		if(list.size()>0) {
 			for(String item:list) {
@@ -125,7 +144,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 			
 			set = "set"+set.substring(0, set.length()-",".length());
 			
-			sql	= "update station "+set+" where uuid='"+uuid+"'";
+			sql	= "update device "+set+" where uuid='"+uuid+"'";
 		
 		}		
 		
@@ -134,21 +153,20 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 	
 	//	进行新增的操作;
 	public String add() {
-		
-		String uuid	=getUUID(),stationid=null,name=null,state="0";
-		long   datetime1=System.currentTimeMillis();
-		String datetime =getCurrentDatetime(datetime1,"yyyy-MM-dd HH:mm:ss"),sql="";
-		
+
+		String uuid=getUUID(),deviceip=null,stationid=null,kind=null,note=null,sql="";
+
 		try {
-			
+			deviceip= util_Net.getRequest().getParameter("deviceip");
 			stationid= util_Net.getRequest().getParameter("stationid");
-			name 	 = util_Net.getRequest().getParameter("name");
+			kind= util_Net.getRequest().getParameter("kind");
+			note= util_Net.getRequest().getParameter("note");
 
 		} catch (Exception e) {
 
 		}
-		sql	=	"insert into station (uuid,stationid,name,state,datetime,datetime1) values('"+uuid+"','"+stationid+"','"+name+"',"+state+",'"+datetime+"',"+datetime1+")";
-		
+		sql	=	"insert into device (uuid,deviceip,stationid,kind,note,state) values('"+uuid+"','"+deviceip+"','"+stationid+"',"+kind+",'"+note+"',0)";
+
 		return util_Net.sendResult("200", "OK", update(sql), "null");
 	}
 	
@@ -162,7 +180,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		sql			= "update station set state=1 where uuid='"+uuid+"'";
+		sql			= "update device set state=1 where uuid='"+uuid+"'";
 		
 		return util_Net.sendResult("200", "OK", update(sql), "null");
 	}
