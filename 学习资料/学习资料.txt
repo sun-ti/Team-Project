@@ -1,0 +1,54 @@
+// 1.首先应该关闭服务器端防火墙的开关（私用，专用，公用）
+
+// 2.设置servlet的字符编码;
+https://blog.csdn.net/whscheetah/article/details/85056467
+
+// 3.修改tomcat的头文件的限制;
+
+// 4.端口占用的处置;
+https://blog.csdn.net/mouxianbiao/article/details/82082833
+
+// 5.android的service的使用;
+https://www.jianshu.com/p/cc25fbb5c0b3
+
+// 6.文件进行保存的时候需要保存为utf-8格式
+
+// 7.在进行文件读取的格式中，当将文件保存为json格式时，需要去掉最后一个回车换行符;
+https://cloud.tencent.com/developer/ask/151098
+
+// 8.Handler传递数据Message;
+https://blog.csdn.net/rongwenbin/article/details/46983757
+
+// 9.点击图像库的图片变大
+https://yq.aliyun.com/articles/635814
+
+// 10.Fragment之间的数据传递的方法;
+https://blog.csdn.net/sinat_40833091/article/details/78382588
+
+// 11.Fragment之间传递对象，需要对其进行序列化;
+https://www.cnblogs.com/gw811/archive/2012/10/10/2718331.html
+
+// 12.Tomcat部署的方式;
+https://blog.csdn.net/weiqiang2/article/details/79390049
+
+// 13.设置点击输入栏目，不会被前端遮挡;
+getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+// 14.服务器名称、ip地址;
+https://blog.csdn.net/qq_38262596/article/details/79282408
+
+// 15. MySQL数据库的长整型，表现为BigInt；
+https://zhidao.baidu.com/question/447231546.html
+
+// 16.Server.xml文件中指定磁盘
+https://www.cnblogs.com/lemon-flm/p/9088285.html
+
+// 17.CoordinatorLayout实现折叠式菜单栏
+
+// 18.banner网络加载图片;
+https://blog.csdn.net/weixin_43815544/article/details/85124683
+
+//19.设置字符的表示集合保持一致;
+https://www.cnblogs.com/china-flint/p/9685578.html
+
+

@@ -75,8 +75,8 @@ public class Util_DBase extends Util implements Utils_DBase{
 	public JSONArray select(String sql) {
 		JSONArray 				list		=	new  JSONArray();
 		
-		setTag("查询数据");
-		tagStartModule();
+//		setTag("查询数据");
+//		tagStartModule();
 		
 		try{
 	    	 
@@ -105,8 +105,8 @@ public class Util_DBase extends Util implements Utils_DBase{
 	        e.printStackTrace();
 	     }
 
-		tagEndModule();
-		tagComputeProcessingTime();
+//		tagEndModule();
+//		tagComputeProcessingTime();
 		
 		return list;
 	}

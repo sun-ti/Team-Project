@@ -46,22 +46,35 @@ public class QueryServlet_Monitor extends HttpServlet {
 		
 		//	进行所有信息的查询;
 		case 0:
-			result			 = query.query();	
+			result			= query.query();	
 			break;
 			
-		//	车牌识别-统计;
+		//	车牌识别;
 		case 1:
-			
+			result			= query.queryByVehicle_license();
 			break;
 		
-		//	车流识别-统计;
+		//	车流识别-统计-按日;
 		case 2:
-			
+			result			= query.queryByVehicle_flow_Day();
+			break;
+		//	车流识别-统计-按月;
+		case 3:
+			result			= query.queryByVehicle_flow_Month();
+			break;		
+		//	人脸识别;
+		case 4:
+			result			= query.queryByFace_recognition();
 			break;
 			
-		//	人脸识别-统计;
-		case 4:
-			
+		//	人流识别-统计-按日;
+		case 5:
+			result			= query.queryByFace_flow_Day();
+			break;
+		
+		//	人流识别-统计-按月;
+		case 6:
+			result			= query.queryByFace_flow_Month();
 			break;
 			
 		default:

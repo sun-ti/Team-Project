@@ -1,0 +1,106 @@
+/////////////////////
+//	设备管理>>
+//	新增:
+http://localhost:8080/ExtractLoadV01/Device?oper=0&stationid=[must]&name=[must]
+
+//	删除:
+http://localhost:8080/ExtractLoadV01/Device?oper=1&uuid=[must]
+
+//	修改:
+http://localhost:8080/ExtractLoadV01/Device?oper=2&uuid=[must]&(stationid,name选填，或者都填)
+
+//	查询:
+http://localhost:8080/ExtractLoadV01/Device?oper=3&(autoid,uuid,stationid,name,state,limit,page选填,根据自身需要或者都不填,默认为全部查询)
+
+/////////////////////
+//	检测管理>>
+//	进行所有信息查询:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=0&(lcommand,deviceip,stationid,limit,page选填，根据自身需要或者都不填,默认为全部查询)
+
+//	车牌识别:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=1&stationid=jyxd&start=2019-09-10 00:00:00&end=2019-09-10 23:59:59&limit=10&page=1
+
+//	车流识别-统计-按日:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=2&stationid=jyxd&date=2019-09-24
+
+//	车流识别-统计-按月:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=3&stationid=jyxd&date=2019
+
+//	人脸识别:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=4&stationid=jyxd&start=2019-09-10%2000:00:00&end=2019-09-10%2023:59:59&limit=1&page=1
+
+//	人流识别-统计-按日:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=5&date=2019-9-12&stationid=jyxd
+
+//	人流识别-统计-按月:
+http://localhost:8080/ExtractLoadV01/Monitor?oper=6&date=2019&stationid=jyxd
+
+/////////////////////
+//	权限管理>>
+//	新增:
+http://localhost:8080/ExtractLoadV01/Permission?oper=0&name=[must]&url=[must]&type =[must]&parentuuid = [must]
+
+//	删除:
+http://localhost:8080/ExtractLoadV01/Permission?oper=1&uuid=[must]
+
+//	修改:
+http://localhost:8080/ExtractLoadV01/Permission?oper=2&uuid=[must]&(name,url,type,parentuuid,del选填，或者都填)
+
+//	查询:
+http://localhost:8080/ExtractLoadV01/Permission?oper=3&(autoid,name,url,createtime,uuid,type,parentuuid,del,page,limit选填,根据自身需要或者都不填,默认为全部查询);
+
+/////////////////////
+//	角色管理>>
+//	新增:
+http://localhost:8080/ExtractLoadV01/Role?oper=0&name=[must]
+
+//	删除:
+http://localhost:8080/ExtractLoadV01/Role?oper=1&uuid=[must]
+
+//	修改:
+http://localhost:8080/ExtractLoadV01/Role?oper=2&uuid=[must]&name=[must]
+
+//	查询:
+http://localhost:8080/ExtractLoadV01/Role?oper=3&(autoid,name,uuid,del,createtime,page,limit选填,根据自身需要或者都不填,默认为全部查询)
+
+/////////////////////
+//	站点管理>>
+//	新增:
+http://localhost:8080/ExtractLoadV01/Station?oper=0&stationid=[must]&name=[must]
+
+//	删除:
+http://localhost:8080/ExtractLoadV01/Station?oper=1&uuid=[must]
+
+//	修改:
+http://localhost:8080/ExtractLoadV01/Station?oper=2&uuid=[must]&(uuid,stationid,name选填，或者都填)
+
+//	查询:
+http://localhost:8080/ExtractLoadV01/Station?oper=3&(autoid,uuid,stationid,name,state,page,limit选填,根据自身需要或者都不填,默认为全部查询)
+
+/////////////////////
+//	用户管理>>
+//	新增:
+http://localhost:8080/ExtractLoadV01/User?oper=0&username =[must]&password=[must]
+
+//	删除:
+http://localhost:8080/ExtractLoadV01/User?oper=1&uuid=[must]
+
+//	修改:
+http://localhost:8080/ExtractLoadV01/User?oper=2&uuid=[must]&(username,password选填，或者都填);
+
+//	查询:
+http://localhost:8080/ExtractLoadV01/User?oper=3&(autoid,username,password,createtime,refreshtime,refreshmark,del,uuid,page,limit选填,根据自身需要或者都不填,默认为全部查询);
+/////////////////////
+相应设备的IP地址信息:
+<input type="button" id="btn1" data='{"deviceIP":"172.30.9.14","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动入口">
+<input type="button" id="btn2" data='{"deviceIP":"172.30.9.15","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动出口">
+<input type="button" id="btn3" data='{"deviceIP":"172.30.9.16","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道1">
+<input type="button" id="btn4" data='{"deviceIP":"172.30.9.17","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道2">
+<input type="button" id="btn5" data='{"deviceIP":"172.30.9.18","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道3">
+<input type="button" id="btn6" data='{"deviceIP":"172.30.9.19","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道-1">
+<input type="button" id="btn7" data='{"deviceIP":"172.30.9.20","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道-3">
+<input type="button" id="btn8" data='{"deviceIP":"172.30.9.13","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车流统计">
+<input type="button" id="btn9" data='{"deviceIP":"172.30.9.11","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":2}' value="启动客流统计">
+<input type="button" id="btn10" data='{"deviceIP":"172.30.9.12","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":3}' value="启动人脸识别">
+<input type="button" id="btn11" data='{"deviceIP":"172.30.9.21","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":4}' value="启动西侧卸油区">
+<input type="button" id="btn12" data='{"deviceIP":"172.30.9.22","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":4}' value="启动东侧卸油区">
