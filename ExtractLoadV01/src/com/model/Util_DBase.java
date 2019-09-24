@@ -17,7 +17,7 @@ public class Util_DBase extends Util implements Utils_DBase{
 	// 数据库的驱动的类;
 	public String 				driver   = "com.mysql.jdbc.Driver";
 	// 数据库的驱动链接;
-	public String 				url 	 = "jdbc:mysql://localhost:3306/formaldb?useUnicode=true&characterEncoding=UTF8";
+	public String 				url 	 = "jdbc:mysql://localhost:3306/sinopec?useUnicode=true&characterEncoding=UTF8";
 	public String 				user 	 = "root";
 	public String 				password = "root";
 	public Connection  			coon 	 = null;

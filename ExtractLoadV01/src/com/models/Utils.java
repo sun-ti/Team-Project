@@ -1,8 +1,5 @@
 package com.models;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 public interface Utils {
 	//	监测文件夹是否存在的方法;
 	abstract void checkFile(String path);
@@ -12,12 +9,11 @@ public interface Utils {
 	abstract void tagEndModule();
 	//	计算程序时间长内容;
 	abstract void tagComputeProcessingTime();
-	//	网络配置设置;
-	abstract void setHttpServletParameter(HttpServletRequest request,HttpServletResponse response);
+
 	//	获得UUID的方法;
 	abstract String getUUID();
 	//	获得当前的时间;
-	abstract String getCurrentDatetime();
+	abstract String getCurrentDatetime(long ltime);
 //	//	进行项目的设置;
 //	abstract void getHttpUrl();
 }

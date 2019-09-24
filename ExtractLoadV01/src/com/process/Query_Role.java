@@ -117,7 +117,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		//	uuid;
 		String uuid    = getUUID();
 		//	时间戳;
-		String datetime= getCurrentDatetime();
+		String datetime= getCurrentDatetime(System.currentTimeMillis());
 		
 		try {
 			name   = util_Net.getRequest().getParameter("name");

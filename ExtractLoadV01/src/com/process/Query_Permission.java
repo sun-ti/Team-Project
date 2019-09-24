@@ -157,7 +157,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 			
 			set="set"+set.substring(0, set.length()-",".length());
 			
-			sql	= "update psermission "+set+" where PERMISSION_UUID='"+uuid+"'";
+			sql	= "update permission "+set+" where PERMISSION_UUID='"+uuid+"'";
 		
 		}		
 		
@@ -169,7 +169,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		
 		String name	=null,url=null,type=null,parentuuid=null,sql="";
 		String uuid	= getUUID();
-		String time = getCurrentDatetime();
+		String time = getCurrentDatetime(System.currentTimeMillis());
 		try {
 			
 			

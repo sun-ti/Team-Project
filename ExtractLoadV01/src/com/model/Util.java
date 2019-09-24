@@ -1,12 +1,8 @@
 package com.model;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.models.Utils;
 
@@ -72,40 +68,15 @@ public class Util implements Utils{
 		System.out.println("'"+this.tag+"'功能-花费时间:"+td+"毫秒!");
 		System.out.println("--------------------------------");
 	}
-	//	设置网页的相应内容;
-	public void setHttpServletParameter(HttpServletRequest request,HttpServletResponse response){
-		//	输入的字符串编辑内容;
-		try {
-			request.setCharacterEncoding("utf-8");
-		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		//	输出的相应的内容信息;
-		response.setHeader("Context-Type","text/html;charset=utf-8");
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType("text/html;charset=utf-8");
-//		//
-//		/* 允许跨域的主机地址 */
-//		response.setHeader("Access-Control-Allow-Origin", "*");  
-//		/* 允许跨域的请求方法GET, POST, HEAD 等 */
-//		response.setHeader("Access-Control-Allow-Methods", "*");  
-//		/* 重新预检验跨域的缓存时间 (s) */
-//		response.setHeader("Access-Control-Max-Age", "3600");  
-//		/* 允许跨域的请求头 */
-//		response.setHeader("Access-Control-Allow-Headers", "*");  
-//		/* 是否携带cookie */
-//		response.setHeader("Access-Control-Allow-Credentials", "true");  
-		
-	}
+
 	//	获得系统获得UUID的方法;
 	public String getUUID() {
 		return UUID.randomUUID().toString();
 	}
 	//	获得相应的时间内容;
 	@Override
-	public String getCurrentDatetime() {
-		long   ltime	   			= System.currentTimeMillis();
+	public String getCurrentDatetime(long ltime) {
+//		long   ltime	   			= System.currentTimeMillis();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");//可以方便地修改日期格式
 		String currenttime 			= dateFormat.format(ltime); 
 		return currenttime;

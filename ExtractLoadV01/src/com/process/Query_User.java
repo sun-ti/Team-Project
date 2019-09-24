@@ -135,7 +135,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 				set+=" "+item+",";
 			}
 			
-			set="set"+set+" USER_REFRESH_TIME='"+getCurrentDatetime()+"',USER_REFRESH_MARK=1";
+			set="set"+set+" USER_REFRESH_TIME='"+getCurrentDatetime(System.currentTimeMillis())+"',USER_REFRESH_MARK=1";
 			
 			sql	= "update user "+set+" where USER_UUID='"+uuid+"'";
 		
@@ -148,7 +148,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 	public String add() {
 		String username = null, password = null,sql="";
 		String uuid	    = getUUID();
-		String time		= getCurrentDatetime();
+		String time		= getCurrentDatetime(System.currentTimeMillis());
 		
 		try {
 			username = util_Net.getRequest().getParameter("username");
