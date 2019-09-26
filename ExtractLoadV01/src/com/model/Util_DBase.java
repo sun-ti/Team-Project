@@ -17,9 +17,16 @@ public class Util_DBase extends Util implements Utils_DBase{
 	// 数据库的驱动的类;
 	public String 				driver   = "com.mysql.jdbc.Driver";
 	// 数据库的驱动链接;
-	public String 				url 	 = "jdbc:mysql://localhost:3306/sinopec?useUnicode=true&characterEncoding=UTF8";
+//	public String 				http	 = "39.106.70.111";
+	public String 				http	 = "localhost";
+	public String				dbname	 = "sinopec";
+//	public String				dbname	 = "shiro_db";
+	public String				dbport	 = "3306";
+	//
+	public String 				url 	 = "jdbc:mysql://"+http+":"+dbport+"/"+dbname+"?useUnicode=true&characterEncoding=UTF8";
 	public String 				user 	 = "root";
 	public String 				password = "root";
+//	public String 				password = "1234";
 	public Connection  			coon 	 = null;
 
 	

@@ -92,8 +92,8 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 		}
 		
 		//	进行相应的查询内容;
-		sql   = "select * from device "+where+" order by datetime1 desc limit "+first+","+nlimitcount;
-		sqlall= "select count(autoid) from device "+where+" order by datetime1 desc";
+		sql   = "select * from device "+where+" order by autoid desc limit "+first+","+nlimitcount;
+		sqlall= "select count(autoid) from device "+where;
 
 		//	数据库查询操作;
 		JSONArray 	 array = select(sql);
