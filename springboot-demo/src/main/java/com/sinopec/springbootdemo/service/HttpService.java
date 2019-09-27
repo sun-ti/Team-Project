@@ -6,12 +6,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Map;
+
 @Service
 public class HttpService {
 
-    public String client(String url, HttpMethod method, MultiValueMap<String, String> params) {
+    public String client(String url, HttpMethod method, Map<String, String> params) {
         RestTemplate template = new RestTemplate();
-        ResponseEntity<String> response = template.getForEntity(url, String.class);
+        final String[] finalUrl = {url + "?"};
+        params.forEach((key, value) -> {
+            finalUrl[0] = finalUrl[0] + key + "=" + value + "&";
+        });
+        System.out.println(finalUrl[0]);
+        ResponseEntity<String> response = template.getForEntity(finalUrl[0], String.class);
         return response.getBody();
     }
 }

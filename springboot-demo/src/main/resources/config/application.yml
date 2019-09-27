@@ -1,0 +1,2 @@
+myConfig:
+  mysqlAddr: localhost:8080

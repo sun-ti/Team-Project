@@ -60,12 +60,14 @@
                 , range: true
                 , max: 0
                 , done: function (value, date, endDate) {
-                    console.log(value);
                     if (value != null) {
                         table.reload('table', {
                             page: {curr: 1}
                             , where: {
-                                dateRange: value
+                                startDate: date.year + "-" + date.month + "-" + date.date + " " +
+                                    date.hours + ":" + date.minutes + ":" + date.seconds
+                                , endDate: endDate.year + "-" + endDate.month + "-" + endDate.date + " " +
+                                    endDate.hours + ":" + endDate.minutes + ":" + endDate.seconds
                             }
                         });
                     }
