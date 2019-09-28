@@ -28,6 +28,16 @@ public class Util_Init extends Util implements Utils_Init{
 	}
 	
 	public void checkConfiger() {
+		//	文件路径的拼写;
+		String filepath	=	this.folder+File.separator+FOLDER1+".txt";
+		//	检测文件的路径;
+		checkFile(filepath);
+		File   file		=	new File(filepath);
+		String config	=	readFile(file, UTF8);
+		//	判断这些数据是否具有相应内容;
+		if(config.trim()!=null) {
+			
+		}
 		
 		
 	}
