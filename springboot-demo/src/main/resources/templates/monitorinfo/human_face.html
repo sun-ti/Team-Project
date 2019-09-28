@@ -11,11 +11,15 @@
     </style>
 </head>
 <div>
+    <form class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">选择想要查询的时间范围</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="searchTimeRange" placeholder="请选择搜索时间范围">
+            </div>
+        </div>
+    </form>
 
-    <div class="layui-inline">
-        <input type="text" class="layui-input" id="searchTimeRange" placeholder="请选择搜索时间范围">
-    </div>
-    <button type="button" class="layui-btn">搜索</button>
 
     <table id="table" lay-filter="table"></table>
 
@@ -54,49 +58,33 @@
                 }
             });
 
-
+            // 时间选择组件
             laydate.render({
                 elem: '#searchTimeRange'
                 , range: true
-                // , btns: ['clear', 'now', 'confirm']
                 , max: 0
                 , done: function (value, date, endDate) {
-                    console.log(date.year + "-" + date.month + "-" + date.date + " " + date.hours + ":" + date.minutes + ":" + date.seconds);
-                    console.log(value);
-                    if (value != null) {
-                        table.reload('table', {
-                            page: {curr: 1}
-                            , where: {
-                                startDate: value
-                                , endDate: endDate
-                            }
-                        });
+                    var startDate;
+                    var endDate;
+                    if (value != "") {
+                        startDate = date.year + "-" + date.month + "-" + date.date + " " +
+                            date.hours + ":" + date.minutes + ":" + date.seconds;
+                        endDate = endDate.year + "-" + endDate.month + "-" + endDate.date + " " +
+                            endDate.hours + ":" + endDate.minutes + ":" + endDate.seconds;
+                    } else {
+                        startDate = "";
+                        endDate = "";
                     }
+                    table.reload('table', {
+                        page: {curr: 1}
+                        , where: {
+                            startDate: startDate
+                            , endDate: endDate
+                        }
+                    });
                 }
             });
 
-            // // 搜索时重载
-            // var $ = layui.$, active = {
-            //     reload: function () {
-            //         var searchValue = $('#searchValue');
-            //
-            //         //执行重载
-            //         table.reload('roleTable', {
-            //             page: {
-            //                 curr: 1 //重新从第 1 页开始
-            //             }
-            //             , where: {
-            //                 roleName: searchValue.val()
-            //             }
-            //         }, 'data');
-            //     }
-            // };
-            // // 搜索按钮响应
-            // $('#searchBtn').on('click', function () {
-            //     var type = $(this).data('type');
-            //     active[type] ? active[type].call(this) : '';
-            //     $('#searchValue').val("");
-            // });
 
             table.on('tool(table)', function (obj) {
                 var data = obj.data;

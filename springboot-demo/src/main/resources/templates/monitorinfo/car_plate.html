@@ -11,10 +11,14 @@
     </style>
 </head>
 <div>
-
-    <div class="layui-inline">
-        <input type="text" class="layui-input" id="searchTimeRange" placeholder="请选择搜索时间范围">
-    </div>
+    <form class="layui-form layui-form-pane">
+        <div class="layui-form-item">
+            <label class="layui-form-label" style="width: 200px">选择想要查询的时间范围</label>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="searchTimeRange" placeholder="请选择搜索时间范围">
+            </div>
+        </div>
+    </form>
 
 
     <table id="table" lay-filter="table"></table>
@@ -60,17 +64,24 @@
                 , range: true
                 , max: 0
                 , done: function (value, date, endDate) {
-                    if (value != null) {
-                        table.reload('table', {
-                            page: {curr: 1}
-                            , where: {
-                                startDate: date.year + "-" + date.month + "-" + date.date + " " +
-                                    date.hours + ":" + date.minutes + ":" + date.seconds
-                                , endDate: endDate.year + "-" + endDate.month + "-" + endDate.date + " " +
-                                    endDate.hours + ":" + endDate.minutes + ":" + endDate.seconds
-                            }
-                        });
+                    var startDate;
+                    var endDate;
+                    if (value != "") {
+                        startDate = date.year + "-" + date.month + "-" + date.date + " " +
+                            date.hours + ":" + date.minutes + ":" + date.seconds;
+                        endDate = endDate.year + "-" + endDate.month + "-" + endDate.date + " " +
+                            endDate.hours + ":" + endDate.minutes + ":" + endDate.seconds;
+                    } else {
+                        startDate = "";
+                        endDate = "";
                     }
+                    table.reload('table', {
+                        page: {curr: 1}
+                        , where: {
+                            startDate: startDate
+                            , endDate: endDate
+                        }
+                    });
                 }
             });
 

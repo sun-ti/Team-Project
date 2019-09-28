@@ -42,8 +42,18 @@ public class MonitorinfoController {
     @ResponseBody
     @RequestMapping("/humanFaceList")
     public String getHumanFaceList(HttpServletRequest request) throws IOException {
+
         Map<String, String> params = new HashMap<>();
-        params.put("oper", "1");
+
+        // 范围日期筛选
+        if (request.getParameter("startDate") != null && !request.getParameter("startDate").isEmpty()) {
+            params.put("oper", "4");
+            params.put("start", request.getParameter("startDate"));
+            params.put("end", request.getParameter("endDate"));
+        } else {
+            params.put("oper", "0");
+            params.put("lcommand","4370");
+        }
         return getInfo(request, params);
     }
 
@@ -60,12 +70,13 @@ public class MonitorinfoController {
         Map<String, String> params = new HashMap<>();
 
         // 范围日期筛选
-        if (request.getParameter("startDate") != null) {
+        if (request.getParameter("startDate") != null && !request.getParameter("startDate").isEmpty()) {
             params.put("oper", "1");
             params.put("start", request.getParameter("startDate"));
             params.put("end", request.getParameter("endDate"));
         } else {
             params.put("oper", "0");
+            params.put("lcommand","12368");
         }
         return getInfo(request, params);
     }
@@ -79,8 +90,17 @@ public class MonitorinfoController {
     @ResponseBody
     @RequestMapping("/humanFlowList")
     public String getHumanFlow(HttpServletRequest request) throws IOException {
-
         Map<String, String> params = new HashMap<>();
+
+        // 范围日期筛选
+        if (request.getParameter("startDate") != null && !request.getParameter("startDate").isEmpty()) {
+            params.put("oper", "4");
+            params.put("start", request.getParameter("startDate"));
+            params.put("end", request.getParameter("endDate"));
+        } else {
+            params.put("oper", "0");
+            params.put("lcommand","4355");
+        }
         return getInfo(request, params);
     }
 
