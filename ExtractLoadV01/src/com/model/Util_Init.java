@@ -97,7 +97,7 @@ public class Util_Init extends Util implements Utils_Init{
 		if(config!=null&&!config.trim().equals("")) {
 			//	进行结果的显示;
 			JSONObject object=JSONObject.fromObject(config);
-			System.out.println(object.toString());
+//			System.out.println(object.toString());
 			//	进行参数的初始化设置;
 			setHTTP_IP(object.getString("HTTP-IP"));
 			setHTTP_PORT(object.getString("HTTP-PORT"));
