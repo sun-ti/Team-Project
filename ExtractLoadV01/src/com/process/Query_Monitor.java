@@ -70,7 +70,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 		
 		//	信息查询;
-		sql	  			= "select a.note,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=1 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
+		sql	  			= "select a.note,b.stationid,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=1 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
 		JSONArray array = select(sql);
 		
 		//	查询总页数;

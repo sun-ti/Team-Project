@@ -19,7 +19,9 @@ public class Util_Net implements Utils_Net{
 	private String project;
 	//	头部链接;
 	private String httphead;
-
+	//	项目路径;
+	private String propath;
+	
 	//	参数的内容;
 	private HttpServletRequest  request;
 	private HttpServletResponse response;
@@ -41,11 +43,19 @@ public class Util_Net implements Utils_Net{
         this.project = 	this.request.getContextPath();
         //	链接的头部;
         this.httphead=	"http://"+this.ip+":"+this.port;
+        
+        //	项目的路径;
+        this.propath =	this.request.getSession().getServletContext().getRealPath("\\");
 	}
+
 	//	Ip地址;
 	public String getIp() {
 		return ip;
 	}
+	public String getPropath() {
+		return propath;
+	}
+
 	//	Port端口号;
 	public int getPort() {
 		return port;

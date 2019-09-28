@@ -1,5 +1,6 @@
 package com.model;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +19,7 @@ import com.models.Utils;
 public class Util implements Utils{
 
 	public static final String FOLDER="SYS"+File.separator+"SINOPEC";
+	public static final String FOLDER1="configer";
 	public static final String PATH = "D:"+File.separator+FOLDER+File.separator+"SYS_image";
 	public static final String PATH2= "D:"+File.separator+FOLDER+File.separator+"SYS_download";
 	public static final String PATH3= "D:"+File.separator+FOLDER+File.separator+"SYS_info";
@@ -133,4 +135,19 @@ public class Util implements Utils{
 		}else
 			return null;
 	}
+//	//	读取文件;
+//	public void readFile(File file){
+//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
+//        String line = null;   
+//        while ((line = br.readLine()) != null) {
+//            System.out.println(line);
+//        }  
+//    }
+//    
+//    public void writeFile(File file, String content){
+//        FileOutputStream fos = new FileOutputStream(file);
+//        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
+//        osw.write(content);
+//        osw.flush();
+//    }
 }
