@@ -16,6 +16,8 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 	public Query_Role(Util_Net util_Net) {
 		super();
 		this.util_Net = util_Net;
+		//	进行数据库的连接;
+		super.LinkDatabase(this.util_Net);
 	}
 
 	// 进行查询的操作;
@@ -75,12 +77,15 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and a.ROLE_UUID=c.ROLE_UUID and b.PERMISSION_UUID=c.PERMISSION_UUID";	
+		}else {
+			where="where a.ROLE_UUID=c.ROLE_UUID and b.PERMISSION_UUID=c.PERMISSION_UUID";
 		}
 		
 		//	进行相应的查询内容;
-		sql   = "select * from role "+where+" order by ROLE_AutoID desc limit "+first+","+nlimitcount;
-		sqlall= "select count(ROLE_AutoID) from role "+where+" order by ROLE_AutoID desc";
+		sql   = "select a.*,b.PERMISSION_NAME,b.PERMISSION_UUID from role a,permission b,role_permission c "+where+" order by a.ROLE_AutoID desc limit "+first+","+nlimitcount;
+
+		sqlall= "select count(a.ROLE_AutoID) from role a,permission b,role_permission c "+where+" order by a.ROLE_AutoID desc";
 
 		//	数据库查询操作;
 		JSONArray 	 array = select(sql);
@@ -93,8 +98,8 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 	// 进行修改的操作;
 	public String updateItem() {
 
-		String sql="";
-		String name=null,uuid=null;
+		String sql = "";
+		String name= null,uuid=null;
 		
 		try {
 			name   = util_Net.getRequest().getParameter("name");

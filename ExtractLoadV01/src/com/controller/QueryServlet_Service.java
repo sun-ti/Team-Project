@@ -1,8 +1,8 @@
 package com.controller;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
+//import java.net.HttpURLConnection;
+//import java.net.URL;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -15,9 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.rpc.ServiceException;
 
-import org.codehaus.xfire.client.Client;
+//import org.codehaus.xfire.client.Client;
 
-import com.model.Util_Net;
 
 /**
  * Servlet implementation class QueryServlet_Service

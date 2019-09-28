@@ -29,6 +29,8 @@ public class Util implements Utils{
 	public static final String PATH = "D:"+File.separator+FOLDER+File.separator+"SYS_image";
 	public static final String PATH2= "D:"+File.separator+FOLDER+File.separator+"SYS_download";
 	public static final String PATH3= "D:"+File.separator+FOLDER+File.separator+"SYS_info";
+	//	进行初始化参数对象;
+	public static Util_Init instance;
 	
 	//	文件存储的标签;
 	public String KEY_1="pic";
@@ -155,13 +157,12 @@ public class Util implements Utils{
 			br 			= new BufferedReader(new InputStreamReader(new FileInputStream(file), format));
 			String line = null;
 	        while ((line= br.readLine()) != null) {
+	        	//	进行文件的读取;
 	        	buffer.append(line);
-	            System.out.println(line);
 	        }
 	        result		= buffer.toString();
 		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			//	当异常时,进行参数的赋值;
 			result=null;
 		}
 		//	将结果进行数据的返回;
