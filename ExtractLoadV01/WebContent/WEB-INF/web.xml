@@ -89,6 +89,16 @@
 		<url-pattern>/Service</url-pattern>
 	</servlet-mapping>
 
+	<!-- 处理数据 -->
+	<servlet>
+		<servlet-name>QueryServlet_Compute</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Compute</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_Compute</servlet-name>
+		<url-pattern>/Compute</url-pattern>
+	</servlet-mapping>
 
 	<filter>
 		<filter-name>WebFilter</filter-name>

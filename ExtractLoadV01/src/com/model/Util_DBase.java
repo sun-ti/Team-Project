@@ -17,25 +17,25 @@ public class Util_DBase extends Util implements Utils_DBase{
 	// 数据库的驱动的类;
 	public String 				driver   = "com.mysql.jdbc.Driver";
 	// 数据库的驱动链接;
-//	public String 				http	 = "39.106.70.111";
-	public String 				http	 = "localhost";
-	public String				dbname	 = "sinopec";
-//	public String				dbname	 = "shiro_db";
-	public String				dbport	 = "3306";
 	//
-	public String 				url 	 = "jdbc:mysql://"+http+":"+dbport+"/"+dbname+"?useUnicode=true&characterEncoding=UTF8";
-	public String 				user 	 = "root";
-	public String 				password = "root";
-//	public String 				password = "1234";
+	public String 				url 	 = null;
 	public Connection  			coon 	 = null;
 
-	
 	// 构造函数;
 	public Util_DBase() {
+		
+	}
+	
+	public void LinkDatabase(Util_Net util_Net) {
+		//	进行
 		try {
-			// 构造函数的驱动类;
+			//	初始化工具
+			Util_Init util_Init	=	new Util_Init(util_Net);
+			this.url			=	"jdbc:mysql://"+util_Init.getHTTP_IP()+":"+util_Init.getDB_PORT()+"/"+util_Init.getDB_NAME()+"?useUnicode=true&characterEncoding="+util_Init.getDB_ENCODING();
+//			System.out.println(this.url);
+			//  构造函数的驱动类;
 			Class.forName(driver);
-			this.coon = (Connection) DriverManager.getConnection(url, user, password);
+			this.coon = (Connection) DriverManager.getConnection(url, util_Init.getDB_USERNAME(), util_Init.getDB_PASSWORD());
 			if (!this.coon.isClosed()) {
 				System.out.println("数据库的连接!");
 			}
@@ -147,14 +147,6 @@ public class Util_DBase extends Util implements Utils_DBase{
 
 	public String getUrl() {
 		return url;
-	}
-
-	public String getUser() {
-		return user;
-	}
-
-	public String getPassword() {
-		return password;
 	}
 
 	public Connection getCoon() {

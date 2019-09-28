@@ -2,6 +2,12 @@ package com.model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
@@ -23,12 +29,18 @@ public class Util implements Utils{
 	public static final String PATH = "D:"+File.separator+FOLDER+File.separator+"SYS_image";
 	public static final String PATH2= "D:"+File.separator+FOLDER+File.separator+"SYS_download";
 	public static final String PATH3= "D:"+File.separator+FOLDER+File.separator+"SYS_info";
+	//	进行初始化参数对象;
+	public static Util_Init instance;
 	
 	//	文件存储的标签;
 	public String KEY_1="pic";
 	public String TAG_1="%";
 	public String TAG_2="\\";
 	public String TAG_3="-";
+	
+	//	格式的相应的内容;
+	public String UTF8 ="utf-8";
+	public String GBK  ="gbk";
 	
 	//	计时的标签参数;
 	public String tag; 
@@ -135,19 +147,48 @@ public class Util implements Utils{
 		}else
 			return null;
 	}
-//	//	读取文件;
-//	public void readFile(File file){
-//        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"));
-//        String line = null;   
-//        while ((line = br.readLine()) != null) {
-//            System.out.println(line);
-//        }  
-//    }
-//    
-//    public void writeFile(File file, String content){
-//        FileOutputStream fos = new FileOutputStream(file);
-//        OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
-//        osw.write(content);
-//        osw.flush();
-//    }
+	//	读取文件;
+	public String readFile(File file,String format){
+		
+        BufferedReader br;
+        StringBuffer   buffer = new StringBuffer();
+        String 		   result = null;
+		try {
+			br 			= new BufferedReader(new InputStreamReader(new FileInputStream(file), format));
+			String line = null;
+	        while ((line= br.readLine()) != null) {
+	        	//	进行文件的读取;
+	        	buffer.append(line);
+	        }
+	        result		= buffer.toString();
+		} catch (Exception e) {
+			//	当异常时,进行参数的赋值;
+			result=null;
+		}
+		//	将结果进行数据的返回;
+        return result;
+    }
+    
+    public boolean writeFile(File file, String content,String format){
+    	//	输出流的相应内容;
+        FileOutputStream   fos;
+        //	输出的对象的内容;
+        OutputStreamWriter osw;
+        boolean flag=false;
+		try {
+			//	建立输出流;
+			fos = new FileOutputStream(file);
+			//	将数据进行输出;
+			osw = new OutputStreamWriter(fos, format);
+	        osw.write(content);
+	        osw.flush();
+	        flag= true;
+	        
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			flag= false;
+		}
+        return flag;
+    }
 }

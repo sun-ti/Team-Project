@@ -12,9 +12,12 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 
 	//	网络的操作控件;
 	private Util_Net util_Net;
+	
 	public Query_Device(Util_Net util_Net) {
 		super();
 		this.util_Net=util_Net;
+		//	进行数据库的连接;
+		super.LinkDatabase(this.util_Net);
 	}
 	
 	//	进行查询的操作;

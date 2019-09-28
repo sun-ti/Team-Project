@@ -23,13 +23,15 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public Query_Monitor(Util_Net util_Net) {
 		super();
 		this.util_Net=util_Net;
+		//	进行数据库的连接;
+		super.LinkDatabase(this.util_Net);
 		
 	}
 
 	//	根据车辆牌照进行查询
 	public String queryByVehicle_license() {
 		//	站点信息;
-		String stationid = null;
+		String stationid = "";
 		//	每页显示的最大数目,当前的页面;
 		String limitcount= null,currentpage=null;
 		//	初始页,结束页;
@@ -50,7 +52,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
+
 		String between	 = "";
 		if(start!=null&&!start.equals("")&&end!=null&&!end.equals("")) {
 
@@ -68,13 +70,17 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		if(currentpage!=null&&!currentpage.trim().equals("")) {
 			first	     = (Integer.parseInt(currentpage)-1)*nlimitcount;
 		}
-		
+		String where="";
+		if(stationid!=null&&!stationid.trim().equals("")) {
+			where+="and a.stationid='"+stationid+"'";
+		}
 		//	信息查询;
-		sql	  			= "select a.note,b.stationid,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=1 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
+		sql	  			= "select a.note,b.stationid,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip "+where+" and a.kind=1 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
 		JSONArray array = select(sql);
-		
+
 		//	查询总页数;
-		sqlAll			= "select count(b._id) from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=1 "+between;
+		sqlAll			= "select count(b._id) from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip "+where+" and a.kind=1 "+between;
+		
 		int 	  count = getQueryCount(sqlAll);
 		
 		return util_Net.sendResult("200", "OK", count, array.toString());
@@ -105,7 +111,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
+		
 		//	判断输入的时间是否完整;
 		if(date!=null&&!date.equals("")) {
 			//	当时间信息符合格式时;
@@ -117,6 +123,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				//	结束的时间;
 				end	 = date+" 23:59:59";
 				lend=transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				
 			}
 			//	当时间信息不符合格式时;
 			else
@@ -138,27 +145,28 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			
 			//	此时间段的数据;
 			//	进行外大街摄像头的检测数据;
-			String sql1="select b.errMsg from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=5 and b.datetime1 between "+l1+" and "+l2+" order by b.datetime1 desc";
-
+			String 		sql1="select b.errMsg from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=5 and b.datetime1 between "+l1+" and "+l2+" order by b.datetime1 desc";
+		
 			JSONArray array1=super.select(sql1);
 			Set<String> set1=new TreeSet<String>();
 			//	对大街摄像头数据进行解析;
 			for(int a=0;a<array1.size();a++) {
-				String errMsg=array1.getJSONObject(a).getString("errMsg").replace(" ", "").trim();
-				errMsg=errMsg.substring(errMsg.indexOf("车牌：")+"车牌：".length(), errMsg.length());
-				if(!errMsg.equals("无车牌")) {
+				String errMsg= array1.getJSONObject(a).getString("errMsg").replace(" ", "").trim();
+				
+				errMsg		 = errMsg.substring(errMsg.indexOf("num:")+"num:".length(), errMsg.length());
+				if(!errMsg.equals("NONE")) {
 					set1.add(errMsg);
 				}
 			}
 			
 			//	进入车站的车牌;
-			String sql2="select b.errMsg from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=1 and b.datetime1 between "+l1+" and "+l2+" order by b.datetime1 desc";
-			JSONArray array2=super.select(sql2);
-			Set<String> set2=new TreeSet<String>();
+			String 	  sql2	= "select b.errMsg from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=1 and b.datetime1 between "+l1+" and "+l2+" order by b.datetime1 desc";
+			JSONArray array2= super.select(sql2);
+			Set<String> set2= new TreeSet<String>();
 			for(int b=0;b<array2.size();b++) {
 				String errMsg=array2.getJSONObject(b).getString("errMsg").replace(" ", "").trim();
-				errMsg=errMsg.substring(errMsg.indexOf("车牌：")+"车牌：".length(), errMsg.length());
-				if(!errMsg.equals("无车牌")) {
+				errMsg=errMsg.substring(errMsg.indexOf("num:")+"num:".length(), errMsg.length());
+				if(!errMsg.equals("NONE")) {
 					set2.add(errMsg);
 				}
 			}
@@ -269,8 +277,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			//	对大街摄像头数据进行解析;
 			for(int a=0;a<array1.size();a++) {
 				String errMsg=array1.getJSONObject(a).getString("errMsg").replace(" ", "").trim();
-				errMsg=errMsg.substring(errMsg.indexOf("车牌：")+"车牌：".length(), errMsg.length());
-				if(!errMsg.equals("无车牌")) {
+				errMsg=errMsg.substring(errMsg.indexOf("num:")+"num:".length(), errMsg.length());
+				if(!errMsg.equals("NONE")) {
 					set1.add(errMsg);
 				}
 			}
@@ -281,8 +289,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			Set<String> set2	=	new TreeSet<String>();
 			for(int b=0;b<array2.size();b++) {
 				String errMsg=array2.getJSONObject(b).getString("errMsg").replace(" ", "").trim();
-				errMsg=errMsg.substring(errMsg.indexOf("车牌：")+"车牌：".length(), errMsg.length());
-				if(!errMsg.equals("无车牌")) {
+				errMsg=errMsg.substring(errMsg.indexOf("num:")+"num:".length(), errMsg.length());
+				if(!errMsg.equals("NONE")) {
 					set2.add(errMsg);
 				}
 			}
@@ -358,7 +366,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 		
 		//	信息查询;
-		sql	  			= "select a.note,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=3 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
+		sql	  			= "select a.note,b.stationid,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=3 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
 		JSONArray array = select(sql);
 		
 		//	查询总页数;

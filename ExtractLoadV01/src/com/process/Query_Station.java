@@ -15,6 +15,8 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 	public Query_Station(Util_Net util_Net) {
 		super();
 		this.util_Net=util_Net;
+		//	进行数据库的连接;
+		super.LinkDatabase(this.util_Net);
 	}
 	
 	//	进行查询的操作;

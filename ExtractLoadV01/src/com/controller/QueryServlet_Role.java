@@ -7,8 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.model.Util_Init;
 import com.model.Util_Net;
 import com.process.Query_Role;
 
@@ -33,8 +31,7 @@ public class QueryServlet_Role extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-				//	进行系统配置的初始化;
-				Util_Init	util_Init  = new Util_Init(request, response);
+				
 				//	开头设置;
 				Util_Net 	util_Net   = new Util_Net(request,response);
 				
@@ -61,6 +58,10 @@ public class QueryServlet_Role extends HttpServlet {
 				//	查询
 				case 3:
 					result=query.query();
+					break;
+				//	根据角色查询出权限;
+				case 4:
+					
 					break;
 				default:
 					break;
