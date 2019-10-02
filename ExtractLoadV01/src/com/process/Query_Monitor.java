@@ -83,7 +83,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		
 		int 	  count = getQueryCount(sqlAll);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	
 	//	根据车辆流量进行查询-按日:eg:2019-09-12;
@@ -127,11 +127,11 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			}
 			//	当时间信息不符合格式时;
 			else
-			return util_Net.sendResult("200", "NO", 0, null);
+			return util_Net.sendResult("0", "NO", 0, null);
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("200", "NO", 0, null);
+		return util_Net.sendResult("0", "NO", 0, null);
 		//	将时间进行24等分;
 		long ldis=(lend-lstart)/24;
 
@@ -198,7 +198,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 		tagEndModule();
 		tagComputeProcessingTime();
-		return util_Net.sendResult("200", "OK", 24, array.toString());
+		return util_Net.sendResult("0", "OK", 24, array.toString());
 	}
 	
 	//	根据车辆流量进行查询-按月;
@@ -239,12 +239,12 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				nDate=nTemp;
 			}//	当时间信息输入为错误时;
 			else
-				return util_Net.sendResult("200", "NO", 0, null);
+				return util_Net.sendResult("0", "NO", 0, null);
 			
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("200", "NO", 0, null);
+		return util_Net.sendResult("0", "NO", 0, null);
 		
 		//	对12个月进行数据统计;
 		JSONArray array=new JSONArray();
@@ -319,7 +319,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 		tagEndModule();
 		tagComputeProcessingTime();
-		return util_Net.sendResult("200", "OK", 12,array.toString());
+		return util_Net.sendResult("0", "OK", 12,array.toString());
 	}
 	
 	//	根据人脸识别进行查询;
@@ -373,7 +373,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		sqlAll			= "select count(b._id) from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=3 "+between;
 		int 	  count = getQueryCount(sqlAll);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	
 	//	根据客户流量进行查询-按日;
@@ -416,11 +416,11 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			}
 			//	当时间信息不符合格式时;
 			else
-			return util_Net.sendResult("200", "NO", 0, null);
+			return util_Net.sendResult("0", "NO", 0, null);
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("200", "NO", 0, null);
+		return util_Net.sendResult("0", "NO", 0, null);
 		//	将时间进行24等分;
 		long ldis=(lend-lstart)/24;
 
@@ -449,7 +449,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 		tagEndModule();
 		tagComputeProcessingTime();
-		return util_Net.sendResult("200", "OK", 24, array.toString());
+		return util_Net.sendResult("0", "OK", 24, array.toString());
 	}
 	//	根据客户流量进行查询-按月;
 	public String queryByFace_flow_Month() {
@@ -489,12 +489,12 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				nDate=nTemp;
 			}//	当时间信息输入为错误时;
 			else
-				return util_Net.sendResult("200", "NO", 0, null);
+				return util_Net.sendResult("0", "NO", 0, null);
 			
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("200", "NO", 0, null);
+		return util_Net.sendResult("0", "NO", 0, null);
 		
 		//	对12个月进行数据统计;
 		JSONArray array=new JSONArray();
@@ -530,7 +530,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 		tagEndModule();
 		tagComputeProcessingTime();
-		return util_Net.sendResult("200", "OK", 12,array.toString());
+		return util_Net.sendResult("0", "OK", 12,array.toString());
 	}
 	
 	public String query() {
@@ -598,7 +598,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 		int 		 count = getQueryCount(sqlall);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	
 	@Override

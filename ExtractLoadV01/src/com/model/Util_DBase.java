@@ -32,7 +32,7 @@ public class Util_DBase extends Util implements Utils_DBase{
 			//	初始化工具
 			Util_Init util_Init	=	new Util_Init(util_Net);
 			this.url			=	"jdbc:mysql://"+util_Init.getHTTP_IP()+":"+util_Init.getDB_PORT()+"/"+util_Init.getDB_NAME()+"?useUnicode=true&characterEncoding="+util_Init.getDB_ENCODING();
-//			System.out.println(this.url);
+			System.out.println(this.url);
 			//  构造函数的驱动类;
 			Class.forName(driver);
 			this.coon = (Connection) DriverManager.getConnection(url, util_Init.getDB_USERNAME(), util_Init.getDB_PASSWORD());

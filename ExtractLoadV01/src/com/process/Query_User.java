@@ -106,7 +106,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 
 		int 		 count = getQueryCount(sqlall);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	//	进行修改的操作;
 	public String updateItem() {
@@ -143,7 +143,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		
 		}		
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行新增的操作;
@@ -162,7 +162,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 				
 		sql="insert into user (USER_AutoID,USERNAME,PASSWORD,USER_CREATE_TIME,USER_REFRESH_TIME,USER_REFRESH_MARK,USER_DEL,USER_UUID) values('"+username+"','"+password+"','"+time+"','"+time+"',0,0,'"+uuid+"')";
 				
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行删除的操作;
@@ -175,7 +175,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		}
 		
 		sql			= "update user set USER_DEL=1 where USER_UUID='"+uuid+"'";
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	

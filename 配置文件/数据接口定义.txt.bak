@@ -117,7 +117,8 @@ http://localhost:8080/ExtractLoadV01/Tanker?oper=1&uuid=[must]
 http://localhost:8080/ExtractLoadV01/Tanker?oper=2&uuid=[must]&(orderNum,price,quantity,money,payType,cardNum,oilGunNum,plateOld,plate选填，或者都填)
 
 //	查询：
-http://localhost:8080/ExtractLoadV01/Tanker?oper=3&(autoid,uuid,orderNum,price,quantity,money,payType,cardNum,oilGunNum,startTime,endTime,plateOld,plate,state,page,limit选填,根据自身需要或者都不填，默认为全部信息查询);
+http://localhost:8080/ExtractLoadV01/Tanker?oper=3&
+autoid,uuid,orderNum,price,quantity,money,payType,cardNum,oilGunNum,startTime,endTime,plateOld,plate,state,page,limit
 
 
 相应设备的IP地址信息:

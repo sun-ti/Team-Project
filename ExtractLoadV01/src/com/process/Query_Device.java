@@ -103,7 +103,7 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 
 		int 		 count = getQueryCount(sqlall);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	//	进行修改的操作;
 	public String updateItem() {
@@ -151,7 +151,7 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 		
 		}		
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行新增的操作;
@@ -170,7 +170,7 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 		}
 		sql	=	"insert into device (uuid,deviceip,stationid,kind,note,state) values('"+uuid+"','"+deviceip+"','"+stationid+"',"+kind+",'"+note+"',0)";
 
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行删除的操作;
@@ -185,7 +185,7 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 		}
 		sql			= "update device set state=1 where uuid='"+uuid+"'";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	

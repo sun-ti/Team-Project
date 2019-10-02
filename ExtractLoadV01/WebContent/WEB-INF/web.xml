@@ -100,6 +100,29 @@
 		<url-pattern>/Compute</url-pattern>
 	</servlet-mapping>
 
+	<!-- 液位仪的数据处理-->
+	<servlet>
+		<servlet-name>QueryServlet_LevelGauge</servlet-name>
+		<servlet-class>com.controller.QueryServlet_LevelGauge</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_LevelGauge</servlet-name>
+		<url-pattern>/LevelGauge</url-pattern>
+	</servlet-mapping>
+
+	<!-- 加油的数据处理-->
+	<servlet>
+		<servlet-name>QueryServlet_Tanker</servlet-name>
+		<servlet-class>com.controller.QueryServlet_Tanker</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_Tanker</servlet-name>
+		<url-pattern>/Tanker</url-pattern>
+	</servlet-mapping>
+
+
 	<filter>
 		<filter-name>WebFilter</filter-name>
 		<filter-class>com.controller.WebFilter</filter-class>

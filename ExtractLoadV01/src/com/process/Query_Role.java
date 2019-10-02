@@ -92,7 +92,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 
 		int 		 count = getQueryCount(sqlall);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 
 	// 进行修改的操作;
@@ -111,7 +111,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		
 		sql	= "update role set ROLE_NAME='"+name+"' where ROLE_UUID='"+uuid+"'";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 
 	// 进行新增的操作;
@@ -132,7 +132,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 				
 		sql			   = "insert into role (ROLE_AutoID,ROLE_NAME,ROLE_UUID,ROLE_DEL,ROLE_CREATE_TIME) values('"+name+"','"+uuid+"',0,'"+datetime+"')";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 
 	// 进行删除的操作;
@@ -148,7 +148,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		}
 		sql			= "update role set ROLE_DEL=1 where ROLE_UUID='"+uuid+"'";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 
 	@Override

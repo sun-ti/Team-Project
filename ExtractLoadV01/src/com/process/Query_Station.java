@@ -91,7 +91,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 
 		int 		 count = getQueryCount(sqlall);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	//	进行修改的操作;
 	public String updateItem() {
@@ -131,7 +131,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		
 		}		
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行新增的操作;
@@ -151,7 +151,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		}
 		sql	=	"insert into station (uuid,stationid,name,state,datetime,datetime1) values('"+uuid+"','"+stationid+"','"+name+"',"+state+",'"+datetime+"',"+datetime1+")";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行删除的操作;
@@ -166,7 +166,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		}
 		sql			= "update station set state=1 where uuid='"+uuid+"'";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	

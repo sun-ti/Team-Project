@@ -108,7 +108,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 
 		int 		 count = getQueryCount(sqlall);
 		
-		return util_Net.sendResult("200", "OK", count, array.toString());
+		return util_Net.sendResult("0", "OK", count, array.toString());
 	}
 	//	进行修改的操作;
 	public String updateItem() {
@@ -163,7 +163,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		
 		}		
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行新增的操作;
@@ -188,7 +188,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 				
 		sql="insert into permission (PERMISSION_AutoID,PERMISSION_NAME,PERMISSION_URL,PERMISSION_CREATE_TIME,PERMISSION_UUID,PERMISSION_TYPE,PERMISSION_PARENT_UUID,PERMISSION_DEL) values('"+name+"','"+url+"','"+time+"','"+uuid+"',"+type+",'"+parentuuid+"',0)";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	//	进行删除的操作;
@@ -203,7 +203,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		}
 		sql			= "update permission set PERMISSION_DEL=1 where PERMISSION_UUID='"+uuid+"'";
 		
-		return util_Net.sendResult("200", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	
 	
