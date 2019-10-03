@@ -1,0 +1,72 @@
+//1.选择站点（列表来自站点管理），以时间维度用柱状折线图比较单站各月入站率的变化趋势
+//2.选择站点（列表来自站点管理），以时间维度用柱状折线图比较单站各月入站率和加油量、加油次数的变化关系的变化关系
+//3.选择站点（列表来自站点管理），以时间维度用柱状折线图比较单站各月入站车辆的变化趋势，如有下降，则可能有客户流失
+//4.选择站点（列表来自站点管理），以时间维度用柱状折线图比较单站各月入站车辆数量和加油量、加油次数的变化关系
+
+链接：http://localhost:8080/ExtractLoadV01/Monitor?oper=7&stationid=jyxd&year=2019
+结果：其中,year:		查询的年份;
+					 month:		查询的月份;
+					 out:			临街摄像头拍摄门口车辆数;
+					 in:		  入站加油的车辆数;
+					 quantity:入站加油的加油量;
+					 count:	  入站加油的加油次数;
+样例：
+{"msg":"1","code":"OK","data":
+[{"quantity":0,"month":1,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":2,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":3,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":4,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":5,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":6,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":7,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":90,"month":8,"year":"2019","in":10,"count":90,"out":12},
+ {"quantity":0,"month":9,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":170,"month":10,"year":"2019","in":17,"count":20,"out":32},
+ {"quantity":0,"month":11,"year":"2019","in":0,"count":0,"out":0},
+ {"quantity":0,"month":12,"year":"2019","in":0,"count":0,"out":0}]
+ ,"count":12}
+
+//5.选择站点（列表来自站点管理），用柱状图横向比较每个月、季度、半年、年各个车牌进站次数排名
+// 按月链接：http://localhost:8080/ExtractLoadV01/Monitor?oper=8&type=0&stationid=jyxd&year=2019
+结果：year:	年;
+  	  tag:	结果集合的标签;
+  	  order:顺序排名;
+样例:
+{"data":
+[{"year":"2019","tag":"第1月","order":"NONE"},
+ {"year":"2019","tag":"第2月","order":"NONE"},
+ {"year":"2019","tag":"第3月","order":"津MWZ579,18;津DFB610,16;津D09281,14;津AY7889,12;津MAT899,12;津HQB308,11;津A6R556,11;津MLG878,11;津RNF397,10;津NQK929,10;津G60127,9;津E10880,9;津HXN229,9;津FE1982,9;津ABT699,9;津DFL866,9;津FBS660,9;津HC6817,9;津RQQ352,9;津HJZ557,9;津JJ3806,9;津CAS018,8;渝A6017Q,8;津BN1607,8;津NTA880,8;津E16619,8;津MUY158,8;津G10779,8;津J01888,8;鲁NK52L2,8;津FCW285,8;津ANV892,8;津G06671,8;津RYX029,8;鲁J8188P,8;冀RRX888,8;津AQQ109,8;津AY6351,8;津JXD939,8;津A1W073,8;津AY6260,8;津E22233,8;津C1X213,8;津A05933D,8;津HXF262,7;津JER969,7;津NYW807,7;津A2G635,7;津JSM505,7;津GMJ328,7;津FCW515,7;津RWX319,7;津MB2159,7;津FAF018,7;津L88289,7;吉HBX859,7;津G11853,7;津AJN439,7;津AVB727,7;津DCR168,7;京QD3Y02,7;津NMG666,7;车牌,7;津N32709,7;津JNW600,7;津FFT765,7;津HNR596,7;},
+ {"year":"2019","tag":"第4月","order":"NONE"},
+ {"year":"2019","tag":"第5月","order":"NONE"},
+ {"year":"2019","tag":"第6月","order":"NONE"},
+ {"year":"2019","tag":"第7月","order":"NONE"},
+ {"year":"2019","tag":"第8月","order":"NONE"},
+ {"year":"2019","tag":"第9月","order":"NONE"},
+ {"year":"2019","tag":"第10月","order":"NONE"},
+ {"year":"2019","tag":"第11月","order":"NONE"},
+ {"year":"2019","tag":"第12月","order":"NONE"}
+ ]
+ ,"count":0}
+
+// 按季度链接：http://localhost:8080/ExtractLoadV01/Monitor?oper=8&type=1&stationid=jyxd&year=2019
+结果：year:	年;
+  	  tag:	结果集合的标签;
+  	  order:顺序排名;
+
+样例:
+{"data":
+[{"year":"2019","tag":"第1季度","order":"NONE"},
+ {"year":"2019","tag":"第2季度","order":"NONE"},
+ {"year":"2019","tag":"第3季度","order":"津MWZ579,18;津DFB610,16;津D09281,14;津AY7889,12;津MAT899,12;津HQB308,11;津A6R556,11;津MLG878,11;津RNF397,10;津NQK929,10;津G60127,9;津E10880,9;津HXN229,9;津FE1982,9;津ABT699,9;津DFL866,9;津FBS660,9;津HC6817,9;津RQQ352,9;津HJZ557,9;津JJ3806,9;津CAS018,8;渝A6017Q,8;津BN1607,8;津NTA880,8;津E16619,8;津MUY158,8;津G10779,8;津J01888,8;鲁NK52L2,8;津FCW285,8;津ANV892,8;津G06671,8;津RYX029,8;鲁J8188P,8;冀RRX888,8;津AQQ109,8;津AY6351,8;津JXD939,8;津A1W073,8;津AY6260,8;津E22233,8;津C1X213,8;津A05933D,8;津HXF262,7;津JER969,7;津NYW807,7;津A2G635,7;津JSM505,7;津GMJ328,7;津FCW515,7;津RWX319,7;津MB2159,7;津FAF018,7;津L88289,7;吉HBX859,7;津G11853,7;津AJN439,7;津AVB727,7;津DCR168,7;京QD3Y02,7;津NMG666,7;车牌,7;津N32709,7;津JNW600,7;津FFT765,7;津HNR596,7;},
+ {"year":"2019","tag":"第4季度","order":"NONE"}]
+ ,"count":0}
+
+// 按半年链接：http://localhost:8080/ExtractLoadV01/Monitor?oper=8&type=2&stationid=jyxd&year=2019
+结果：year:	年;
+  	  tag:	结果集合的标签;
+  	  order:顺序排名;
+样例：
+{"data":
+[{"year":"2019","tag":"第1半年","order":"NONE"},
+ {"year":"2020","tag":"第2半年","order":"津MWZ579,18;津DFB610,16;津D09281,14;津AY7889,12;津MAT899,12;津HQB308,11;津A6R556,11;津DTZ109,1;"}]
+ ,"count":0}
