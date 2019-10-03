@@ -237,7 +237,6 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 			payType= util_Net.getRequest().getParameter("payType");
 			cardNum= util_Net.getRequest().getParameter("cardNum");
 			oilGunNum= util_Net.getRequest().getParameter("oilGunNum");
-			startTime= util_Net.getRequest().getParameter("stationid");
 			endTime= startTime;
 			plateOld= util_Net.getRequest().getParameter("plateOld");
 			plate= util_Net.getRequest().getParameter("plate");

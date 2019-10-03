@@ -1,0 +1,176 @@
+#1.站点的运营分析表—车辆和加油
+create table StationStatistics_carandoil(
+autoid bigint primmary key auto_increment,
+uuid  varchar(50),
+stationid varchar(20),
+out_num bigint,
+in_num bigint,
+in_oil_quantity double,
+in_oil_count int,
+datetime varchar(20),
+datetime1 bigint
+)
+#2.人员进行
+create table StationStatistics_human(
+autoid bigint primary key auto_increment,
+uuid varchar(50),
+stationid varchar(20),
+in_num bigint,
+datetime varchar(20),
+datetime1 bigint
+)
+#3.加油车的分析表;
+create table car_plan(
+autoid bigint primary key auto_increment,
+stationid varchar(20),
+carid varchar(20)
+)
+#4.车辆加油情况表;
+create table car_addoil(
+autoid bigint primary key auto_increment,
+uuid varchar(50),
+carid varchar(20),
+stationid varchar(20),
+datetime varchar(20),
+staytime bigInt,
+in_oil_quantity double,
+in_oil_count int
+)
+#5.车辆异常统计表;
+create table StationStatistic_Exception(
+autoid bigint primary key auto_increment,
+uuid varchar(50),
+carid varchar(20),
+stationid varchar(20),
+datetime varchar(20),
+datetime1 bigint
+)
+#6.设备管理表
+create table device(
+autoid bigint primary key auto_increment,
+uuid varchar(50),
+deviceip varchar(20),
+stationid varchar(20),
+kind int,
+note varchar(1000),
+state int(2)
+)
+#7.加油机管理表
+create table jyj (
+  autoid  bigint(20) primary key NOT NULL AUTO_INCREMENT,
+  uuid  varchar(50) DEFAULT NULL,
+  orderNum  varchar(50) DEFAULT NULL,
+  price  double DEFAULT NULL,
+  quantity  double DEFAULT NULL,
+  money  double DEFAULT NULL,
+  payType  int(11) DEFAULT NULL,
+  cardNum  varchar(20) DEFAULT NULL,
+  oilGunNum  varchar(20) DEFAULT NULL,
+  startTime  varchar(20) DEFAULT NULL,
+  endTime  varchar(20) DEFAULT NULL,
+  plateOld  varchar(20) DEFAULT NULL,
+  plate  varchar(20) DEFAULT NULL,
+  state  int(11) DEFAULT NULL
+) 
+#8.监控信息管理表
+create table monitorinfo (
+   _id  int(11) primary key NOT NULL AUTO_INCREMENT,
+   uuid  varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+   stationid  varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+   lcommand  int(13) DEFAULT NULL,
+   deviceip  varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+   errMsg  varchar(1000) COLLATE utf8_unicode_ci DEFAULT NULL,
+   datetime  varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+   datetime1  bigint(20) DEFAULT NULL,
+   pic1  varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+   pic2  varchar(200) COLLATE utf8_unicode_ci DEFAULT NULL,
+   state  int(2) unsigned zerofill DEFAULT NULL
+) 
+#9.权限信息管理表
+create table permission (
+   PERMISSION_AutoID  int(11) primary key NOT NULL AUTO_INCREMENT,
+   PERMISSION_NAME  varchar(255) DEFAULT NULL,
+   PERMISSION_URL  varchar(255) DEFAULT NULL,
+   PERMISSION_CREATE_TIME  datetime DEFAULT NULL,
+   PERMISSION_UUID  varchar(40) DEFAULT NULL,
+   PERMISSION_TYPE  tinyint(4) DEFAULT NULL COMMENT '分为三类：1 系统，2 导航，3 菜单(打开某个功能)',
+   PERMISSION_PARENT_UUID  varchar(40) DEFAULT NULL COMMENT '父级权限uuid',
+   PERMISSION_DEL  tinyint(4) DEFAULT '0'
+)
+#10.角色信息管理表
+create table role (
+   ROLE_AutoID  int(11) primary key NOT NULL AUTO_INCREMENT,
+   ROLE_NAME  varchar(25) DEFAULT NULL,
+   ROLE_UUID  varchar(40) DEFAULT NULL,
+   ROLE_DEL  tinyint(1) DEFAULT '0' COMMENT '删除标志（0代表不删除，1代表删除）',
+   ROLE_CREATE_TIME  datetime DEFAULT NULL
+)
+#11.角色权限信息表
+create table role_permission (
+   RP_AutoID  int(11) primary key NOT NULL AUTO_INCREMENT,
+   ROLE_UUID  varchar(40) DEFAULT NULL,
+   PERMISSION_UUID  varchar(40) DEFAULT NULL,
+   RP_CREATE_TIME  datetime DEFAULT NULL,
+   RP_DEL  tinyint(4) DEFAULT '0',
+   RP_UUID  varchar(40) DEFAULT NULL
+)
+#12.站点信息管理表
+create table station (
+   autoid  bigint(20) primary key NOT NULL AUTO_INCREMENT,
+   uuid  varchar(50) DEFAULT NULL,
+   stationid  varchar(10) DEFAULT NULL,
+   name  varchar(20) DEFAULT NULL,
+   state  int(11) DEFAULT NULL,
+   datetime  varchar(50) DEFAULT NULL,
+   datetime1  bigint(20) DEFAULT NULL
+)
+#13.用户信息管理表
+create table user (
+   USER_AutoID  int(11) primary key NOT NULL AUTO_INCREMENT,
+   USERNAME  varchar(16) DEFAULT NULL,
+   PASSWORD  varchar(16) DEFAULT NULL,
+   USER_CREATE_TIME  datetime DEFAULT NULL,
+   USER_REFRESH_TIME  datetime DEFAULT NULL COMMENT '同步时间',
+   USER_REFRESH_MARK  tinyint(4) DEFAULT '0' COMMENT '同步标志（0未同步，1已同步）',
+   USER_DEL  tinyint(4) DEFAULT '0' COMMENT '删除标志（0代表不删除，1代表删除）',
+   USER_UUID  varchar(40) DEFAULT NULL
+)
+#14.用户角色对应表
+create table  user_role (
+   UR_AutoID  int(11) primary key NOT NULL AUTO_INCREMENT,
+   USER_UUID  varchar(40) DEFAULT NULL,
+   ROLE_UUID  varchar(40) DEFAULT NULL,
+   UR_UUID  varchar(40) DEFAULT NULL,
+   UR_CREATE_TIME  datetime DEFAULT NULL,
+   UR_DEL  tinyint(4) DEFAULT '0'
+)
+#15.液位仪信息管理表
+create table ywy (
+   autoid  int(11) primary key NOT NULL AUTO_INCREMENT,
+   uuid  varchar(50) DEFAULT NULL,
+   nodeno  varchar(20) DEFAULT NULL,
+   xql  varchar(20) DEFAULT NULL,
+   ps_date  varchar(20) DEFAULT NULL,
+   cp_no  varchar(20) DEFAULT NULL,
+   depot_code  varchar(20) DEFAULT NULL,
+   psd_id  varchar(20) DEFAULT NULL,
+   oils_id  varchar(20) DEFAULT NULL,
+   state  int(2) DEFAULT NULL
+)
+
+#16.卸油信息单;
+create table car_removeoil(
+  autoid bigint primary key auto_increment,
+  uuid varchar(20),
+  psd_id varchar(20),
+  stationid varchar(20),
+  cp_no varchar(20) COMMENT '理论车牌',
+  car_id varchar(20) COMMENT '实际车牌'，
+  datetime varchar(20)  COMMENT '送达时间',
+  datetime1 bigint,
+  psd_time varchar(20) COMMENT '配送时间',
+  year int,
+  month int,
+  day int,
+  state int COMMENT '修改状态'
+)

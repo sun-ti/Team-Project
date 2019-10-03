@@ -4,9 +4,13 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.model.InStation;
 import com.model.Util_DBase;
 import com.model.Util_Net;
 import com.models.Utils_DBase;
@@ -27,7 +31,747 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		super.LinkDatabase(this.util_Net);
 		
 	}
+	//	1.入站率分析-各月入站率的变化趋势;
+	public String queryRadio_InStation_ByMonth() {
+		//	站点的id编号;
+		String 	 stationid="",year="",sql="",result=null;
+		String[] results  =new String[2];
+		int size=0;
+		
+		//	站点的内容;
+		stationid=util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 =util_Net.getRequest().getParameter("year");
 
+		//	SQL语句的内容;
+		//	查询年时间段里的所有数据信息;
+		JSONArray arrayNew= new JSONArray();
+		try {
+			for(int i=1;i<=12;i++) {
+				sql		 		  = "select out_num,in_num,in_oil_quantity,in_oil_count,month from stationstatistics_carandoil where stationid='"+stationid+"' and year="+year+" and month="+i+"  order by datetime1";
+				JSONArray array	  = super.select(sql);
+				int 	  out_temp		= 0;
+				int 	  in_temp 		= 0;
+				double	  quantity_temp = 0;
+				int	  	  count_temp 	= 0;
+				for(int j=0;j<array.size();j++) {
+					//	JSONOBject对象;
+					JSONObject 	jo 		= array.getJSONObject(j);
+					String 		out_num	= jo.getString("out_num");
+					String 		in_num 	= jo.getString("in_num");
+					String oil_quantity	= jo.getString("in_oil_quantity");
+					String oil_count 	= jo.getString("in_oil_count");
+					
+					int    out	  = Integer.parseInt(out_num);
+					int    in	  = Integer.parseInt(in_num);
+					double quantity	  = Double.parseDouble(oil_quantity);
+					int    count	  = Integer.parseInt(oil_count);
+					out_temp	 += out;
+					in_temp      += in;
+					quantity_temp+= quantity;
+					count_temp   += count;
+				}
+				JSONObject joNew  = new JSONObject();
+				joNew.put("year", year);
+				joNew.put("month", i);
+				joNew.put("in", in_temp);
+				joNew.put("out", out_temp);
+				joNew.put("quantity", quantity_temp);
+				joNew.put("count", count_temp);
+				arrayNew.add(joNew);
+			}
+			result=arrayNew.toString();
+		} catch (Exception e) {
+			result=null;
+		}
+		//	判断结果内容;
+		if(result!=null) {
+			results[0]="1";
+			results[1]="OK";
+			size=arrayNew.size();
+			
+		}else {
+			results[0]="0";
+			results[1]="NO";
+			size=0;
+		}
+		//	关闭数据库;
+		close();
+		//	数据结果的显示;
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	//	统计车牌出现的次数的方法;
+	private JSONObject query_licenceByOrder(String stationid,String year,String month,long start,long end) {
+		JSONObject object=new JSONObject();
+		
+		String sql="select errMsg from monitorinfo where stationid='"+stationid+"' and datetime1 between "+start+" and "+end;
+		JSONArray array=super.select(sql);
+		
+		//	进行计数的内容信息;
+		int count=1;
+		
+		Map<String, String> 	map	=	new HashMap<String, String>();
+		
+		for(int i=0;i<array.size();i++) {
+			JSONObject   o = array.getJSONObject(i);
+			//	进行MSG的信息内容;
+			String  errMsg = o.getString("errMsg").trim();
+			
+			//	进行标签的内容;
+			if(errMsg.contains("num:")) {
+
+				errMsg=errMsg.substring(errMsg.indexOf("num:")+"num:".length(), errMsg.length());
+				
+				//	车牌的牌照不同;
+				if(!errMsg.equals("NONE")) {
+					String temp = null;
+					try {
+						temp	= map.get(errMsg);
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+					//	进行计数信息;
+					if(temp!=null) {
+						count++;
+						
+					}else {
+						count=1;
+					}
+					//	对车牌的出现次数进行赋值;
+					map.put(errMsg, count+"");	
+				}
+					
+			}	
+		}
+		
+		ArrayList<InStation> list=new ArrayList<InStation>();
+
+		//	进行排序;
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			String name  =	entry.getKey();
+			int    value =	Integer.parseInt(entry.getValue());
+			
+			list.add(new InStation(name, value));
+		}
+		//	长度的排列
+		object.put("year", year);
+		object.put("tag", month);
+		int size	=	list.size();
+		
+		if(size>0) {
+			Collections.sort(list);
+			
+			String temp="";
+			for(int i=size-1;i>=0;i--) {
+				String key	=list.get(i).key;
+				int    value=list.get(i).value;
+				
+				temp+=key+","+value+";";
+			}	
+			
+			//	进行order放入到列表里;
+			object.put("order", temp);
+		}else {
+			object.put("order", "NONE");
+		}
+
+		return object;
+	}
+	
+	
+	
+	
+	
+	//	根据月份查询入站人数;
+	public String query_InStationByMonth() {
+		String[]  results= {"0","NO"};
+		String    result = null,stationid=null,year=null,sql="";
+		JSONArray array	 = new JSONArray();
+		int 	  size	 = 0;
+		
+		//	站点的内容;
+		stationid= util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 = util_Net.getRequest().getParameter("year");
+		
+		for(int i=1;i<=12;i++) {
+			sql	 			= "select in_human_num from stationstatistics_human where stationid='"+stationid+"' and year="+year+" and month="+i;
+			JSONArray array2= super.select(sql);
+			
+			int in_num_temp = 0;
+			for(int j=0;j<array2.size();j++) {
+				JSONObject  obj			= array2.getJSONObject(j);
+				String 		in_human_num= obj.getString("in_human_num");
+				int			in_num		= Integer.parseInt(in_human_num);
+				in_num_temp			   += in_num;
+			}
+			
+			JSONObject 	object	=	new JSONObject();
+			object.put("year", year);
+			object.put("month", i);
+			object.put("in_human_num", in_num_temp);
+			
+			array.add(object);
+		}
+		
+		//	进行相应的数据传输;
+		if(array!=null){
+			results[0]= "1";
+			results[1]= "OK";
+			size	  = array.size();
+			result	  = array.toString();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	
+	//	按照月进行——人脸与车辆比
+	public String query_RadioByHumanAndCar() {
+		String[]  results= {"0","NO"};
+		String    result = null,stationid=null,year=null;
+		JSONArray array	 = new JSONArray();
+		int 	  size	 = 0;
+
+		//	站点的内容;
+		stationid=util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 =util_Net.getRequest().getParameter("year");
+		
+		//	进行12个月的查询;
+		for(int i=1;i<=12;i++) {
+			String 	  	sql		 = "select a.out_num,a.in_num,b.in_human_num from stationstatistics_carandoil a, stationstatistics_human b where a.stationid=b.stationid and a.year=b.year and a.month=b.month and a.day=b.day and a.year="+year+" and a.month="+i+" and a.stationid='"+stationid+"'";
+			
+			JSONArray 	array2	 = super.select(sql);
+			int car_out_num_temp = 0;
+			int car_in_num_temp  = 0;
+			int human_in_num_temp= 0;
+
+			System.out.println(array2.toString());
+			//	进行数据的传入内容;
+			for(int j=0;j<array2.size();j++) {
+				
+				JSONObject     obj = array2.getJSONObject(j);
+				//	临街车辆数;
+				String car_out_num = obj.getString("out_num");
+				//	入站车辆数;
+				String car_in_num  = obj.getString("in_num");
+				//	入点人脸数;
+				String human_in_num= obj.getString("in_human_num");
+				
+				int	   		car_out= Integer.parseInt(car_out_num);
+				int	   		car_in = Integer.parseInt(car_in_num);
+				int	   	   human_in= Integer.parseInt(human_in_num);
+				
+				car_out_num_temp  += car_out;
+				car_in_num_temp   += car_in;
+				human_in_num_temp += human_in;
+
+			}
+			JSONObject   object= new JSONObject();
+			
+			object.put("year", year);
+			object.put("month", i);
+			object.put("car_out_num", car_out_num_temp);
+			object.put("car_in_num", car_in_num_temp);
+			object.put("human_in_num", human_in_num_temp);
+			
+			array.add(object);
+
+		}
+		
+		//	进行相应的数据传输;
+		if(array!=null){
+			results[0]= "1";
+			results[1]= "OK";
+			size	  = array.size();
+			result	  = array.toString();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	
+	//	按照各类用户的加油次数的变化趋势;
+	public String query_addOilCountByDifferentKind() {
+		//	站点的编号;
+		String   stationid= null,result=null,sql="";
+		String[] results  = {"0","NO"};
+		int 	 year	  = 0,size=0;
+		
+		//	结果的列表;
+		JSONArray array2  =	new JSONArray();
+		
+		//	站点的内容;
+		stationid		  =	util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 		  =	Integer.parseInt(util_Net.getRequest().getParameter("year"));
+		
+		//	进行按月进行统计的内容;
+		for(int i=1;i<=12;i++) {
+			
+			//	进行相应的数据传输;
+			//	进行相应的类别的内容信息;
+			for(int type=1;type<=5;type++) {
+				sql		    		 =	"select carid,in_oil_quantity,type from car_addoil where stationid='"+stationid+"' and year="+year+" and month="+i+" and type="+type;
+				
+				JSONArray array		 =	super.select(sql);
+				
+				if(array.size()>0) {
+					int 	count_temp 	 = 0;
+					double	quantity_temp= 0;
+					//	对象相应的数据进行总结;
+					for(int j=0;j<array.size();j++) {
+						//	每个对象的内容;
+						JSONObject 		o		= 	array.getJSONObject(j);
+						//	加油的内容;
+						String in_oil_quantity	= 	o.getString("in_oil_quantity");
+						double in_quantity		=	Double.parseDouble(in_oil_quantity);
+						//	进行量统计;
+						quantity_temp		   +=	in_quantity;
+						
+						//	进行数统计;
+						count_temp++;
+						
+					}
+					JSONObject object=new JSONObject();
+					object.put("stationid", stationid);
+					object.put("year", year);
+					object.put("month", i);
+					object.put("count", count_temp);
+					object.put("quantity", quantity_temp);
+					object.put("type", "类型"+type);
+					//	进行数据添加
+					array2.add(object);	
+				}
+							
+			}
+		}
+		
+		if(array2!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array2.toString();
+			size=array2.size();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	
+	//	按照牌照的次数进行调查-车牌进站率的比较;
+	public String query_licence() {
+		//	站点的id编号;
+		String 	 stationid="",result=null;
+		String[] results  = {"0","NO"};
+		int size=0,type=0,year=0;
+		
+		//	站点的内容;
+		stationid		=	util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 		=	Integer.parseInt(util_Net.getRequest().getParameter("year"));
+		//	进行排名的统计;
+		type	 		=	Integer.parseInt(util_Net.getRequest().getParameter("type"));
+		JSONArray array	=	new JSONArray();
+		
+		switch (type) {
+		//	根据月排名
+		case 0:
+			//	根据12个月进行相应的数据信息;
+			for(int i=1;i<=12;i++) {
+				int    j	= i+1;
+				String start= year+"-"+i+"-1 00:00:00";
+				String end  = year+"-"+j+"-1 00:00:00";
+				int	   month= i;
+				
+				//	当月份超出则变成下一年;
+				if(j==13) {
+					year=year+1;
+					end=year+"-1-1 00:00:00";
+				}
+				
+				System.out.println("开始:"+start+"|结束:"+end);
+				//	进行相应的时间统计;
+				//	开始标签;
+				long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				//	结束标签;
+				long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				
+				//	按顺序进行排列;
+				array.add(query_licenceByOrder(stationid,year+"","第"+month+"月",lstart, lend));
+			}
+					
+			break;
+		
+		//	根据季度排名
+		case 1:
+			//	根据4个季度进行相应的数据信息;
+			for(int i=1;i<=12;i+=3) {
+				int    j	  = i+3;
+				String start  = year+"-"+i+"-1 00:00:00";
+				String end    = year+"-"+j+"-1 00:00:00";
+				int    season = j/3;
+				//	当月份超出则变成下一年;
+				if(j==13) {
+					year=year+1;
+					end=year+"-1-1 00:00:00";
+				}
+				//	进行相应的时间统计;
+				//	开始标签;
+				long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				//	结束标签;
+				long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				//	按顺序进行排列;
+				array.add(query_licenceByOrder(stationid,year+"","第"+season+"季度",lstart, lend));
+			}
+
+			break;
+		
+		//	根据半年排名
+		case 2:
+			//	根据2个半年进行相应的数据信息;
+			for(int i=1;i<=12;i+=6) {
+				int    j	   = i+6;
+				String start   = year+"-"+i+"-1 00:00:00";
+				String end     = year+"-"+j+"-1 00:00:00";
+				int    halfyear= 1+i/6;
+				//	当月份超出则变成下一年;
+				if(j==13) {
+					year=year+1;
+					end=year+"-1-1 00:00:00";
+				}
+				//	进行相应的时间统计;
+				//	开始标签;
+				long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				//	结束标签;
+				long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				//	按顺序进行排列;
+				array.add(query_licenceByOrder(stationid,year+"","第"+halfyear+"半年",lstart, lend));
+			}
+
+			break;
+		
+		default:
+			break;
+		}
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	//	查询配送单
+	public String query_DeliveryOrder() {
+		//	站点的id编号;
+		String 	 stationid="",result=null,sql="",date=null;
+		String[] results  = {"0","NO"};
+		int size=0;
+		
+		//	站点的内容;
+		stationid		=	util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		date	 		=	util_Net.getRequest().getParameter("date");
+		
+		String ps_date  = date+" 00:00:00";
+		
+		sql				= "select autoid,uuid,nodeno,xql,ps_date,cp_no,depot_code,psd_id,oils_id from ywy where nodeno='"+stationid+"' and ps_date='"+ps_date+"'";
+		JSONArray array = super.select(sql);
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	
+	
+	//	加油停留时间的查询
+	public String query_stayStationByMonth() {
+		//	站点的id编号;
+		String 	 stationid="",result=null,sql="";
+		String[] results  = {"0","NO"};
+		int size=0,year=0;
+		JSONArray array=    new JSONArray();
+		
+		//	站点的内容;
+		stationid		=	util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 		=	Integer.parseInt(util_Net.getRequest().getParameter("year"));
+		
+		for(int i=1;i<=12;i++) {
+			//	进行SQL;
+			sql				=	"select in_oil_quantity,staytime from car_addoil where year="+year+" and month="+i+" and stationid='"+stationid+"'";
+			//	结果内容;
+			JSONArray array2=	super.select(sql);
+			
+			double in_oil_quantity_temp=0;
+			int    staytime_temp	   =0;
+			
+			for(int j=0;j<array2.size();j++) {
+				JSONObject obj		  = array2.getJSONObject(j);
+				String in_oil_quantity= obj.getString("in_oil_quantity");
+				String staytime		  = obj.getString("staytime");
+				
+				double in_quantity	  = Double.parseDouble(in_oil_quantity);
+				int    in_staytime	  = Integer.parseInt(staytime);
+				
+				in_oil_quantity_temp += in_quantity;
+				staytime_temp	     += in_staytime;
+			}
+			
+			double in_quantity_mean   = 0;
+			double    staytime_mean   = 0;
+			
+			if(array2.size()>0) {
+				in_quantity_mean	=	(double)in_oil_quantity_temp/array2.size();
+				staytime_mean	 	=	(double)staytime_temp/array2.size();	
+			}
+			
+			JSONObject 		object	  = new JSONObject();
+			object.put("year", year);
+			object.put("month", i);
+			object.put("in_quantity_mean", in_quantity_mean);
+			object.put("add_oil_count", array2.size());
+			object.put("staytime_mean", staytime_mean);
+			array.add(object);
+		}
+
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+
+	//	加油停留时间与停留次数的查询
+	public String query_DeilveryAndReality() {
+		//	站点的id编号;
+		String 	 stationid="",result=null,date=null,sql="";
+		String[] results  = {"0","NO"};
+		int size=0;
+
+		//	站点的内容;
+		stationid		=	util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		date	 		=	util_Net.getRequest().getParameter("date")+" 00:00:00";
+			
+		sql				=	"select autoid,uuid,psd_id,stationid,cp_no,car_id,datetime,datetime1,psd_time,state from car_removeoil where stationid='"+stationid+"' and psd_time='"+date+"'";
+		
+		JSONArray array =   super.select(sql);
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	//	黑名单方法;
+	public String add_ExceptionList() {
+		String 	uuid	=	getUUID(),carid=null,stationid=null;
+		
+		long 	ltime	=	System.currentTimeMillis();
+		String 	datetime=	getCurrentDatetime(ltime, "yyyy-MM-dd hh:mm:ss"),datetime1=ltime+"";
+		
+		String 	date	=	getCurrentDatetime(ltime, "yyyy-MM-dd");
+		
+		String[] times  =   date.split("-");
+		String  year	=	times[0];
+		String  month	=	times[1];
+		String  day		=	times[2];
+
+		carid			=	util_Net.getRequest().getParameter("carid");
+		stationid		=	util_Net.getRequest().getParameter("stationid");
+		
+		String sql="insert into stationstatistics_exception (uuid,carid,stationid,datetime,datetime1,year,month,day) values "
+				+ "('"+uuid+"','"+carid+"','"+stationid+"','"+datetime+"',"+datetime1+","+year+","+month+","+day+")";
+		
+		return util_Net.sendResult("0", "OK", update(sql), "null");
+	}
+	//	根据站点查询黑名单;
+	public String query_ExceptionListByStationId() {
+		//	站点的id编号;
+		String 	 result=null,year="";
+		String[] results  = {"0","NO"};
+		int size=0;
+		//	查询出所有的站点;
+		String 	  sql1	  = "select stationid from station";
+		JSONArray array1  = super.select(sql1);
+		JSONArray array	  = new JSONArray();
+		
+		//	获得的年份;
+		year	 		=	util_Net.getRequest().getParameter("year");
+
+		//	根据年进行查询;
+		for(int j=0;j<array1.size();j++) {
+			
+			JSONObject obj1  = array1.getJSONObject(j);
+			String stationid = obj1.getString("stationid");
+			
+			JSONArray array3 = new JSONArray();
+			
+			for(int i=1;i<=12;i++){
+				
+				String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+year+" and month="+i;
+	
+				JSONArray  array2 = super.select(sql);
+				
+				JSONObject obj2   = new JSONObject();
+			
+				obj2.put("year", year);
+				obj2.put("month", i);
+				obj2.put("data", array2.toString());
+				array3.add(obj2);
+			}
+		
+			JSONObject obj3=new JSONObject();
+			obj3.put("stationid", stationid);
+			obj3.put("info", array3.toString());
+			array.add(obj3);
+		}
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+//	//	各站黑名单车辆到站预警（并需传输给CMC系统）
+//	public String alarm_ExceptionListByStationId() {
+//		//	站点的id编号;
+//		String 	 stationid="",result=null,date=null,sql="";
+//		String[] results  = {"0","NO"};
+//		int size=0;
+//		
+//		
+//		
+//		if(array!=null) {
+//			results[0]= "1";
+//			results[1]= "OK";
+//			result	  = array.toString();
+//			size	  = array.size();
+//		}
+//		
+//		return util_Net.sendResult(results[0], results[1], size, result);
+//	}
+	//	黑名单车辆到站预警;
+	public String alarm_ExceptionToStation() {
+		//	站点的id编号;
+		String 	  stationid="",result=null,year=null;
+		String[]  results  = {"0","NO"};
+		int 	  size	   = 0;
+		JSONArray array	   = new JSONArray();
+		
+		//	获得的年份;
+		year	 		=	util_Net.getRequest().getParameter("year");
+		stationid 		=	util_Net.getRequest().getParameter("stationid");
+		
+		
+		String    	sql1	  =	"select carid from stationstatistics_exception";
+		JSONArray   array1	  =	super.select(sql1);
+		ArrayList<String>	exceptions= new ArrayList<String>();
+		
+		//	异常信息的列表内容;
+		for(int j=0;j<array1.size();j++) {
+			
+			//	每个声明的对象;
+			JSONObject obj1	 =	array1.getJSONObject(j);
+			//	声明对象的变量;
+			String carid	 =  obj1.getString("carid");
+			exceptions.add(carid);
+		}
+		
+		for(int i=1;i<=12;i++) {	
+			String 	  sql2	 =	"select carid from car_addoil where stationid='"+stationid+"' and year="+year+" and month="+i;
+			JSONArray array2 =  super.select(sql2);
+			
+			int count=0;
+			for(int a=0;a<array2.size();a++) {
+				JSONObject obj2=array2.getJSONObject(a);
+				
+				String   car_id=obj2.getString("carid");
+				
+				if(exceptions.contains(car_id)) {
+					count++;
+				}
+			}
+			
+			JSONObject object	=	new JSONObject();
+			object.put("stationid",stationid);
+			object.put("year",year);
+			object.put("month",i);
+			object.put("errCount",count);
+			
+			array.add(object);
+		}
+		
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	
+	public String query_AnalyzeDeilveryAndOrder() {
+		//	站点的id编号;
+		String 	  stationid="",result=null,year=null,sql="";
+		String[]  results  = {"0","NO"};
+		int 	  size	   = 0;
+		JSONArray array	   = new JSONArray();
+		
+		//	站点的内容;
+		stationid		=	util_Net.getRequest().getParameter("stationid");
+		//	获得的年份;
+		year	 		=	util_Net.getRequest().getParameter("year");
+		
+		
+		for(int i=1;i<=12;i++) {
+			
+			sql				  =   "select autoid,uuid,psd_id,stationid,cp_no,car_id,datetime,datetime1,psd_time,state from car_removeoil where stationid='"+stationid+"' and year="+year+" and month="+i;
+			JSONArray  array2 =	super.select(sql);
+			
+			JSONObject object = new JSONObject();
+			
+			object.put("year", year);
+			object.put("month", i);
+			object.put("data", array2.toString());
+			
+			array.add(object);
+		}
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+		
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	
 	//	根据车辆牌照进行查询
 	public String queryByVehicle_license() {
 		//	站点信息;
