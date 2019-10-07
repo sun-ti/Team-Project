@@ -79,8 +79,7 @@
   	  count:	 加油次数
   	  type:		 客户类型
 样例:
-{"msg":"OK","code":"1","data":
-[{"month":10,"data":
+{"msg":"OK","code":"1","data":[{"month":10,"data":
 								[{"quantity":0,"count":0,"type":1},
 								 {"quantity":0,"count":0,"type":2},
 								 {"quantity":0,"count":0,"type":3},

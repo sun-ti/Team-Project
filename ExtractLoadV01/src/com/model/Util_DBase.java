@@ -109,7 +109,7 @@ public class Util_DBase extends Util implements Utils_DBase{
 	         }
 	          stmt.close();
 	     }catch(Exception e){
-	        e.printStackTrace();
+//	        e.printStackTrace();
 	        return null;
 	     }
 

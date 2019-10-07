@@ -32,6 +32,7 @@ uuid varchar(50),
 carid varchar(20),
 stationid varchar(20),
 datetime varchar(20),
+datetime1 bigint,
 staytime bigInt,
 in_oil_quantity double,
 in_oil_count int
