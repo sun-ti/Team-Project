@@ -1,0 +1,217 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+
+</head>
+<div>
+    <div class="layui-form" style="width: 1000">
+        <div class="layui-form-item">
+            <label class="layui-form-label">时间筛选</label>
+            <div class="layui-input-inline">
+                <select name="quiz1">
+                    <option value="" selected="">请选择年份</option>
+                    <option value="2015" >2015年</option>
+                    <option value="2016" >2016年</option>
+                    <option value="2017" >2017年</option>
+                    <option value="2018" >2018年</option>
+                    <option value="2019" >2019年</option>
+                </select>
+            </div>
+            <div class="layui-input-inline">
+                <select name="quiz2">
+                    <option value="">请选择月份</option>
+                    <option value="1">1月</option>
+                    <option value="2">2月</option>
+                    <option value="3">3月</option>
+                    <option value="4">4月</option>
+                    <option value="5">5月</option>
+                    <option value="6">6月</option>
+                    <option value="7">7月</option>
+                    <option value="8">8月</option>
+                    <option value="9">9月</option>
+                    <option value="10">10月</option>
+                    <option value="11">11月</option>
+                    <option value="12">12月</option>
+                </select>
+            </div>
+            <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
+        </div>
+
+    </div>
+    <div id="main" style="width: 900px;height:600px;"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
+    <script src="../layui.js"></script>
+    <script type="text/javascript" th:inline="none">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'))
+
+        var datajson = "{\"msg\":\"OK\",\"code\":\"200\",\"data\":[{\"date\":\"2019-1\",\"in\":580,\"percent\":\"0.78\",\"out\":7206},{\"date\":\"2019-2\",\"in\":809,\"percent\":\"0.89\",\"out\":7272},{\"date\":\"2019-3\",\"in\":733,\"percent\":\"0.66\",\"out\":9225},{\"date\":\"2019-4\",\"in\":535,\"percent\":\"0.73\",\"out\":7252},{\"date\":\"2019-5\",\"in\":530,\"percent\":\"0.60\",\"out\":9245},{\"date\":\"2019-6\",\"in\":406,\"percent\":\"0.80\",\"out\":7225},{\"date\":\"2019-7\",\"in\":818,\"percent\":\"0.99\",\"out\":6245},{\"date\":\"2019-8\",\"in\":674,\"percent\":\"0.54\",\"out\":8462},{\"date\":\"2019-9\",\"in\":640,\"percent\":\"0.602613434\",\"out\":6237},{\"date\":\"2019-10\",\"in\":443,\"percent\":\"0.87\",\"out\":6245},{\"date\":\"2019-11\",\"in\":349,\"percent\":\"0.78\",\"out\":5370},{\"date\":\"2019-12\",\"in\":214,\"percent\":\"0.66\",\"out\":7006}],\"count\":12}"
+        var data = JSON.parse(datajson).data
+
+        var xdata=[],data_precent=[],data_car=[],data_custom=[]
+        for(var item of data){
+            xdata.push(item.date)
+            //data_precent存放入店比队列
+            data_precent.push(item.percent)
+            //data_car存放进站车流量
+            data_car.push(item.out)
+            //data_custom存放进店客流量
+            data_custom.push(item.in)
+        }
+
+        var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+        option = {
+            color: colors,
+            dataZoom: [
+                {   // 这个dataZoom组件，默认控制x轴。
+                    type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+                    start: 10,      // 左边在 10% 的位置。
+                    end: 60         // 右边在 60% 的位置。
+                }
+            ],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            grid: {
+                right: '20%'
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            legend: {
+                data:['车流量','客流量','入店比']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    data: xdata
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '车流量',
+                    min: 0,
+                    max: Math.max.apply(null,data_car)*1.3,
+                    position: 'right',
+                    axisLine: {
+                        lineStyle: {
+                            color: colors[0]
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                {
+                    type: 'value',
+                    name: '客流量',
+                    min: 0,
+                    max: Math.max.apply(null,data_custom)*1.3,
+                    position: 'right',
+                    offset: 80,
+                    axisLine: {
+                        lineStyle: {
+                            color: colors[1]
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                {
+                    type: 'value',
+                    name: '入店比',
+                    min: 0,
+                    max: Math.max.apply(null,data_precent),
+                    position: 'left',
+                    axisLine: {
+                        lineStyle: {
+                            color: colors[2]
+                        }
+                    },
+                    axisLabel: {
+                        formatter: '{value}%'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name:'车流量',
+                    type:'bar',
+                    data:data_car
+                },
+                {
+                    name:'客流量',
+                    type:'bar',
+                    yAxisIndex: 1,
+                    data:data_custom
+                },
+                {
+                    name:'入店比',
+                    type:'line',
+                    yAxisIndex: 2,
+                    data:data_precent
+                }
+            ]
+        };
+
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+
+        layui.use('table', function () {
+            // 搜索时重载
+            var $ = layui.$, active = {
+                reload: function () {
+                    var searchValue = $('#searchValue');
+
+                    //执行重载
+                    table.reload('userTable', {
+                        page: {
+                            curr: 1 //重新从第 1 页开始
+                        }
+                        , where: {
+                            username: searchValue.val()
+                        }
+                    }, 'data');
+                }
+            };
+            // 搜索按钮响应
+            $('#searchBtn').on('click', function () {
+                console.log(111)
+
+                data1 = []
+                data2 = []
+                data3 = []
+                myChart.setOption({
+                    xAxis: {
+                        data: []
+                    },
+                    series: [{
+                        // 根据名字对应到相应的系列
+                        name: '销量',
+                        data: data.data
+                    }]
+                });
+            });
+        });
+
+    </script>
+
+</div>
+</html>
