@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50138
 File Encoding         : 65001
 
-Date: 2019-09-25 01:27:05
+Date: 2019-10-08 17:36:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -34,7 +34,7 @@ CREATE TABLE `station` (
 -- Records of station
 -- ----------------------------
 INSERT INTO `station` VALUES ('1', '165c5930-e846-4505-a436-03c243b3c72f', 'jyxd', 'jieyuanxidao', '0', '2019-09-24 11:04:14', '1569294254395');
-INSERT INTO `station` VALUES ('2', 'acb1942d-0ae0-4bbe-a698-8183eabc50a8', 'jyxd', '芥园西道', '0', '2019-09-24 11:15:28', '1569294928121');
-INSERT INTO `station` VALUES ('3', '4345ecbb-5707-44a5-b703-150abd847a66', 'jyxd', 'null', '0', '2019-09-24 13:57:26', '1569304646561');
-INSERT INTO `station` VALUES ('4', '3b2f9665-54f8-4df5-a633-7a801865a166', 'jyxd', 'null', '0', '2019-09-24 13:59:17', '1569304757223');
-INSERT INTO `station` VALUES ('5', '81edc555-5d24-4f07-8008-21b3a54e0cf5', 'jyxd', 'null', '0', '2019-09-24 13:59:55', '1569304795911');
+INSERT INTO `station` VALUES ('2', 'acb1942d-0ae0-4bbe-a698-8183eabc50a8', 'jyxd1', '芥园西道', '0', '2019-09-24 11:15:28', '1569294928121');
+INSERT INTO `station` VALUES ('3', '4345ecbb-5707-44a5-b703-150abd847a66', 'jyxd2', 'null', '0', '2019-09-24 13:57:26', '1569304646561');
+INSERT INTO `station` VALUES ('4', '3b2f9665-54f8-4df5-a633-7a801865a166', 'jyxd3', 'null', '0', '2019-09-24 13:59:17', '1569304757223');
+INSERT INTO `station` VALUES ('5', '81edc555-5d24-4f07-8008-21b3a54e0cf5', 'jyxd4', 'null', '0', '2019-09-24 13:59:55', '1569304795911');

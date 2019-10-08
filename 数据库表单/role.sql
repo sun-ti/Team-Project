@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50138
 File Encoding         : 65001
 
-Date: 2019-09-25 01:26:54
+Date: 2019-10-08 17:36:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -31,5 +31,5 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', '1', '1', '1', '2017-10-02 11:00:00');
-INSERT INTO `role` VALUES ('2', '1', '1', '1', '2017-10-02 11:00:00');
+INSERT INTO `role` VALUES ('1', '1', 'admin-001', '1', '2017-10-02 11:00:00');
+INSERT INTO `role` VALUES ('2', '2', 'admin-002', '1', '2017-10-02 11:00:00');
