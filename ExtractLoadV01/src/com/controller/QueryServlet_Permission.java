@@ -57,6 +57,11 @@ public class QueryServlet_Permission extends HttpServlet {
 			case 3:
 				result=query.query();
 				break;
+				
+			//	权限总数的查询;
+			case 4:
+				result=query.queryCount();
+				break;
 			default:
 				break;
 			}

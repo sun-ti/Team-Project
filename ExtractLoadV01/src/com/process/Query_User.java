@@ -18,6 +18,84 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		//	进行数据库的连接;
 		super.LinkDatabase(this.util_Net);
 	}
+	
+
+    //	4.获得相应的数据的总数;
+	public String queryCount() {
+		String 	  sql	 	= "select count(*) from user";
+		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+	}
+	
+	//	5.根据用户查询角色;
+	public String queryRoleAccordingUser() {
+		String[]  results= {"0","NO"};
+		String 	  result = null;
+		int 	  size	 = 0;
+		
+		String 	  userid = util_Net.getRequest().getParameter("userUuid");
+		
+		String 	  sql	 = "select b.ROLE_UUID,b.ROLE_NAME from user_role a, role b where a.USER_UUID='"+userid+"' and a.ROLE_UUID=b.ROLE_UUID";
+		
+		JSONArray array	 = super.select(sql);
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
+	//	6.根据用户增加角色;
+	public String addRoleAccordingUser() {
+		
+		
+		String 	  userid = util_Net.getRequest().getParameter("userUuid");
+		String 	  roleid = util_Net.getRequest().getParameter("roleUuid");
+		String 	  ur_id	 = getUUID();
+		String 	  datetime=getCurrentDatetime(System.currentTimeMillis(), "yyyy-MM-dd hh:mm:ss");
+		
+		String 	  sql	 	= "insert into user_role(USER_UUID,ROLE_UUID,UR_ID,UR_CREATE_TIME,UR_DEL) values ('"+userid+"','"+roleid+"','"+ur_id+"','"+datetime+"',0)";
+		
+		return util_Net.sendResult("0", "OK", update(sql), "null");
+	}
+	//	7.根据用户删除角色;
+	public String delRoleAccordingUser() {
+		
+		String 	  userid = util_Net.getRequest().getParameter("userUuid");
+		String 	  roleid = util_Net.getRequest().getParameter("roleUuid");
+		
+		String 	  sql	 	= "delete from user_role where USER_UUID='"+userid+"' and ROLE_UUID='"+roleid+"'";
+		
+		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+	}
+	//	8.根据用户查询权限;
+	public String queryPermissionAccordingUser() {
+		
+		String[]  results= {"0","NO"};
+		String 	  result = null;
+		int 	  size	 = 0;
+		
+		String 	  userid = util_Net.getRequest().getParameter("userUuid");
+		
+		String 	  sql	 = 
+		"select b.ROLE_UUID,b.ROLE_NAME,c.PERMISSION_UUID,c.PERMISSION_NAME from user_role a, role b, permission c,role_permission d "
+		+ "where a.USER_UUID='"+userid+"' and a.ROLE_UUID=b.ROLE_UUID and c.PERMISSION_UUID=d.PERMISSION_UUID";
+		
+		JSONArray array	 = super.select(sql);
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+	
 	//	进行查询的操作;
 	public String query() {
 				

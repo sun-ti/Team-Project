@@ -59,9 +59,24 @@ public class QueryServlet_Role extends HttpServlet {
 				case 3:
 					result=query.query();
 					break;
-				//	根据角色查询出权限;
+				//	查询出相应的count计数;
 				case 4:
+					result=query.queryCount();
+					break;
 					
+				//	根据角色查询权限;
+				case 5:
+					result=query.queryPermissionAccordingRole();
+					break;
+
+				//	根据角色新增权限;
+				case 6:
+					result=query.addPermissionAccordingRole();
+					break;
+
+				//	根据角色删除权限;
+				case 7:
+					result=query.delPermissionAccordingRole();
 					break;
 				default:
 					break;

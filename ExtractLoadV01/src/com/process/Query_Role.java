@@ -19,7 +19,58 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		//	进行数据库的连接;
 		super.LinkDatabase(this.util_Net);
 	}
+	//	4.获得相应的数据的差
+	public String queryCount() {
+		String 	  sql	 	= "select count(*) from user";
+		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+	}
 
+	//	5.根据角色查询权限;
+	public String queryPermissionAccordingRole() {
+		String[]  results= {"0","NO"};
+		String 	  result = null;
+		int 	  size	 = 0;
+		
+		String 	  roleUuid = util_Net.getRequest().getParameter("roleUuid");
+		
+		String 	  sql	 = "select b.PERMISSION_UUID,b.PERMISSION_NAME from role_permission a, permission b where a.ROLE_UUID='"+roleUuid+"' and a.PERMISSION_UUID=b.PERMISSION_UUID";
+		
+		JSONArray array	 = super.select(sql);
+		
+		if(array!=null) {
+			results[0]= "1";
+			results[1]= "OK";
+			result	  = array.toString();
+			size	  = array.size();
+		}
+
+		return util_Net.sendResult(results[0], results[1], size, result);
+	}
+
+	//	6.根据角色新增权限;
+	public String addPermissionAccordingRole() {
+		
+		String roleUuid		  = util_Net.getRequest().getParameter("roleUuid");;
+		String permissionUuid = util_Net.getRequest().getParameter("permissionUuid");;
+		String datetime		  = getCurrentDatetime(System.currentTimeMillis(), "yyyy-MM-dd hh:mm:dd");
+		String uuid	   		  = getUUID();
+
+		String sql	   		  = "insert into role_permission(ROLE_UUID,PERMISSION_UUID,RP_CREATE_TIME,RP_DEL,RP_UUID) values('"+roleUuid+"','"+permissionUuid+"','"+datetime+"',0,'"+uuid+"')";
+		
+		return util_Net.sendResult("0", "OK", update(sql), "null");
+	}
+	
+	//	7.根据角色删除新增权限;
+	public String delPermissionAccordingRole() {
+		
+		String 	  roleid 	   = util_Net.getRequest().getParameter("roleUuid");
+		String 	  permissionid = util_Net.getRequest().getParameter("permissionUuid");
+		
+		String 	  sql	 	   = "delete from role_permission where ROLE_UUID='"+roleid+"' and PERMISSION_UUID='"+permissionid+"'";
+		
+		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+	}
+	
 	// 进行查询的操作;
 	public String query() {
 		String autoid = null, name = null, uuid = null, del = null, createtime = null, currentpage = null,

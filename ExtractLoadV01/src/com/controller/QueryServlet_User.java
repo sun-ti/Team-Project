@@ -55,6 +55,30 @@ public class QueryServlet_User extends HttpServlet {
 			case 3:
 				result=query.query();
 				break;
+			//	查询所有的user计数接口;
+			case 4:
+				result=query.queryCount();
+				break;
+				
+			//	根据用户查询角色;
+			case 5:
+				result=query.queryRoleAccordingUser();
+				break;
+							
+			//	根据用户增加角色;
+			case 6:
+				result=query.addRoleAccordingUser();
+				break;
+				
+			//	根据用户删除角色;
+			case 7:
+				result=query.delRoleAccordingUser();
+				break;
+				
+			//	根据用户查询权限;
+			case 8:	
+				result=query.queryPermissionAccordingUser();
+				break;
 			default:
 				break;
 			}

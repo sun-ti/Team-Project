@@ -19,6 +19,11 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		super.LinkDatabase(this.util_Net);
 	}
 	
+	public String queryCount() {
+		String 	  sql	 	= "select count(*) from permission";
+		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+	}
+	
 	//	进行查询的操作;
 	public String query() {
 		String autoid=null,name=null,url=null,createtime=null,uuid=null,type=null,parentuuid=null,del=null,

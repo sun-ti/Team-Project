@@ -1733,7 +1733,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				//	进行相应的数据传输;
 				//	进行相应的类别的内容信息;
 				JSONArray ary=new JSONArray();
-				for(int type=1;type<=5;type++) {
+				for(int type=1;type<=2;type++) {
 					sql		    		 =	"select carid,in_oil_quantity,type from car_addoil where stationid='"+stationid+"' and year="+last+" and month="+i+" and type="+type;
 					
 					JSONArray array		 =	super.select(sql);
@@ -1777,7 +1777,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			//	进行相应的数据传输;
 			//	进行相应的类别的内容信息;
 			JSONArray ary=new JSONArray();
-			for(int type=1;type<=5;type++) {
+			for(int type=1;type<=2;type++) {
 				sql		    		 =	"select carid,in_oil_quantity,type from car_addoil where stationid='"+stationid+"' and year="+year+" and month="+i+" and type="+type;
 				
 				JSONArray array		 =	super.select(sql);

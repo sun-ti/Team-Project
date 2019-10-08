@@ -1,0 +1,62 @@
+新增的接口:
+//1.角色总数的查询
+http://localhost:8080/ExtractLoadV01/Role?oper=4
+
+//2.用户总数的查询;
+http://localhost:8080/ExtractLoadV01/User?oper=4
+
+//3.权限总数的查询;
+http://localhost:8080/ExtractLoadV01/Permission?oper=4
+
+//4.根据用户查询角色;
+http://localhost:8080/ExtractLoadV01/User?oper=5&userUuid=217be8ba-1eec-44ac-a337-ae42e7e54f90
+
+结果：
+		ROLE_UUID:角色的uuid编号;
+		ROLE_NAME:角色的名称;
+		
+样例:
+{"msg":"OK","code":"1","data":
+												[{"ROLE_UUID":"admin-001","ROLE_NAME":"1"}],
+ "count":1}
+ 
+//5.根据用户新增角色;
+http://localhost:8080/ExtractLoadV01/User?oper=6&userUuid=[must]&roleUuid=[must]
+
+//6.根据用户删除角色;
+http://localhost:8080/ExtractLoadV01/User?oper=7&userUuid=[must]&roleUuid=[must]
+
+//7.根据角色查询权限;
+http://localhost:8080/ExtractLoadV01/Role?oper=5&roleUuid=admin-001'
+
+结果:
+		PERMISSION_UUID:权限的uuid编号;
+		PERMISSION_NAME:权限的名称;
+
+样例:
+{"msg":"OK","code":"1","data":
+												[{"PERMISSION_NAME":"3","PERMISSION_UUID":"pms-1-001"},
+												 {"PERMISSION_NAME":"1","PERMISSION_UUID":"pms-2-008"},
+												 {"PERMISSION_NAME":"2","PERMISSION_UUID":"pms-2-009"}],
+"count":3}
+
+//8.根据角色新增权限;
+http://localhost:8080/ExtractLoadV01/Role?oper=6&roleUuid=[must]&permissionUuid=[must]
+
+//9.根据角色删除权限;
+http://localhost:8080/ExtractLoadV01/Role?oper=7&roleUuid=[must]&permissionUuid=[must]
+
+//10.根据用户查询权限;
+http://localhost:8080/ExtractLoadV01/User?oper=8&userUuid=217be8ba-1eec-44ac-a337-ae42e7e54f90
+结果:
+		ROLE_UUID:			角色的UUID;
+		ROLE_NAME:			角色的名称;
+		PERMISSION_UUID:角色的UUID;
+		PERMISSION_NAME:权限的名称;
+
+样例:
+{"msg":"OK","code":"1","data":
+												[{"ROLE_UUID":"admin-001","PERMISSION_NAME":"3","ROLE_NAME":"1","PERMISSION_UUID":"pms-1-001"},
+												 {"ROLE_UUID":"admin-001","PERMISSION_NAME":"1","ROLE_NAME":"1","PERMISSION_UUID":"pms-2-008"},
+												 {"ROLE_UUID":"admin-001","PERMISSION_NAME":"2","ROLE_NAME":"1","PERMISSION_UUID":"pms-2-009"}],"count":3}
+
