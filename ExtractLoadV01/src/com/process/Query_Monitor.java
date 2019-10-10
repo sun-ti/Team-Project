@@ -47,7 +47,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		Map<String, String> 	map	=	new HashMap<String, String>();
 		
 		for(int i=0;i<array.size();i++) {
+			
 			JSONObject   o = array.getJSONObject(i);
+			
 			//	进行MSG的信息内容;
 			String  errMsg = o.getString("errMsg").trim();
 			
