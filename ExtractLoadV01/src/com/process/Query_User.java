@@ -2,6 +2,7 @@ package com.process;
 
 import java.util.ArrayList;
 
+import com.model.Util;
 import com.model.Util_DBase;
 import com.model.Util_Net;
 import com.models.Utils_DBase;
@@ -55,7 +56,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		String 	  userid = util_Net.getRequest().getParameter("userUuid");
 		String 	  roleid = util_Net.getRequest().getParameter("roleUuid");
 		String 	  ur_id	 = getUUID();
-		String 	  datetime=getCurrentDatetime(System.currentTimeMillis(), "yyyy-MM-dd hh:mm:ss");
+		String 	  datetime=getCurrentDatetime(System.currentTimeMillis(), Util.TAG_DATETIME);
 		
 		String 	  sql	 	= "insert into user_role(USER_UUID,ROLE_UUID,UR_ID,UR_CREATE_TIME,UR_DEL) values ('"+userid+"','"+roleid+"','"+ur_id+"','"+datetime+"',0)";
 		
@@ -228,7 +229,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 	public String add() {
 		String username = null, password = null,sql="";
 		String uuid	    = getUUID();
-		String time		= getCurrentDatetime(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+		String time		= getCurrentDatetime(System.currentTimeMillis(),Util.TAG_DATETIME);
 		
 		try {
 			username = util_Net.getRequest().getParameter("username");

@@ -2,6 +2,7 @@ package com.process;
 
 import java.util.ArrayList;
 
+import com.model.Util;
 import com.model.Util_DBase;
 import com.model.Util_Net;
 import com.models.Utils_DBase;
@@ -159,7 +160,7 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 			cardNum  = util_Net.getRequest().getParameter("cardNum");
 			oilGunNum= util_Net.getRequest().getParameter("oilGunNum");
 			
-			endTime	 = getCurrentDatetime(System.currentTimeMillis(), "yyyy-MM-dd hh:mm:ss");
+			endTime	 = getCurrentDatetime(System.currentTimeMillis(),Util.TAG_DATETIME);
 			plateOld = util_Net.getRequest().getParameter("plateOld");
 			plate	 = util_Net.getRequest().getParameter("plate");
 			
@@ -225,7 +226,7 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 	public String add() {
 		
 		String uuid = getUUID(), orderNum = null, price = null, quantity = null, money = null, payType = null,
-				cardNum = null, oilGunNum = null, startTime = getCurrentDatetime(System.currentTimeMillis(), "yyyy-MM-dd hh:mm:ss"), endTime = null, plateOld = null, plate = null,
+				cardNum = null, oilGunNum = null, startTime = getCurrentDatetime(System.currentTimeMillis(), Util.TAG_DATETIME), endTime = null, plateOld = null, plate = null,
 				state = "0",sql="";
 
 		try {

@@ -5,7 +5,4 @@ public class ComputeDataBase {
 	public static void main(String[] args) {
 		
 	}
-	
-	
-	
 }

@@ -2,6 +2,7 @@ package com.process;
 
 import java.util.ArrayList;
 
+import com.model.Util;
 import com.model.Util_DBase;
 import com.model.Util_Net;
 import com.models.Utils_DBase;
@@ -139,7 +140,7 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 		
 		String uuid	=getUUID(),stationid=null,name=null,state="0";
 		long   datetime1=System.currentTimeMillis();
-		String datetime =getCurrentDatetime(datetime1,"yyyy-MM-dd HH:mm:ss"),sql="";
+		String datetime =getCurrentDatetime(datetime1,Util.TAG_DATETIME),sql="";
 		
 		try {
 			

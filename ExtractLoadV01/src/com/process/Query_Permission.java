@@ -2,6 +2,7 @@ package com.process;
 
 import java.util.ArrayList;
 
+import com.model.Util;
 import com.model.Util_DBase;
 import com.model.Util_Net;
 import com.models.Utils_DBase;
@@ -176,7 +177,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 		
 		String name	=null,url=null,type=null,parentuuid=null,sql="";
 		String uuid	= getUUID();
-		String time = getCurrentDatetime(System.currentTimeMillis(),"yyyy-MM-dd HH:mm:ss");
+		String time = getCurrentDatetime(System.currentTimeMillis(),Util.TAG_DATETIME);
 		try {
 			
 			

@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.model.InStation;
+import com.model.Util;
 import com.model.Util_DBase;
 import com.model.Util_Net;
 import com.models.Utils_DBase;
@@ -321,9 +322,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		String 	uuid	=	getUUID(),carid=null,stationid=null;
 		
 		long 	ltime	=	System.currentTimeMillis();
-		String 	datetime=	getCurrentDatetime(ltime, "yyyy-MM-dd hh:mm:ss"),datetime1=ltime+"";
+		String 	datetime=	getCurrentDatetime(ltime, Util.TAG_DATETIME),datetime1=ltime+"";
 		
-		String 	date	=	getCurrentDatetime(ltime, "yyyy-MM-dd");
+		String 	date	=	getCurrentDatetime(ltime, Util.TAG_YEAR_MONTH_DAY);
 		
 		String[] times  =   date.split("-");
 		String  year	=	times[0];
@@ -737,8 +738,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		String between	 = "";
 		if(start!=null&&!start.equals("")&&end!=null&&!end.equals("")) {
 
-			lstart		 = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
-			lend		 = transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+			lstart		 = transDateStr2Long(start, Util.TAG_DATETIME);
+			lend		 = transDateStr2Long(end, Util.TAG_DATETIME);
 			
 			between		 = "and b.datetime1 between "+lstart+" and "+lend;
 		}
@@ -799,11 +800,11 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			if(checkDate(date, "yyyy-MM-dd")) {
 				//	初始的时间;
 				start= date+" 00:00:00";
-				lstart=transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				lstart=transDateStr2Long(start, Util.TAG_DATETIME);
 				
 				//	结束的时间;
 				end	 = date+" 23:59:59";
-				lend=transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				lend=transDateStr2Long(end, Util.TAG_DATETIME);
 				
 			}
 			//	当时间信息不符合格式时;
@@ -946,8 +947,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				end=nDate+"-1-1 00:00:00";
 			}
 			
-			long lstart=transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
-			long lend  =transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+			long lstart=transDateStr2Long(start, Util.TAG_DATETIME);
+			long lend  =transDateStr2Long(end, Util.TAG_DATETIME);
 			//	进行相应的数据统计;
 			//	此时间段的数据;
 			//	进行外大街摄像头的检测数据;
@@ -1031,8 +1032,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		String between	 = "";
 		if(start!=null&&!start.equals("")&&end!=null&&!end.equals("")) {
 
-			lstart		 = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
-			lend		 = transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+			lstart		 = transDateStr2Long(start, Util.TAG_DATETIME);
+			lend		 = transDateStr2Long(end, Util.TAG_DATETIME);
 			
 			between		 = "and b.datetime1 between "+lstart+" and "+lend;
 		}
@@ -1088,11 +1089,11 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			if(checkDate(date, "yyyy-MM-dd")) {
 				//	初始的时间;
 				start= date+" 00:00:00";
-				lstart=transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				lstart=transDateStr2Long(start, Util.TAG_DATETIME);
 				
 				//	结束的时间;
 				end	 = date+" 23:59:59";
-				lend=transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				lend=transDateStr2Long(end, Util.TAG_DATETIME);
 			}
 			//	当时间信息不符合格式时;
 			else
@@ -1194,8 +1195,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				end=nDate+"-1-1 00:00:00";
 			}
 			
-			long lstart=transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
-			long lend  =transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+			long lstart=transDateStr2Long(start,Util.TAG_DATETIME);
+			long lend  =transDateStr2Long(end, Util.TAG_DATETIME);
 			//	进行相应的数据统计;
 			//	此时间段的数据;
 			//	进行外大街摄像头的检测数据;
@@ -1395,8 +1396,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		//	将当前的日期转换为字符内容;
 		min				=	year+"-01-01 00:00:00";
 		max				=	(year+1)+"-01-01 00:00:00";
-		mintime			=	transDateStr2Long(min, "yyyy-MM-dd hh:mm:ss");
-		maxtime			=	transDateStr2Long(max, "yyyy-MM-dd hh:mm:ss");
+		mintime			=	transDateStr2Long(min, Util.TAG_DATETIME);
+		maxtime			=	transDateStr2Long(max, Util.TAG_DATETIME);
 
 		//	查询出当前年份的可用月数个数;
 		String 		sql_querySet  = "select datetime from monitorinfo where stationid='"+stationid+"' and datetime1 between "+mintime+" and "+maxtime+" order by datetime1 desc limit 0,1";
@@ -1423,8 +1424,8 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			//	将当前的日期转换为字符内容;
 			min					  =	year+"-01-01 00:00:00";
 			max					  =	(year+1)+"-01-01 00:00:00";
-			mintime				  =	transDateStr2Long(min, "yyyy-MM-dd hh:mm:ss");
-			maxtime				  =	transDateStr2Long(max, "yyyy-MM-dd hh:mm:ss");
+			mintime				  =	transDateStr2Long(min, Util.TAG_DATETIME);
+			maxtime				  =	transDateStr2Long(max, Util.TAG_DATETIME);
 
 			//	查询出当前年份的可用月数个数;
 			sql_querySet  		  = "select datetime from monitorinfo where stationid='"+stationid+"' and datetime1 between "+mintime+" and "+maxtime+" order by datetime1 desc limit 0,1";
@@ -1475,9 +1476,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 					
 					//	进行相应的时间统计;
 					//	开始标签;
-					long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+					long lstart = transDateStr2Long(start, Util.TAG_DATETIME);
 					//	结束标签;
-					long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+					long lend	= transDateStr2Long(end, Util.TAG_DATETIME);
 					
 					//	按顺序进行排列;
 					array.add(query_licenceByOrder(stationid,last+"","第"+month+"月",lstart, lend));
@@ -1502,9 +1503,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				
 				//	进行相应的时间统计;
 				//	开始标签;
-				long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				long lstart = transDateStr2Long(start, Util.TAG_DATETIME);
 				//	结束标签;
-				long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				long lend	= transDateStr2Long(end, Util.TAG_DATETIME);
 				
 				//	按顺序进行排列;
 				array.add(query_licenceByOrder(stationid,year+"","第"+month+"月",lstart, lend));
@@ -1546,9 +1547,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 //					System.out.println(start+" "+end);
 					//	行相应的时间统计;
 					//	开始标签;
-					long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+					long lstart = transDateStr2Long(start, Util.TAG_DATETIME);
 					//	结束标签;
-					long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+					long lend	= transDateStr2Long(end, Util.TAG_DATETIME);
 					//	按顺序进行排列;
 					array.add(query_licenceByOrder(stationid,last+"","第"+i+"季度",lstart, lend));					
 				}
@@ -1576,9 +1577,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 //				System.out.println(start+" "+end);
 				//	行相应的时间统计;
 				//	开始标签;
-				long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				long lstart = transDateStr2Long(start, Util.TAG_DATETIME);
 				//	结束标签;
-				long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				long lend	= transDateStr2Long(end, Util.TAG_DATETIME);
 				//	按顺序进行排列;
 				array.add(query_licenceByOrder(stationid,year+"","第"+i+"季度",lstart, lend));
 			}
@@ -1619,9 +1620,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 //					System.out.println(start+" "+end);
 					//	行相应的时间统计;
 					//	开始标签;
-					long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+					long lstart = transDateStr2Long(start, Util.TAG_DATETIME);
 					//	结束标签;
-					long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+					long lend	= transDateStr2Long(end, Util.TAG_DATETIME);
 					//	按顺序进行排列;
 					array.add(query_licenceByOrder(stationid,last+"","第"+i+"半年",lstart, lend));					
 				}
@@ -1651,9 +1652,9 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				System.out.println(start+" "+end);
 				//	行相应的时间统计;
 				//	开始标签;
-				long lstart = transDateStr2Long(start, "yyyy-MM-dd hh:mm:ss");
+				long lstart = transDateStr2Long(start, Util.TAG_DATETIME);
 				//	结束标签;
-				long lend	= transDateStr2Long(end, "yyyy-MM-dd hh:mm:ss");
+				long lend	= transDateStr2Long(end, Util.TAG_DATETIME);
 				//	按顺序进行排列;
 				array.add(query_licenceByOrder(stationid,year+"","第"+i+"半年",lstart, lend));
 			}

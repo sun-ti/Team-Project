@@ -10,6 +10,7 @@ import java.io.OutputStreamWriter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 import java.util.UUID;
 
 import com.models.Utils;
@@ -24,11 +25,14 @@ import com.models.Utils;
  */
 public class Util implements Utils{
 
-	public static final String FOLDER="SYS"+File.separator+"SINOPEC";
-	public static final String FOLDER1="configer";
-	public static final String PATH = "D:"+File.separator+FOLDER+File.separator+"SYS_image";
-	public static final String PATH2= "D:"+File.separator+FOLDER+File.separator+"SYS_download";
-	public static final String PATH3= "D:"+File.separator+FOLDER+File.separator+"SYS_info";
+	public static final String FOLDER			 =	"SYS"+File.separator+"SINOPEC";
+	public static final String FOLDER1			 =	"configer";
+	public static final String PATH 			 =	"D:"+File.separator+FOLDER+File.separator+"SYS_image";
+	public static final String PATH2			 =  "D:"+File.separator+FOLDER+File.separator+"SYS_download";
+	public static final String PATH3			 =  "D:"+File.separator+FOLDER+File.separator+"SYS_info";
+	public static final String TAG_DATETIME		 =	"yyyy-MM-dd HH:mm:ss";
+	public static final String TAG_YEAR_MONTH_DAY=	"yyyy-MM-dd HH:mm:ss";
+	
 	//	进行初始化参数对象;
 	public static Util_Init instance;
 	
@@ -37,6 +41,8 @@ public class Util implements Utils{
 	public String TAG_1="%";
 	public String TAG_2="\\";
 	public String TAG_3="-";
+	
+	
 	
 	//	格式的相应的内容;
 	public String UTF8 ="utf-8";
@@ -86,6 +92,20 @@ public class Util implements Utils{
 		System.out.println("--------------------------------");
 	}
 
+	//	获得随机数;
+	public int getRandomNum(int max) {
+		Random random=new Random();
+		return random.nextInt(max);
+	}
+	
+	//	获得26个字母的随机数;
+	public String getRandommEng26() {
+	    //	进行26个字母书写的偏移量;
+		int c='a'+(int)(Math.random()*26);
+		
+	    return ((char)c+"").toUpperCase();
+	}
+	
 	//	获得系统获得UUID的方法;
 	public String getUUID() {
 		return UUID.randomUUID().toString();
