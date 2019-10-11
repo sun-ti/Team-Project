@@ -1,6 +1,12 @@
 package com.process;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+
+import javax.servlet.ServletInputStream;
 
 import com.model.Util;
 import com.model.Util_DBase;
@@ -8,6 +14,7 @@ import com.model.Util_Net;
 import com.models.Utils_DBase;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 public class Query_Tanker extends Util_DBase implements Utils_DBase{
 
@@ -221,6 +228,56 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 		
 		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
+	public String queryCarid() {
+
+//		BufferedReader bf;
+//		String acceptjson=null;
+//		try {
+//			bf = new BufferedReader(new InputStreamReader((ServletInputStream)util_Net.getRequest().getInputStream(),"utf-8"));
+//			StringBuffer   sb 			 = new StringBuffer();
+//			
+//			String tmp = "";
+//			while((tmp = bf.readLine())!=null){
+//				sb.append(tmp);
+//			}
+//			bf.close();
+//			acceptjson = sb.toString();
+//		} catch (UnsupportedEncodingException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		
+//		
+		String 		parameters	 = util_Net.getRequest().getParameter("parameters");
+		
+		JSONObject  object		 = JSONObject.fromObject(parameters);
+		//	获得相应的参数;
+		String 		clientIp	 = object.getString("clientIp");
+		String 		oilGunNum	 = object.getString("oilGunNum");
+//		
+		System.out.println("clientIp:"+clientIp+"|oilGunNum:"+oilGunNum);
+//		
+//		//	返回值结果数据集合;
+		JSONObject	back		 = new JSONObject();
+		JSONObject	all		 	 = new JSONObject();
+		back.put("plates", "津A12345,津A12346,津A12347");
+		all.put("errCode", 0);
+		
+//		all.put("results", back);
+////		if(array!=null) {
+////			results[0]= "0";
+////			results[1]= "OK";
+////			result	  = array.toString();
+////			size	  = array.size();
+////		}
+		
+		return all.toString();
+	}
+	
 	
 	//	进行新增的操作;
 	public String add() {
@@ -231,16 +288,29 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 
 		try {
 			
-			orderNum= util_Net.getRequest().getParameter("orderNum");
-			price= util_Net.getRequest().getParameter("price");
-			quantity= util_Net.getRequest().getParameter("quantity");
-			money= util_Net.getRequest().getParameter("money");
-			payType= util_Net.getRequest().getParameter("payType");
-			cardNum= util_Net.getRequest().getParameter("cardNum");
-			oilGunNum= util_Net.getRequest().getParameter("oilGunNum");
+			String 		parameters	 = util_Net.getRequest().getParameter("parameters");
+			
+			JSONObject	obj			 = JSONObject.fromObject(parameters);
+			
+			orderNum= obj.getString("orderNum");
+			price= obj.getString("price");
+			quantity= obj.getString("quantity");
+			money= obj.getString("money");
+			payType= obj.getString("payType");
+			cardNum= obj.getString("cardNum");
+			oilGunNum= obj.getString("oilGunNum");
+//			orderNum= util_Net.getRequest().getParameter("orderNum");
+//			price= util_Net.getRequest().getParameter("price");
+//			quantity= util_Net.getRequest().getParameter("quantity");
+//			money= util_Net.getRequest().getParameter("money");
+//			payType= util_Net.getRequest().getParameter("payType");
+//			cardNum= util_Net.getRequest().getParameter("cardNum");
+//			oilGunNum= util_Net.getRequest().getParameter("oilGunNum");
 			endTime= startTime;
-			plateOld= util_Net.getRequest().getParameter("plateOld");
-			plate= util_Net.getRequest().getParameter("plate");
+			plateOld= obj.getString("plateOld");
+			plate= obj.getString("plate");
+//			plateOld= util_Net.getRequest().getParameter("plateOld");
+//			plate= util_Net.getRequest().getParameter("plate");
 			state= "0";
 
 		} catch (Exception e) {
@@ -249,7 +319,10 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 		sql	=	"insert into station (uuid,orderNum,price,quantity,money,payType,cardNum,oilGunNum,startTime,endTime,plateOld,plate,state) "
 				+ "values('"+uuid+"','"+orderNum+"',"+price+","+quantity+","+money+","+payType+",'"+cardNum+"','"+oilGunNum+"','"+startTime+"','"+endTime+"','"+plateOld+"','"+plate+"',"+state+")";
 		
-		return util_Net.sendResult("0", "OK", update(sql), "null");
+		JSONObject obj=new JSONObject();
+		obj.put("errorCode", 0);
+		
+		return obj.toString();
 	}
 	
 	//	进行删除的操作;

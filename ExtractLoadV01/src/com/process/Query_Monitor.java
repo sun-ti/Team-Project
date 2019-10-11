@@ -32,7 +32,6 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		super.LinkDatabase(this.util_Net);
 		
 	}
-
 	
 	//	统计车牌出现的次数的方法;
 	private JSONObject query_licenceByOrder(String stationid,String year,String month,long start,long end) {
@@ -120,7 +119,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_DeliveryOrder() {
 		//	站点的id编号;
 		String 	 stationid="",result=null,sql="",date=null;
-		String[] results  = {"0","NO"};
+		String[] results  = {"1","NO"};
 		int size=0;
 		
 		//	站点的内容;
@@ -134,7 +133,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		JSONArray array = super.select(sql);
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -149,7 +148,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_stayStationByMonth() {
 		//	站点的id编号;
 		String 	 stationid="",result=null,sql="";
-		String[] results  = {"0","NO"};
+		String[] results  = {"1","NO"};
 
 		JSONArray array=    new JSONArray();
 		
@@ -285,7 +284,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -298,7 +297,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_DeilveryAndReality() {
 		//	站点的id编号;
 		String 	 stationid="",result=null,date=null,sql="";
-		String[] results  = {"0","NO"};
+		String[] results  = {"1","NO"};
 		int size=0;
 
 		//	站点的内容;
@@ -311,7 +310,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		JSONArray array =   super.select(sql);
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -345,7 +344,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_ExceptionListByStationId() {
 		//	站点的id编号;
 		String 	 result=null;
-		String[] results  = {"0","NO"};
+		String[] results  = {"1","NO"};
 		int size=0,year	= 0,monthsize=0,	monthcurrent = 0,	dis	=	0;
 		
 		//	查询出所有的站点;
@@ -439,7 +438,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -451,7 +450,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_bySQL() {
 		//	根据SQL进行查询;
 		String 	  sql=null,result=null;
-		String[]  results  = {"0","NO"};
+		String[]  results  = {"1","NO"};
 		int 	  size	   = 0;
 		JSONArray array=new JSONArray();
 		
@@ -461,7 +460,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -475,7 +474,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String alarm_ExceptionToStation() {
 		//	站点的id编号;
 		String 	  stationid="",result=null;
-		String[]  results  = {"0","NO"};
+		String[]  results  = {"1","NO"};
 		//	monthsize:查询出的月的条目结果;
 		int 	    year   = 0,size  	 = 0,monthsize=0,	monthcurrent = 0,	dis	=	0;
 		JSONArray array	   = new JSONArray();
@@ -599,7 +598,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -612,7 +611,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_AnalyzeDeilveryAndOrder() {
 		//	站点的id编号;
 		String 	  stationid="",result=null,sql="";
-		String[]  results  = {"0","NO"};
+		String[]  results  = {"1","NO"};
 		int 	  size	   = 0,year		 = 0,monthsize=0,	monthcurrent = 0,	dis	=	0;
 		JSONArray array	   = new JSONArray();
 		
@@ -702,7 +701,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -811,11 +810,11 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			}
 			//	当时间信息不符合格式时;
 			else
-			return util_Net.sendResult("0", "NO", 0, null);
+			return util_Net.sendResult("1", "NO", 0, null);
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("0", "NO", 0, null);
+		return util_Net.sendResult("1", "NO", 0, null);
 		//	将时间进行24等分;
 		long ldis=(lend-lstart)/24;
 
@@ -923,12 +922,12 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				nDate=nTemp;
 			}//	当时间信息输入为错误时;
 			else
-				return util_Net.sendResult("0", "NO", 0, null);
+				return util_Net.sendResult("1", "NO", 0, null);
 			
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("0", "NO", 0, null);
+		return util_Net.sendResult("1", "NO", 0, null);
 		
 		//	对12个月进行数据统计;
 		JSONArray array=new JSONArray();
@@ -1099,11 +1098,11 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			}
 			//	当时间信息不符合格式时;
 			else
-			return util_Net.sendResult("0", "NO", 0, null);
+			return util_Net.sendResult("1", "NO", 0, null);
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("0", "NO", 0, null);
+		return util_Net.sendResult("1", "NO", 0, null);
 		//	将时间进行24等分;
 		long ldis=(lend-lstart)/24;
 
@@ -1172,12 +1171,12 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 				nDate=nTemp;
 			}//	当时间信息输入为错误时;
 			else
-				return util_Net.sendResult("0", "NO", 0, null);
+				return util_Net.sendResult("1", "NO", 0, null);
 			
 		}
 		//	当时间信息输入为错误时;
 		else
-		return util_Net.sendResult("0", "NO", 0, null);
+		return util_Net.sendResult("1", "NO", 0, null);
 		
 		//	对12个月进行数据统计;
 		JSONArray array=new JSONArray();
@@ -1223,7 +1222,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		//	站点的id编号;
 		String 	  	stationid	 = "",sql="",result=null;
 		//	结果标记内容;
-		String[]  	results  	 = {"0","NO"};
+		String[]  	results  	 = {"1","NO"};
 		
 		//	其中的表示内容:
 		//	year:请求查询的年份内容;
@@ -1359,12 +1358,12 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 		//	判断结果内容;
 		if(result!=null) {
-			results[0]="1";
+			results[0]="0";
 			results[1]="OK";
 			size=arrayNew.size();
 			
 		}else {
-			results[0]="0";
+			results[0]="1";
 			results[1]="NO";
 			size=0;
 		}
@@ -1378,7 +1377,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_licence() {
 		//	站点的id编号;
 		String 	  stationid= "", min=null, max=null,result	=	null;
-		String[]  results  = {"0","NO"};
+		String[]  results  = {"1","NO"};
 		int 	  size	   = 0 ,	type	=0  , year=0,	monthsize=0,  monthcurrent=0,zheng=0,yu=0, lastStart=0 ,currentStart=0;
 		//	最小的字符串;
 		long	  mintime  = 0,maxtime=0;
@@ -1668,7 +1667,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -1681,7 +1680,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	public String query_addOilCountByDifferentKind() {
 		//	站点的编号;
 		String   stationid= null,result=null,sql="";
-		String[] results  = {"0","NO"};
+		String[] results  = {"1","NO"};
 		int 	 year	  = 0,	size=0,	monthsize	=	0,	monthcurrent	=	0,dis=0;
 		
 		//	获得月份的临时存储结构;
@@ -1822,7 +1821,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		}
 		
 		if(array2!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array2.toString();
 			size=array2.size();
@@ -1833,7 +1832,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 	//	10.按照月进行——人脸与车辆比
 	public String query_RadioByHumanAndCar() {
-		String[]  results= {"0","NO"};
+		String[]  results= {"1","NO"};
 		String    result = null,stationid=null;
 		JSONArray array	 = new JSONArray();
 
@@ -1985,7 +1984,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	
 	//	11.根据月份查询入站人数;
 	public String query_InStationByMonth() {
-		String[]  results= {"0","NO"};
+		String[]  results= {"1","NO"};
 		String    result = null,stationid=null,sql="";
 		JSONArray array	 = new JSONArray();
 		int 	  size	 = 0, year	= 0,	monthsize=0,	monthcurrent = 0,	dis	=	0;
@@ -2081,7 +2080,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		
 		//	进行相应的数据传输;
 		if(array!=null){
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			size	  = array.size();
 			result	  = array.toString();

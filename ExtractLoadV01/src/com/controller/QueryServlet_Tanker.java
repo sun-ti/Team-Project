@@ -60,6 +60,11 @@ public class QueryServlet_Tanker extends HttpServlet {
 				case 3:
 					result=query.query();
 					break;
+				//	查询车牌的相应信息;
+				case 4:
+					//	进行车辆牌照的查询;
+					result=query.queryCarid();
+					break;
 				default:
 					break;
 				}

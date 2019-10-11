@@ -28,7 +28,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 
 	//	5.根据角色查询权限;
 	public String queryPermissionAccordingRole() {
-		String[]  results= {"0","NO"};
+		String[]  results= {"1","NO"};
 		String 	  result = null;
 		int 	  size	 = 0;
 		
@@ -39,7 +39,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		JSONArray array	 = super.select(sql);
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();

@@ -29,7 +29,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 	
 	//	5.根据用户查询角色;
 	public String queryRoleAccordingUser() {
-		String[]  results= {"0","NO"};
+		String[]  results= {"1","NO"};
 		String 	  result = null;
 		int 	  size	 = 0;
 		
@@ -40,7 +40,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		JSONArray array	 = super.select(sql);
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
@@ -75,7 +75,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 	//	8.根据用户查询权限;
 	public String queryPermissionAccordingUser() {
 		
-		String[]  results= {"0","NO"};
+		String[]  results= {"1","NO"};
 		String 	  result = null;
 		int 	  size	 = 0;
 		
@@ -88,7 +88,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		JSONArray array	 = super.select(sql);
 		
 		if(array!=null) {
-			results[0]= "1";
+			results[0]= "0";
 			results[1]= "OK";
 			result	  = array.toString();
 			size	  = array.size();
