@@ -46,11 +46,13 @@ public class QueryServlet_Monitor extends HttpServlet {
 		
 		//	进行所有信息的查询;
 		case 0:
+			// TODO
 			result			= query.query();	
 			break;
 			
 		//	车牌识别;
 		case 1:
+			//	TODO
 			result			= query.queryByVehicle_license();
 			break;
 		
@@ -64,6 +66,7 @@ public class QueryServlet_Monitor extends HttpServlet {
 			break;		
 		//	人脸识别;
 		case 4:
+			// TODO
 			result			= query.queryByFace_recognition();
 			break;
 			

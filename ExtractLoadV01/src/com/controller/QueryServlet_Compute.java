@@ -1,5 +1,6 @@
 package com.controller;
 
+import java.io.File;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -38,55 +39,69 @@ public class QueryServlet_Compute extends HttpServlet {
 		Util_DBase util_DBase= new Util_DBase();
 		//	进行相关的数据库工具;
 		util_DBase.LinkDatabase(util_Net);
+		String folder="D:\\apache-tomcat-9.0.22-windows-x64\\apache-tomcat-9.0.22\\webapps\\ExtractLoadV01\\SYS\\SINOPEC\\hcpic\\i1\\172.30.9.13";
 		
-		String starttime= "2018-10-09 00:00:00";
+		File file=new File(folder); 
+		
+		File[] files= file.listFiles();
+		
+		files[0].getName();
+		System.out.println(files.length);
+		int max=60766;
+		
+		
+		String sql="select uuid,pic1,pic2 from monitorinfo ";
+		
+		
+		
+//		String starttime= "2018-10-09 00:00:00";
+////		
+//		long   lst		= util_DBase.transDateStr2Long(starttime, "yyyy-MM-dd HH:mm:ss");
+//		long   dt		= 24*3600000;
 //		
-		long   lst		= util_DBase.transDateStr2Long(starttime, "yyyy-MM-dd HH:mm:ss");
-		long   dt		= 24*3600000;
-		
-		long   datetime1		=	lst;
-		
-		for(int i=0;i<365;i++) {
-			
-
-			for(int j=0;j<4;j++) {
-		
-				String uuid		=	util_DBase.getUUID();
-				String orderNum	=	String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
-				double price	=	(50+util_DBase.getRandomNum(10)*0.15*100);
-				int    quantity =	(int) (util_DBase.getRandomNum(10)*0.15*100);
-				String money	=	price*quantity+"";
-				String payType	=	(util_DBase.getRandomNum(2)+1)+"";
-				String cardNum  =	"J"+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
-				String oilGunNum=	String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
-				
-				String startTime=	util_DBase.getCurrentDatetime(datetime1, Util.TAG_DATETIME);
-				
-				long   l1		=	util_DBase.transDateStr2Long(startTime, Util.TAG_DATETIME);
-				
-				
-				long   dl		=	(long) (util_DBase.getRandomNum(3)*0.15*10*3600000);
-				
-				long   l2		=	l1+dl;
-				
-				String endTime  =	util_DBase.getCurrentDatetime(l2, Util.TAG_DATETIME);
-				
-				
-				String plateOld =	"津"+util_DBase.getRandommEng26()+util_DBase.getRandommEng26()+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
-				String plate	=	"津"+util_DBase.getRandommEng26()+util_DBase.getRandommEng26()+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
-				String state	=	"0";
-				
-				
-				String sql="insert into jyj (uuid,orderNum,price,quantity,money,payType,cardNum,oilGunNum,startTime,endTime,plateOld,plate,state) values ("
-						+ "'"+uuid+"','"+orderNum+"',"+price+","+quantity+","+money+","+payType+",'"+cardNum+"','"+oilGunNum+"','"+startTime+"','"+endTime+"','"+plateOld+"','"+plate+"',"+state+")";
-				System.out.println(sql);
-				util_DBase.update(sql);
-
-				
-			}
-		
-			datetime1+=dt;
-		}
+//		long   datetime1		=	lst;
+//		
+//		for(int i=0;i<365;i++) {
+//			
+//
+//			for(int j=0;j<4;j++) {
+//		
+//				String uuid		=	util_DBase.getUUID();
+//				String orderNum	=	String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
+//				double price	=	(50+util_DBase.getRandomNum(10)*0.15*100);
+//				int    quantity =	(int) (util_DBase.getRandomNum(10)*0.15*100);
+//				String money	=	price*quantity+"";
+//				String payType	=	(util_DBase.getRandomNum(2)+1)+"";
+//				String cardNum  =	"J"+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
+//				String oilGunNum=	String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
+//				
+//				String startTime=	util_DBase.getCurrentDatetime(datetime1, Util.TAG_DATETIME);
+//				
+//				long   l1		=	util_DBase.transDateStr2Long(startTime, Util.TAG_DATETIME);
+//				
+//				
+//				long   dl		=	(long) (util_DBase.getRandomNum(3)*0.15*10*3600000);
+//				
+//				long   l2		=	l1+dl;
+//				
+//				String endTime  =	util_DBase.getCurrentDatetime(l2, Util.TAG_DATETIME);
+//				
+//				
+//				String plateOld =	"津"+util_DBase.getRandommEng26()+util_DBase.getRandommEng26()+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
+//				String plate	=	"津"+util_DBase.getRandommEng26()+util_DBase.getRandommEng26()+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10))+String.valueOf(util_DBase.getRandomNum(10));
+//				String state	=	"0";
+//				
+//				
+//				String sql="insert into jyj (uuid,orderNum,price,quantity,money,payType,cardNum,oilGunNum,startTime,endTime,plateOld,plate,state) values ("
+//						+ "'"+uuid+"','"+orderNum+"',"+price+","+quantity+","+money+","+payType+",'"+cardNum+"','"+oilGunNum+"','"+startTime+"','"+endTime+"','"+plateOld+"','"+plate+"',"+state+")";
+////				System.out.println(sql);
+//				util_DBase.update(sql);
+//
+//				
+//			}
+//		
+//			datetime1+=dt;
+//		}
 		
 		
 		

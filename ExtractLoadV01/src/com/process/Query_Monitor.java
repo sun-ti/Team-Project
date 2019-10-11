@@ -63,7 +63,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 					try {
 						temp	= map.get(errMsg);
 					} catch (Exception e) {
-						// TODO: handle exception
+						
 					}
 					//	进行计数信息;
 					if(temp!=null) {
@@ -703,7 +703,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	}
 	
 	
-	//	1.根据车辆牌照进行查询
+	//	TODO 1.根据车辆牌照进行查询
 	public String queryByVehicle_license() {
 		//	站点信息;
 		String stationid = "";
@@ -749,7 +749,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		if(stationid!=null&&!stationid.trim().equals("")) {
 			where+="and a.stationid='"+stationid+"'";
 		}
-		//	信息查询;
+		//	TODO 信息查询;
 		sql	  			= "select a.note,b.stationid,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip "+where+" and a.kind=1 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
 		JSONArray array = select(sql);
 
@@ -1040,7 +1040,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			first	     = (Integer.parseInt(currentpage)-1)*nlimitcount;
 		}
 		
-		//	信息查询;
+		//	TODO 信息查询;
 		sql	  			= "select a.note,b.stationid,b.deviceip,b.errMsg,b.datetime,b.datetime1,b.pic1,b.pic2 from device a, monitorinfo b where a.stationid=b.stationid and a.deviceip=b.deviceip and a.stationid='"+stationid+"' and a.kind=3 "+between+" order by b.datetime1 desc limit "+first+","+nlimitcount;
 		JSONArray array = select(sql);
 		
@@ -1441,7 +1441,6 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 			}	
 		}
 
-		// TODO 进行描写的部分;
 		//	数据的上限;
 		int dis		=	12-monthcurrent;
 		
@@ -2141,7 +2140,7 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		sql   = "select * from monitorinfo "+where+" order by datetime1 desc limit "+first+","+nlimitcount;
 		sqlall= "select count(lcommand) from monitorinfo "+where+" order by datetime1 desc";
 
-		//	数据库查询操作;
+		//	TODO 数据库查询操作;
 		JSONArray 	 array = select(sql);
 
 		int 		 count = getQueryCount(sqlall);
@@ -2175,16 +2174,19 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	        		  
 	        		  // 将对应的文件格式进行替换;
 	        		  if(key.contains(KEY_1)) {
+	        			  System.out.println("文件"+value);	        			  
 	        			  // 文件夹;
 	        			  String folder= FOLDER.replace(TAG_2, "/");
 	        			  
-	        			  String head  = this.util_Net.getHttphead()+"/"+folder;
+	        			  String head  = this.util_Net.getHttphead()+"/ExtractLoadV01/"+folder;
+
+	        			  value		   = value.replace(TAG_1, "/");
 	        			  
-	        			  value		   = value.replace(TAG_1, "/").replace("[","_").replace("]", "");
-	        			  value		   = value.substring(value.indexOf(":") + 1);
-	        			  
-	        			  value		   = head+value;
-			  
+	        			  if(!value.contains("无图像保存")) {
+	        				  value	   = value.substring(value.indexOf("/"), value.length());
+		        			  value	   = head+value;	
+	        				  System.out.println(value);  
+	        			  }
 	        		  }
 	        		  
 	        		  // 参数的添加;
