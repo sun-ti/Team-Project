@@ -1,0 +1,108 @@
+ //18.记录所有站点黑名单车辆到站信息。可以按照站点排序
+链接:http://localhost:8080/ExtractLoadV01/Monitor?oper=21&year=2019
+
+
+//19.显示各站黑名单车辆到站预警（并需传输给CMC系统）
+链接:http://localhost:8080/ExtractLoadV01/Monitor?oper=22&year=2019
+
+结果: stationid:站点编号
+        info:	       详细情况
+        year:	       年份
+        month:   月份
+        data:[] 数据信息
+	datetime: 异常时间
+	carid:	异常车牌号
+
+{"msg":"OK","code":"0","data":
+[{"stationid":"jyxd","info":
+		[{"month":10,"data":
+				[{"datetime":"2018-10-03 12:00:00","carid":"津IYG772"},
+				 {"datetime":"2018-10-03 12:00:00","carid":"津YRH554"},
+				 {"datetime":"2018-10-03 12:00:00","carid":"津GEF398"},
+				 {"datetime":"2018-10-03 12:00:00","carid":"津XJW501"},
+				 {"datetime":"2018-10-06 12:00:00","carid":"津KZL707"},
+				 {"datetime":"2018-10-06 12:00:00","carid":"津XDX536"},
+				 {"datetime":"2018-10-06 12:00:00","carid":"津QHU140"},
+				 {"datetime":"2018-10-06 12:00:00","carid":"津OGG644"},
+				 {"datetime":"2018-10-09 12:00:00","carid":"津GDD591"},
+				 {"datetime":"2018-10-09 12:00:00","carid":"津AGC824"},],"year":2018},
+		{"month":11,"data":
+				[{"datetime":"2019-01-01 12:00:00","carid":"津VUR033"},],"year":2018},
+		{"month":12,"data":
+				[{"datetime":"2019-01-01 12:00:00","carid":"津VUR033"},],"year":2018},
+		{"month":1,"data":
+				[{"datetime":"2019-01-01 12:00:00","carid":"津VUR033"},
+				 {"datetime":"2019-01-01 12:00:00","carid":"津HXU324"},],"year":2019},
+		{"month":2,"data":
+				[{"datetime":"2019-02-03 12:00:00","carid":"津GGC995"},],"year":2019},
+		{"month":3,"data":
+				[{"datetime":"2019-02-03 12:00:00","carid":"津GGC995"},],"year":2019},
+		{"month":4,"data":
+				[{"datetime":"2019-02-03 12:00:00","carid":"津GGC995"},],"year":2019},
+		{"month":5,"data":
+				[{"datetime":"2019-02-03 12:00:00","carid":"津GGC995"},],"year":2019},
+		{"month":6,"data":
+				[{"datetime":"2019-02-03 12:00:00","carid":"津GGC995"},],"year":2019},
+							.
+							.
+							.
+]},
+{"stationid":"jyxd1","info":"2018-2019无数据"},
+{"stationid":"jyxd2","info":"2017-2018无数据"},
+{"stationid":"jyxd3","info":"2016-2017无数据"},
+{"stationid":"jyxd4","info":"2015-2016无数据"}],"count":5}
+
+// 20.用柱状图横向比较各加油站黑名单车辆到站事件数量
+链接:http://localhost:8080/ExtractLoadV01/Monitor?oper=23&year=2019
+结果:stationid:站点编号
+       info[]:     结果集合
+	year:	年份;
+	month:	月份;
+	count:	异常次数;
+
+样例:
+{"msg":"OK","code":"0","data":
+		          [{"stationid":"jyxd","info":
+				            [{"month":10,"year":2018,"count":40},
+				             {"month":11,"year":2018,"count":40},
+  				             {"month":12,"year":2018,"count":40},
+				             {"month":1,"year":2019,"count":44},
+				             {"month":2,"year":2019,"count":36},
+				             {"month":3,"year":2019,"count":40},
+				             {"month":4,"year":2019,"count":40},
+				             {"month":5,"year":2019,"count":44},
+				             {"month":6,"year":2019,"count":40},
+				             {"month":7,"year":2019,"count":40},
+				             {"month":8,"year":2019,"count":39},
+				             {"month":9,"year":2019,"count":40},
+				             {"month":10,"year":2019,"count":16}]},
+		           {"stationid":"jyxd1","info":"2018-2019无数据"},
+		           {"stationid":"jyxd2","info":"2017-2018无数据"},
+		           {"stationid":"jyxd3","info":"2016-2017无数据"},
+		           {"stationid":"jyxd4","info":"2015-2016无数据"}],"count":5}
+//////////////////////////
+液位仪管理功能模块;
+//1.新增
+链接:http://localhost:8080/ExtractLoadV01/YWY?oper=0&nodeno=[must]&xql=[must]&ps_date =[must]&cp_no=[must]&depot_code=[must]&psd_id=[must]&oils_id=[must]
+//2.修改
+链接:http://localhost:8080/ExtractLoadV01/YWY?oper=1&(nodeno,xql,ps_date,cp_no,depot_code,psd_id,oils_id选填)
+//3.删除
+链接:http://localhost:8080/ExtractLoadV01/YWY?oper=2&uuid=[must]
+//4.查询
+链接:http://localhost:8080/ExtractLoadV01/YWY?oper=3&page=1&limit=1
+结果:uuid:
+        oils_id:
+        xql:
+        nodeno:
+        cp_no:
+        autoid:
+        ps_date:
+        depot_code:
+        psd_id:
+        state:
+
+样例:
+{"msg":"OK","code":"0","data":
+			[{"oils_id":"60522972","xql":"6080","nodeno":"32600693","cp_no":"津CA1859","autoid":"152","ps_date":"2019-08-31 00:00:00","depot_code":"32600017","psd_id":"0045089991","state":"0","uuid":"ab572c8f-1015-4754-94ac-dc80c53d510c"}],"count":116}
+
+
