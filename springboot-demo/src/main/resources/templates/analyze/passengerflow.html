@@ -6,129 +6,540 @@
 
 </head>
 <div>
-    <div class="layui-form" style="width: 1000">
+    <div class="layui-form" style="">
         <div class="layui-form-item">
-            <label class="layui-form-label">时间筛选</label>
+            <label class="layui-form-label">筛选</label>
             <div class="layui-input-inline">
-                <select name="quiz1">
-                    <option value="" selected="">请选择年份</option>
-                    <option value="2015" >2015年</option>
-                    <option value="2016" >2016年</option>
-                    <option value="2017" >2017年</option>
-                    <option value="2018" >2018年</option>
-                    <option value="2019" >2019年</option>
+                <select id="stationSelect">
+                    <option value="" selected="">请选择站点</option>
                 </select>
             </div>
             <div class="layui-input-inline">
-                <select name="quiz2">
-                    <option value="">请选择月份</option>
-                    <option value="1">1月</option>
-                    <option value="2">2月</option>
-                    <option value="3">3月</option>
-                    <option value="4">4月</option>
-                    <option value="5">5月</option>
-                    <option value="6">6月</option>
-                    <option value="7">7月</option>
-                    <option value="8">8月</option>
-                    <option value="9">9月</option>
-                    <option value="10">10月</option>
-                    <option value="11">11月</option>
-                    <option value="12">12月</option>
+                <select id="yearSelect">
+                    <option value="" selected="">请选择年份</option>
                 </select>
             </div>
             <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
         </div>
 
     </div>
-    <div id="main" style="width: 900px;height:600px;"></div>
+    <div id="chart1" style="width: 900px;height:600px;"></div>
+    <br/>
+    <br/>
+    <div id="chart2" style="width: 900px;height:600px;"></div>
+    <br/>
+    <br/>
+    <div id="chart3" style="width: 900px;height:600px;"></div>
+    <br/>
+    <br/>
+    <div id="chart4" style="width: 900px;height:600px;"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
     <script src="../layui.js"></script>
     <script type="text/javascript" th:inline="none">
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
-        var datajosn = "{\"msg\":\"OK\",\"code\":\"200\",\"data\":[{\"date\":\"2019-1\",\"in\":10},{\"date\":\"2019-2\",\"in\":15},{\"date\":\"2019-3\",\"in\":30},{\"date\":\"2019-4\",\"in\":20},{\"date\":\"2019-5\",\"in\":40},{\"date\":\"2019-6\",\"in\":80},{\"date\":\"2019-7\",\"in\":70},{\"date\":\"2019-8\",\"in\":90},{\"date\":\"2019-9\",\"in\":88},{\"date\":\"2019-10\",\"in\":100},{\"date\":\"2019-11\",\"in\":50},{\"date\":\"2019-12\",\"in\":30}],\"count\":12}"
-        var data = JSON.parse(datajosn).data
-        var xdata=[],data1=[]
-        for(item of data){
-            xdata.push(item.date)
-            data1.push(item.in)
-        }
-        option = {
-            title: {
-                text: '客流量统计'
-            },
-            legend: {
-                data: ['客流量'],
-                align: 'left'
-            },
-            toolbox: {
-                // y: 'bottom',
-                feature: {
-                    magicType: {
-                        type: ['stack', 'tiled']
-                    },
-                    dataView: {},
-                    saveAsImage: {
-                        pixelRatio: 2
-                    }
-                }
-            },
-            tooltip: {},
-            xAxis: {
-                data: xdata,
-                silent: false,
-                splitLine: {
-                    show: false
-                }
-            },
-            yAxis: {
-            },
-            series: [{
-                name: '客流量',
-                type: 'bar',
-                data: data1,
-                animationDelay: function (idx) {
-                    return idx * 10;
-                }
-            }],
-            animationEasing: 'elasticOut',
-            animationDelayUpdate: function (idx) {
-                return idx * 5;
-            }
-        };
-
-
-
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-
-        layui.use('table', function () {
+        var host = "http://49.233.36.65:8080"
+        layui.use('form', function () {
             // 搜索时重载
-            var $ = layui.$, active = {
-                reload: function () {
-                    var searchValue = $('#searchValue');
+            var $ = layui.$
+            var form = layui.form
 
-                    //执行重载
-                    table.reload('userTable', {
-                        page: {
-                            curr: 1 //重新从第 1 页开始
-                        }
-                        , where: {
-                            username: searchValue.val()
-                        }
-                    }, 'data');
-                }
-            };
             // 搜索按钮响应
             $('#searchBtn').on('click', function () {
-                console.log(111)
-
-
+                let year = $('#yearSelect').val()
+                let stationid = $('#stationSelect').val()
+                getData(year, stationid)
+                getTypedCostomerData(year, stationid)
+                getRankData((year, stationid))
             });
+            var getYears = function () {
+                var startYear = 2018, year = new Date().getFullYear()
+                for (; startYear <= year; startYear++) {
+                    var opt = $("<option ></option>").val(startYear).text(startYear + "年")
+                    $("#yearSelect").prepend(opt)
+                }
+                form.render('select')
+            }
+            var getStationList = function () {
+                var url = host +'/ExtractLoadV01/Station?oper=3'
+                // var url = 'http://mock-api.com/rg1WOWKY.mock/zhandian'
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(url)
+                        console.log(data)
+                        data = data.data
+                        for (item of data) {
+                            console.log(item.name)
+                            let selet = $('<option></option>').text(item.name).val(item.stationid)
+                            if (item.name == '芥园西道') selet.attr("selected", "true")
+                            $("#stationSelect").append(selet)
+                        }
+                        form.render('select');
+                        getData()
+                        getRankData()
+                        getTypedCostomerData()
+                    }
+                })
+            }
+            var getData = function (year, stationid) {
+                if (year === '' || year == null) {
+                    year = new Date().getFullYear();
+                }
+                if (stationid === '' || stationid == null) {
+                    stationid = "jyxd"
+                }
+                //待替换
+                var url = host+'/ExtractLoadV01/Monitor?oper=7&stationid='+stationid+'&year='+year
+                // var url = 'http://mock-api.com/rg1WOWKY.mock/youji?year=' + year
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(url)
+                        console.log(data)
+                        data = data.data
+                        data.sort(function (a, b) {
+                            if (a.year == b.year) return a.month - b.month;
+                            return a.year - b.year;
+                        })
+                        fullGraph(data)
+                    }
+                })
+            }
+            var getTop = function (max) {
+                var maxTop = 1;
+                console.log(max)
+                while (max > maxTop) {
+                    maxTop *= 10
+                }
+                console.log('maxTop' + maxTop)
+                return maxTop;
+            }
+            var getRankData = function (year, stationid) {
+                if (year === '' || year == null) {
+                    year = new Date().getFullYear();
+                }
+                if (stationid === '' || stationid == null) {
+                    stationid = "jyxd"
+                }
+                //待替换
+                var url = host + '/ExtractLoadV01/Monitor?oper=8&type=2&stationid='+stationid+'&year='+year
+                // var url = 'http://mock-api.com/rg1WOWKY.mock/rank'
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(url)
+                        console.log(data)
+                        data = data.data
+                        let year
+                        let rank=[]
+                        for(let item of data){
+                            year = item.year
+                            if(item.order == "NONE") continue
+                            let temparray = item.order.split(";")
+                            for(let record of temparray){
+                                let acar = record.split(",")
+                                let car = {
+                                    cid:acar[0],
+                                    times:parseInt(acar[1])
+                                }
+                                rank.push(car)
+                            }
+                        }
+                        rank=rank.slice(0,15)
+                        rank.sort((a,b)=>{
+                            return a.times - b.times
+                        })
+
+                        fullGraph_rank(rank)
+                    }
+                })
+            }
+            var getTypedCostomerData = function (year, stationid) {
+                if (year === '' || year == null) {
+                    year = new Date().getFullYear();
+                }
+                if (stationid === '' || stationid == null) {
+                    stationid = "jyxd"
+                }
+                //待替换
+                var url = host + '/ExtractLoadV01/Monitor?oper=9&stationid='+stationid+'&year='+year
+                // var url = 'http://mock-api.com/rg1WOWKY.mock/typedcostomer'
+                $.ajax({
+                    url: url,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(url)
+                        console.log(data)
+                        data = data.data
+                        data.sort(function (a, b) {
+                            if (a.year == b.year) return a.month - b.month;
+                            return a.year - b.year;
+                        })
+                        fullGraph_costomer(data)
+                    }
+                })
+            }
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart1 = echarts.init(document.getElementById('chart1'));
+            var myChart2 = echarts.init(document.getElementById('chart2'));
+            var myChart3 = echarts.init(document.getElementById('chart3'));
+            var myChart4 = echarts.init(document.getElementById('chart4'));
+
+
+            //data1(入站车辆数）data2(加油量) data3(加油次数) // data4 车牌 data5 这个车的进站数 //data6 类型客户统计横坐标，data7类型1，data8类型2
+            var xdata = [], data1 = [], data2 = [], data3 = [],data4=[],data5=[], data6=[],data7=[],data8=[], top1 = 0, top2 = 0, top3 = 0,min=0,max=0
+
+            var colors = ['#5793f3', '#d14a61', '#675bba'];
+
+
+            var fullGraph = function (data) {
+                xdata.splice(0, xdata.length)
+                data1.splice(0, data1.length)
+                data2.splice(0, data2.length)
+                data3.splice(0, data3.length)
+                for (item of data) {
+                    xdata.push(item.year + '-' + item.month)
+                    data1.push(item.in)
+                    data2.push(item.quantity)
+                    data3.push(item.count)
+                }
+                top1 = getTop(Math.max.apply(null, data1))
+                top2 = getTop(Math.max.apply(null, data2))
+                top3 = getTop(Math.max.apply(null, data3))
+                var option1 = {
+                    title: {
+                        text: '入站车流量变化趋势'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['入站车流量']
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true},
+                            magicType: {
+                                show:true,
+                                type: ['line', 'bar']
+                            }
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            axisLabel: {
+                                formatter: '{value} 辆'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '入站车流量',
+                            type: 'line',
+                            areaStyle: {},
+                            data: data1,
+                            markLine: {
+                                lineStyle: {
+                                    normal: {
+                                        type: 'dashed'
+                                    }
+                                },
+                                data: [
+                                    [{type: 'min'}, {type: 'max'}],
+                                    {type: 'average', name: '平均值'}
+                                ]
+                            },
+                        },
+
+                    ]
+                };
+                //入站车辆数量和加油量、加油次数的变化关系
+
+                var option2 = {
+                    color: colors,
+                    title: {
+                        text: '入站车流量、加油量和加油次数对比'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '10%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true},
+                            magicType: {
+                                show:true,
+                                type: ['line', 'bar']
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['入站车流量', '加油量', '加油次数']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '入站车流量',
+                            min: 0,
+                            max: top1,
+                            position: 'right',
+                            axisLine: {
+                                lineStyle: {
+                                    color: colors[0]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} 辆'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '加油量',
+                            min: 0,
+                            max: top2,
+                            position: 'right',
+                            offset: 60,
+                            axisLine: {
+                                lineStyle: {
+                                    color: colors[1]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} L'
+                            }
+                        },
+                        {
+                            type: 'value',
+                            name: '加油次数',
+                            min: 0,
+                            max: top3,
+                            position: 'left',
+                            axisLine: {
+                                lineStyle: {
+                                    color: colors[2]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} 次'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '入站车流量',
+                            type: 'bar',
+                            data: data1
+                        },
+                        {
+                            name: '加油量',
+                            type: 'bar',
+                            yAxisIndex: 1,
+                            data: data2
+                        },
+                        {
+                            name: '加油次数',
+                            type: 'bar',
+                            yAxisIndex: 2,
+                            data: data3
+                        }
+                    ]
+                };
+
+                myChart1.setOption(option1);
+                myChart2.setOption(option2);
+                myChart1.resize()
+                myChart2.resize()
+
+            }
+            var fullGraph_rank = function(data) {
+
+                data4.splice(0, data4.length)
+                data5.splice(0, data5.length)
+                for (item of data) {
+                    data4.push(item.cid)
+                    data5.push(item.times)
+                }
+                min = Math.min.apply(null, data5)
+                max = Math.max.apply(null, data5)
+
+                var option3 = {
+                    title: {
+                        text: '车辆进站次数年排名',
+
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    },
+                    legend: {
+                        data: ["单车辆进站次数"]
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        name:"次数",
+                        type: 'value',
+                        boundaryGap: [0, 0.01]
+                    },
+                    yAxis: {
+                        name:"车牌号",
+                        type: 'category',
+                        data: data4
+                    },
+                    series: [
+                        {
+                            name: '单车辆进站次数',
+                            type: 'bar',
+                            data: data5
+                        }
+
+                    ]
+                };
+
+                myChart3.setOption(option3)
+                myChart3.resize()
+
+            }
+            var fullGraph_costomer = function (data) {
+                let tb = {
+                    "类型1":"优质客户",
+                    "类型2":"普通客户"
+                }
+                data6.splice(0, data6.length)
+                data7.splice(0, data7.length)
+                data8.splice(0, data8.length)
+                for (item of data) {
+                    data6.push(item.year + '-' + item.month)
+                    data7.push(item.data[0].count)
+                    data8.push(item.data[1].count)
+                }
+
+
+                var option4 = {
+                    color: colors,
+                    title: {
+                        text: '各类客户加油次数的变化趋势'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross'
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '10%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true},
+                            magicType: {
+                                show:true,
+                                type: ['line', 'bar']
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['优质客户', '普通客户']
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            axisTick: {
+                                alignWithLabel: true
+                            },
+                            data: data6
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '加油次数',
+                            position: 'left',
+                            axisLine: {
+                                lineStyle: {
+                                    color: colors[0]
+                                }
+                            },
+                            axisLabel: {
+                                formatter: '{value} 次'
+                            }
+                        },
+
+                    ],
+                    series: [
+                        {
+                            name: '优质客户',
+                            type: 'bar',
+                            data: data7
+                        },
+                        {
+                            name: '普通客户',
+                            type: 'bar',
+                            data: data8
+                        }
+                    ]
+                };
+
+                myChart4.setOption(option4);
+                myChart4.resize()
+            }
+            getYears()
+            getStationList()
+
         });
-
     </script>
-
 </div>
 </html>

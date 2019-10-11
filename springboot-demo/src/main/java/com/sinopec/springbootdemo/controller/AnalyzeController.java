@@ -11,7 +11,7 @@ public class AnalyzeController {
     public String car() {
         return "analyze/carflow";
     }
-    
+
     @RequestMapping("/passengerflow")
     public String passenger() {
         return "analyze/passengerflow";
@@ -20,5 +20,15 @@ public class AnalyzeController {
     @RequestMapping("/ruDianBi")
     public String rudianbi() {
         return "analyze/ruDianBi";
+    }
+
+    @RequestMapping("/costomer")
+    public String costomer() {
+        return "analyze/costomer";
+    }
+
+    @RequestMapping("/parking")
+    public String parking() {
+        return "analyze/parking";
     }
 }

@@ -24,6 +24,8 @@
 
     </div>
     <div id="chart1" style="width: 900px;height:600px;"></div>
+    <br/><br/><br/>
+    <div id="chart2" style="width: 900px;height:600px;"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
     <script src="../layui.js"></script>
@@ -77,8 +79,8 @@
                     stationid = "jyxd"
                 }
                 //待替换
-                var url = host + '/ExtractLoadV01/Monitor?oper=10&stationid='+stationid+'&year='+year
-                // var url = 'http://mock-api.com/rg1WOWKY.mock/rudianbi'
+                var url = host + '/ExtractLoadV01/Monitor?oper=13&stationid='+stationid+'&year='+year
+                // var url = 'http://mock-api.com/rg1WOWKY.mock/parking'
                 $.ajax({
                     url: url,
                     dataType: "json",
@@ -106,6 +108,7 @@
 
             // 基于准备好的dom，初始化echarts实例
             var myChart1 = echarts.init(document.getElementById('chart1'));
+            var myChart2 = echarts.init(document.getElementById('chart2'));
 
             //data1(入站车辆数）data2(加油量) data3(加油次数)
             var xdata = [], data1 = [], data2 = [], data3 = [],top1=0,top2=0,top3=0
@@ -120,15 +123,85 @@
                 data3.splice(0, data3.length)
                 for (item of data) {
                     xdata.push(item.year + '-' + item.month)
-                    data1.push((item.human_in_num/item.car_in_num).toFixed(2))
-                    data2.push(item.car_in_num)
-                    data3.push(item.human_in_num)
+                    data1.push(item.staytime_mean)
+                    data2.push(item.add_oil_count)
                 }
 
                 var option1 = {
+                    title: {
+                        text: '车辆站内平均停留时间'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
+                        }
+                    },
+                    legend: {
+                        data: ['平均停留时间']
+                    },
+                    toolbox: {
+                        feature: {
+                            dataView: {show: true, readOnly: false},
+                            saveAsImage: {show: true},
+                            magicType: {
+                                show:true,
+                                type: ['line', 'bar']
+                            }
+                        }
+                    },
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
+                    },
+                    xAxis: [
+                        {
+                            type: 'category',
+                            boundaryGap: false,
+                            data: xdata
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: 'value',
+                            name: '停留时间',
+                            axisLabel: {
+                                formatter: '{value}'
+                            }
+                        }
+                    ],
+                    series: [
+                        {
+                            name: '平均停留时间',
+                            type: 'line',
+                            areaStyle: {},
+                            data: data1,
+                            markLine: {
+                                lineStyle: {
+                                    normal: {
+                                        type: 'dashed'
+                                    }
+                                },
+                                data: [
+                                    [{type: 'min'}, {type: 'max'}],
+                                    {type: 'average', name: '平均值'}
+                                ]
+                            },
+                        },
+
+                    ]
+                };
+                //入站车辆数量和加油量、加油次数的变化关系
+
+                var option2 = {
                     color: colors,
                     title: {
-                        text: '入店比变化趋势'
+                        text: '平均停留时间和加油次数的变化关系'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -153,7 +226,7 @@
                         }
                     },
                     legend: {
-                        data:['入店比','入站车流量','入店人流量']
+                        data:['平均停留时间','加油次数']
                     },
                     xAxis: [
                         {
@@ -167,10 +240,10 @@
                     yAxis: [
                         {
                             type: 'value',
-                            name: '入店比',
+                            name: '平均停留时间',
                             min: 0,
                             // max: top1,
-                            position: 'right',
+                            position: 'left',
                             axisLine: {
                                 lineStyle: {
                                     color: colors[0]
@@ -182,61 +255,43 @@
                         },
                         {
                             type: 'value',
-                            name: '入站车流量',
+                            name: '加油次数',
                             min: 0,
                             // max: top2,
                             position: 'right',
-                            offset: 60,
                             axisLine: {
                                 lineStyle: {
                                     color: colors[1]
                                 }
                             },
                             axisLabel: {
-                                formatter: '{value} 辆'
+                                formatter: '{value} 次'
                             }
                         },
-                        {
-                            type: 'value',
-                            name: '入店人流量',
-                            min: 0,
-                            // max: top3,
-                            position: 'left',
-                            axisLine: {
-                                lineStyle: {
-                                    color: colors[2]
-                                }
-                            },
-                            axisLabel: {
-                                formatter: '{value} 人次'
-                            }
-                        }
                     ],
                     series: [
                         {
-                            name:'入店比',
-                            type:'line',
+                            name:'入站率',
+                            type:'bar',
                             data:data1
                         },
                         {
-                            name:'入站车流量',
+                            name:'加油次数',
                             type:'bar',
                             yAxisIndex: 1,
                             data:data2
                         },
-                        {
-                            name:'入店人流量',
-                            type:'bar',
-                            yAxisIndex: 2,
-                            data:data3
-                        }
+
                     ]
                 };
 
-
                 myChart1.setOption(option1);
+                myChart2.setOption(option2);
                 myChart1.resize()
+                myChart2.resize()
+
             }
+
             getYears()
             getStationList()
 

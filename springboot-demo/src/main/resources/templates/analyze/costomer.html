@@ -6,7 +6,7 @@
 
 </head>
 <div>
-    <div class="layui-form" style="width: 1000">
+    <div class="layui-form" style="">
         <div class="layui-form-item">
             <label class="layui-form-label">筛选</label>
             <div class="layui-input-inline">
@@ -24,6 +24,7 @@
 
     </div>
     <div id="chart1" style="width: 900px;height:600px;"></div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
     <script src="../layui.js"></script>
@@ -77,8 +78,8 @@
                     stationid = "jyxd"
                 }
                 //待替换
-                var url = host + '/ExtractLoadV01/Monitor?oper=10&stationid='+stationid+'&year='+year
-                // var url = 'http://mock-api.com/rg1WOWKY.mock/rudianbi'
+                var url = host+'/ExtractLoadV01/Monitor?oper=11&stationid='+stationid+'&year='+year
+                // var url = 'http://mock-api.com/rg1WOWKY.mock/costomer'
                 $.ajax({
                     url: url,
                     dataType: "json",
@@ -116,31 +117,27 @@
             var fullGraph = function (data) {
                 xdata.splice(0, xdata.length)
                 data1.splice(0, data1.length)
-                data2.splice(0, data2.length)
-                data3.splice(0, data3.length)
+
                 for (item of data) {
                     xdata.push(item.year + '-' + item.month)
-                    data1.push((item.human_in_num/item.car_in_num).toFixed(2))
-                    data2.push(item.car_in_num)
-                    data3.push(item.human_in_num)
-                }
+                    data1.push(item.in_human_num)
 
+                }
                 var option1 = {
-                    color: colors,
                     title: {
-                        text: '入店比变化趋势'
+                        text: '客流量变化趋势'
                     },
                     tooltip: {
                         trigger: 'axis',
                         axisPointer: {
-                            type: 'cross'
+                            type: 'cross',
+                            label: {
+                                backgroundColor: '#6a7985'
+                            }
                         }
                     },
-                    grid: {
-                        left: '3%',
-                        right: '10%',
-                        bottom: '3%',
-                        containLabel: true
+                    legend: {
+                        data: ['客流量']
                     },
                     toolbox: {
                         feature: {
@@ -152,61 +149,22 @@
                             }
                         }
                     },
-                    legend: {
-                        data:['入店比','入站车流量','入店人流量']
+                    grid: {
+                        left: '3%',
+                        right: '4%',
+                        bottom: '3%',
+                        containLabel: true
                     },
                     xAxis: [
                         {
                             type: 'category',
-                            axisTick: {
-                                alignWithLabel: true
-                            },
+                            boundaryGap: false,
                             data: xdata
                         }
                     ],
                     yAxis: [
                         {
                             type: 'value',
-                            name: '入店比',
-                            min: 0,
-                            // max: top1,
-                            position: 'right',
-                            axisLine: {
-                                lineStyle: {
-                                    color: colors[0]
-                                }
-                            },
-                            axisLabel: {
-                                formatter: '{value}'
-                            }
-                        },
-                        {
-                            type: 'value',
-                            name: '入站车流量',
-                            min: 0,
-                            // max: top2,
-                            position: 'right',
-                            offset: 60,
-                            axisLine: {
-                                lineStyle: {
-                                    color: colors[1]
-                                }
-                            },
-                            axisLabel: {
-                                formatter: '{value} 辆'
-                            }
-                        },
-                        {
-                            type: 'value',
-                            name: '入店人流量',
-                            min: 0,
-                            // max: top3,
-                            position: 'left',
-                            axisLine: {
-                                lineStyle: {
-                                    color: colors[2]
-                                }
-                            },
                             axisLabel: {
                                 formatter: '{value} 人次'
                             }
@@ -214,35 +172,36 @@
                     ],
                     series: [
                         {
-                            name:'入店比',
-                            type:'line',
-                            data:data1
+                            name: '客流量',
+                            type: 'line',
+                            areaStyle: {},
+                            data: data1,
+                            markLine: {
+                                lineStyle: {
+                                    normal: {
+                                        type: 'dashed'
+                                    }
+                                },
+                                data: [
+                                    [{type: 'min'}, {type: 'max'}],
+                                    {type: 'average', name: '平均值'}
+                                ]
+                            },
                         },
-                        {
-                            name:'入站车流量',
-                            type:'bar',
-                            yAxisIndex: 1,
-                            data:data2
-                        },
-                        {
-                            name:'入店人流量',
-                            type:'bar',
-                            yAxisIndex: 2,
-                            data:data3
-                        }
+
                     ]
                 };
 
 
                 myChart1.setOption(option1);
                 myChart1.resize()
+
             }
+
             getYears()
             getStationList()
 
         });
-
     </script>
-
 </div>
 </html>
