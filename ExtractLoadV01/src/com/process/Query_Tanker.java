@@ -1,12 +1,6 @@
 package com.process;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-
-import javax.servlet.ServletInputStream;
 
 import com.model.Util;
 import com.model.Util_DBase;
@@ -318,6 +312,7 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 		}
 		sql	=	"insert into station (uuid,orderNum,price,quantity,money,payType,cardNum,oilGunNum,startTime,endTime,plateOld,plate,state) "
 				+ "values('"+uuid+"','"+orderNum+"',"+price+","+quantity+","+money+","+payType+",'"+cardNum+"','"+oilGunNum+"','"+startTime+"','"+endTime+"','"+plateOld+"','"+plate+"',"+state+")";
+		super.update(sql);
 		
 		JSONObject obj=new JSONObject();
 		obj.put("errorCode", 0);

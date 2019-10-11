@@ -295,7 +295,7 @@
 "count":5}
  
  //20.用柱状图横向比较各加油站黑名单车辆到站事件数量
- 链接:http://localhost:8080/ExtractLoadV01/Monitor?oper=22&year=2019
+ 链接:http://localhost:8080/ExtractLoadV01/Monitor?oper=22&year=2019&stationid=jyxd
  结果:stationid:			站点编号
  			info:						详细信息
  				month:				月份

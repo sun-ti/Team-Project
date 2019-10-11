@@ -121,8 +121,18 @@
 		<servlet-name>QueryServlet_Tanker</servlet-name>
 		<url-pattern>/Tanker</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 液位仪的数据处理 -->
+	<servlet>
+		<servlet-name>QueryServlet_YWY</servlet-name>
+		<servlet-class>com.controller.QueryServlet_YWY</servlet-class>
+	</servlet>
 
-
+	<servlet-mapping>
+		<servlet-name>QueryServlet_YWY</servlet-name>
+		<url-pattern>/YWY</url-pattern>
+	</servlet-mapping>
+		
 	<filter>
 		<filter-name>WebFilter</filter-name>
 		<filter-class>com.controller.WebFilter</filter-class>

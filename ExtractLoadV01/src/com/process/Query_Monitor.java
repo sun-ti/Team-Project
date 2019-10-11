@@ -348,28 +348,30 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 		int size=0,year	= 0,monthsize=0,	monthcurrent = 0,	dis	=	0;
 		
 		//	查询出所有的站点;
-		String 	  sql1	= "select stationid from station";
-		JSONArray array1= super.select(sql1);
-		JSONArray array	= new JSONArray();
+		String 	  sql1		= "select stationid from station";
+		JSONArray stationids= super.select(sql1);
+		JSONArray array		= new JSONArray();
 		
 		//	获得的年份;
-		year	 		= Integer.parseInt(util_Net.getRequest().getParameter("year"));
+		year	 			= Integer.parseInt(util_Net.getRequest().getParameter("year"));
 
 		//	根据年进行查询;
-		for(int j=0;j<array1.size();j++) {
+		for(int j=0;j<stationids.size();j++) {
 			
-			JSONObject obj1  = array1.getJSONObject(j);
-			String stationid = obj1.getString("stationid");
+			JSONObject  obj_station  	= stationids.getJSONObject(j);
+			String 	    stationid 		= obj_station.getString("stationid");
 			
-			//	获得月份的临时存储结构;
-			JSONArray 	monthtemp	 = null;
-
 			//	查询出当前年份的可用月数个数;
 			String 		sql_queryMonth  =  "select month from stationstatistics_exception where stationid='"+stationid+"' and year="+year+" order by datetime1 desc limit 0,1";
 			
-			monthtemp					= 	super.select(sql_queryMonth);
+			JSONArray   monthtemp		= 	super.select(sql_queryMonth);
+			
 			monthsize					= 	monthtemp.size();
-
+			String 		info			=	null;
+			
+			JSONObject 	obj3			=	new JSONObject();
+			obj3.put("stationid", stationid);
+			
 			if(monthsize!=0)
 				
 				//	进行数据的转换;
@@ -388,52 +390,61 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 					//	进行数据的转换;
 					monthcurrent		= Integer.parseInt(monthtemp.getJSONObject(0).getString("month"));				
 				else {
-					result				= year+"-"+(year+1)+"无数据";
-					return util_Net.sendResult(results[0], results[1], size, result);
+					
+					monthcurrent		= -1;
 				}
 			}
-
-			//	上限与当前月份的差值;
-			dis		=	12-monthcurrent;
 			
-			JSONArray array3 = new JSONArray();
-			//	对上一年的数据进行添加;
-			if(dis>0) {
+			if(monthcurrent!=-1) {
+
+				//	上限与当前月份的差值;
+				dis		=	12-monthcurrent;
+//				System.out.println(dis);
 				
-				//	上一年的索引内容;
-				int last	=	year-1;
-				for(int i=12-dis;i<=12;i++) {
-					String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+last+" and month="+i;
+				JSONArray array3 = new JSONArray();
+				//	对上一年的数据进行添加;
+				if(dis>0) {
 					
+					//	上一年的索引内容;
+					int last	=	year-1;
+					for(int i=12-dis;i<=12;i++) {
+						String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+last+" and month="+i;
+						
+						JSONArray  array2 = super.select(sql);
+						
+						JSONObject obj2   = new JSONObject();
+					
+						obj2.put("year", last);
+						obj2.put("month", i);
+						obj2.put("data", array2.toString());
+						array3.add(obj2);
+					}
+				}
+
+				//	进行相应的年月的查找;
+				for(int i=1;i<=monthcurrent;i++){
+					
+					String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+year+" and month="+i;
+		
 					JSONArray  array2 = super.select(sql);
 					
 					JSONObject obj2   = new JSONObject();
 				
-					obj2.put("year", last);
+					obj2.put("year", year);
 					obj2.put("month", i);
 					obj2.put("data", array2.toString());
 					array3.add(obj2);
 				}
+				info			=	array3.toString();
+			
+			}else {
+				result				= year+"-"+(year+1)+"无数据";
+				//	结果集合;
+				
+				info				= result;
 			}
 
-			//	进行相应的年月的查找;
-			for(int i=1;i<=monthcurrent;i++){
-				
-				String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+year+" and month="+i;
-	
-				JSONArray  array2 = super.select(sql);
-				
-				JSONObject obj2   = new JSONObject();
-			
-				obj2.put("year", year);
-				obj2.put("month", i);
-				obj2.put("data", array2.toString());
-				array3.add(obj2);
-			}
-		
-			JSONObject obj3=new JSONObject();
-			obj3.put("stationid", stationid);
-			obj3.put("info", array3.toString());
+			obj3.put("info", info);
 			array.add(obj3);
 		}
 		
@@ -472,139 +483,120 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 
 	//	黑名单车辆到站预警;
 	public String alarm_ExceptionToStation() {
-		//	站点的id编号;
-		String 	  stationid="",result=null;
-		String[]  results  = {"1","NO"};
-		//	monthsize:查询出的月的条目结果;
-		int 	    year   = 0,size  	 = 0,monthsize=0,	monthcurrent = 0,	dis	=	0;
-		JSONArray array	   = new JSONArray();
-		
-		//	获得的年份;
-		year	 		=	Integer.parseInt(util_Net.getRequest().getParameter("year"));
-		stationid 		=	util_Net.getRequest().getParameter("stationid");
-		
-		
-		String    	sql1	  =	"select carid from stationstatistics_exception";
-		JSONArray   array1	  =	super.select(sql1);
-		ArrayList<String>	exceptions= new ArrayList<String>();
-		
-		//	异常信息的列表内容;
-		for(int j=0;j<array1.size();j++) {
+			//	站点的id编号;
+			String 	 result=null;
+			String[] results  = {"1","NO"};
+			int size=0,year	= 0,monthsize=0,	monthcurrent = 0,	dis	=	0;
 			
-			//	每个声明的对象;
-			JSONObject obj1	 =	array1.getJSONObject(j);
-			//	声明对象的变量;
-			String carid	 =  obj1.getString("carid");
-			exceptions.add(carid);
-		}
-
-		
-		//	获得月份的临时存储结构;
-		JSONArray 	monthtemp	 = null;
-		
-		//	站点的内容;
-		stationid		   = util_Net.getRequest().getParameter("stationid");
-		
-		//	获得的年份;
-		year	 		   = Integer.parseInt(util_Net.getRequest().getParameter("year"));
-
-		//	查询出当前年份的可用月数个数;
-		String 		sql_queryMonth  = "select month from car_addoil where stationid='"+stationid+"' and year="+year+" order by datetime1 desc limit 0,1";
-		
-		monthtemp					= super.select(sql_queryMonth);
-		monthsize					= monthtemp.size();
-
-		if(monthsize!=0)
+			//	查询出所有的站点;
+			String 	  sql1		= "select stationid from station";
+			JSONArray stationids= super.select(sql1);
+			JSONArray array		= new JSONArray();
 			
-			//	进行数据的转换;
-			monthcurrent			= Integer.parseInt(monthtemp.getJSONObject(0).getString("month"));
-		else {
-			//	当结果不存在进行年份-1,进行上1年的检测;
-			year					= year-1;
-			//	并且再次进行数据的查询;
-			sql_queryMonth  		= "select month from car_addoil where stationid='"+stationid+"' and year="+year+" order by datetime1 desc limit 0,1";
-			monthtemp				= super.select(sql_queryMonth);
-			monthsize				= monthtemp.size();
-			
-			//	当上1年也没有就进行跳出，并且返回连续两年没有信息;
-			if(monthsize!=0)
+			//	获得的年份;
+			year	 			= Integer.parseInt(util_Net.getRequest().getParameter("year"));
+
+			//	根据年进行查询;
+			for(int j=0;j<stationids.size();j++) {
 				
-				//	进行数据的转换;
-				monthcurrent		= Integer.parseInt(monthtemp.getJSONObject(0).getString("month"));				
-			else {
-				result				= year+"-"+(year+1)+"无数据";
-				return util_Net.sendResult(results[0], results[1], size, result);
-			}
-		}
-
-		//	上限与当前月份的差值;
-		dis		=	12-monthcurrent;
-		
-		//	对上一年的数据进行添加;
-		if(dis>0) {
-			
-			//	上一年的索引内容;
-			int last	=	year-1;
-			for(int i=12-dis;i<=12;i++) {
+				JSONObject  obj_station  	= stationids.getJSONObject(j);
+				String 	    stationid 		= obj_station.getString("stationid");
 				
-				String 	  sql2	 =	"select carid from car_addoil where stationid='"+stationid+"' and year="+last+" and month="+i;
-				JSONArray array2 =  super.select(sql2);
+				//	查询出当前年份的可用月数个数;
+				String 		sql_queryMonth  =  "select month from stationstatistics_exception where stationid='"+stationid+"' and year="+year+" order by datetime1 desc limit 0,1";
 				
-				int count=0;
-				for(int a=0;a<array2.size();a++) {
-					JSONObject obj2=array2.getJSONObject(a);
+				JSONArray   monthtemp		= 	super.select(sql_queryMonth);
+				
+				monthsize					= 	monthtemp.size();
+				String 		info			=	null;
+				
+				JSONObject 	obj3			=	new JSONObject();
+				obj3.put("stationid", stationid);
+				
+				if(monthsize!=0)
 					
-					String   car_id=obj2.getString("carid");
+					//	进行数据的转换;
+					monthcurrent			= Integer.parseInt(monthtemp.getJSONObject(0).getString("month"));
+				else {
+					//	当结果不存在进行年份-1,进行上1年的检测;
+					int last				= year-1;
+					//	并且再次进行数据的查询;
+					sql_queryMonth  		= "select month from stationstatistics_exception where stationid='"+stationid+"' and year="+last+" order by datetime1 desc limit 0,1";
+					monthtemp				= super.select(sql_queryMonth);
+					monthsize				= monthtemp.size();
 					
-					if(exceptions.contains(car_id)) {
-						count++;
+					//	当上1年也没有就进行跳出，并且返回连续两年没有信息;
+					if(monthsize!=0)
+						
+						//	进行数据的转换;
+						monthcurrent		= Integer.parseInt(monthtemp.getJSONObject(0).getString("month"));				
+					else {
+						
+						monthcurrent		= -1;
 					}
 				}
 				
-				JSONObject object	=	new JSONObject();
-				object.put("stationid",stationid);
-				object.put("year",last);
-				object.put("month",i);
-				object.put("errCount",count);
-				
-				array.add(object);
-			}
-		}
-		
-		
-		for(int i=1;i<=monthcurrent;i++) {	
-			String 	  sql2	 =	"select carid from car_addoil where stationid='"+stationid+"' and year="+year+" and month="+i;
-			JSONArray array2 =  super.select(sql2);
+				if(monthcurrent!=-1) {
+
+					//	上限与当前月份的差值;
+					dis		=	12-monthcurrent;
+//					System.out.println(dis);
+					
+					JSONArray array3 = new JSONArray();
+					//	对上一年的数据进行添加;
+					if(dis>0) {
+						
+						//	上一年的索引内容;
+						int last	=	year-1;
+						for(int i=12-dis;i<=12;i++) {
+							String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+last+" and month="+i;
+							
+							JSONArray  array2 = super.select(sql);
+							
+							JSONObject obj2   = new JSONObject();
+						
+							obj2.put("year", last);
+							obj2.put("month", i);
+							obj2.put("count", array2.size());
+							array3.add(obj2);
+						}
+					}
+
+					//	进行相应的年月的查找;
+					for(int i=1;i<=monthcurrent;i++){
+						
+						String 	   sql	  = "select carid,datetime from stationstatistics_exception where stationid='"+stationid+"' and year="+year+" and month="+i;
 			
-			int count=0;
-			for(int a=0;a<array2.size();a++) {
-				JSONObject obj2=array2.getJSONObject(a);
+						JSONArray  array2 = super.select(sql);
+						
+						JSONObject obj2   = new JSONObject();
+					
+						obj2.put("year", year);
+						obj2.put("month", i);
+						obj2.put("count", array2.size());
+						array3.add(obj2);
+					}
+					info			=	array3.toString();
 				
-				String   car_id=obj2.getString("carid");
-				
-				if(exceptions.contains(car_id)) {
-					count++;
+				}else {
+					result				= (year-1)+"-"+year+"无数据";
+					//	结果集合;
+					
+					info				= result;
 				}
+
+				obj3.put("info", info);
+				array.add(obj3);
 			}
 			
-			JSONObject object	=	new JSONObject();
-			object.put("stationid",stationid);
-			object.put("year",year);
-			object.put("month",i);
-			object.put("errCount",count);
+			if(array!=null) {
+				results[0]= "0";
+				results[1]= "OK";
+				result	  = array.toString();
+				size	  = array.size();
+			}
 			
-			array.add(object);
-		}
-		
-		
-		if(array!=null) {
-			results[0]= "0";
-			results[1]= "OK";
-			result	  = array.toString();
-			size	  = array.size();
-		}
-		
-		return util_Net.sendResult(results[0], results[1], size, result);
+			return util_Net.sendResult(results[0], results[1], size, result);
 	}
 	
 	
