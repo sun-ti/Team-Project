@@ -2174,18 +2174,18 @@ public class Query_Monitor extends Util_DBase implements Utils_DBase{
 	        		  
 	        		  // 将对应的文件格式进行替换;
 	        		  if(key.contains(KEY_1)) {
-	        			  System.out.println("文件"+value);	        			  
+//	        			  System.out.println("文件"+value);	        			  
 	        			  // 文件夹;
 	        			  String folder= FOLDER.replace(TAG_2, "/");
-	        			  
-	        			  String head  = this.util_Net.getHttphead()+"/ExtractLoadV01/"+folder;
-
+//	        			  System.out.println("head"+this.util_Net.getHttphead());
+//	        			  String head  = this.util_Net.getHttphead()+"/ExtractLoadV01/"+folder;
+	        			  String head  = "http://49.233.36.65:8080"+"/ExtractLoadV01/"+folder;
 	        			  value		   = value.replace(TAG_1, "/");
 	        			  
 	        			  if(!value.contains("无图像保存")) {
 	        				  value	   = value.substring(value.indexOf("/"), value.length());
 		        			  value	   = head+value;	
-	        				  System.out.println(value);  
+//	        				  System.out.println(value);
 	        			  }
 	        		  }
 	        		  
