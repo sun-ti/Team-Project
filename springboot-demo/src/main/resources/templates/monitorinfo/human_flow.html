@@ -45,7 +45,11 @@
                             return layui.util.toDateString(data.datetime);
                         }
                     }
-                    , {field: 'stationid', title: '站点名称'}
+                    , {field: 'stationid', title: '站点名称', templet: function (data) {
+                            if(data.stationid=='jyxd') {
+                                return '<span>芥园西道加油站</span>';
+                            }
+                        }}
                     , {field: 'deviceip', title: '设备 IP 地址'}
                     , {field: 'errMsg', title: '数据'}
                     // , {fixed: 'right', minWidth: 280, align: 'center', toolbar: '#monitorinfoTool'}

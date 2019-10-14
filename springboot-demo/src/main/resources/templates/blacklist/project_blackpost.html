@@ -16,13 +16,13 @@
 <div>
     <div class="layui-row" style="width: 1000">
         <div>
-            <button class="layui-btn" type="button" onclick="plateAdd()">增加站点</button>
+            <button class="layui-btn" type="button" onclick="plateAdd()">增加车辆</button>
             <!--delete还没有实现-->
-            <button class="layui-btn" type="button" onclick="permissionDelete()">删除站点</button>
+            <button class="layui-btn" type="button" onclick="permissionDelete()">删除车辆</button>
         </div>
         <br/>
         <div class="layui-col-md">
-            请输入站点进行搜索：
+            请输入车牌进行搜索：
             <div class="layui-inline">
                 <input class="layui-input" name="id" id="searchValue" autocomplete="off">
             </div>
@@ -40,34 +40,27 @@
             table.render({
                 elem: '#table',
                 /*接口需修改*/
-                url: 'stationDate',
-                page: true // 开启分页
-                ,
+                url: 'blacklistDate'
+                , parseData: function (res) {
+                    return {
+                        "data": res.data.info.data
+                    };
+                }
+                , page: true,
+
                 width: 1000,
                 limits: [10],
-                cols: [
-                    [{
-                        type: 'numbers',
-                        title: '序号'
-                    }, {
-                        //排序，需修改
-                        field: 'stationid',
-                        title: '站点编号'
+                cols: [[
+                    {type: 'numbers', title: '序号'}
+                    , {
+                        field: 'stationid', title: '站点编号', templet: function (data) {
+                            return '<span>芥园西道加油站</span>';
+                        }
                     }
-                        , {
-                        field: 'name',
-                        title: '站点名称'
-                    }, {
-                        field: 'datetime',
-                        title: '建立时间'
-                    }
+                    , {field: 'carid', title: '黑名单车牌号'}
+                    , {field: 'datetime', title: '记录时间'}
+                ]]
 
-                    ]
-                ],
-
-            });
-            form.on('switch(sexDemo)', function (obj) {
-                layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
             });
             // 搜索时重载
             var $ = layui.$,

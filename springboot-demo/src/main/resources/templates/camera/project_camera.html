@@ -1,35 +1,33 @@
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../css/layui.css"/>
+
     <style>
         .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
             top: 50%;
             transform: translateY(-50%);
         }
     </style>
+    <title></title>
 </head>
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 
+<body>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
 </fieldset>
 <div>
     <div class="layui-row" style="width: 1000">
-        <div>
-            <button class="layui-btn" type="button" onclick="plateAdd()">增加站点</button>
-            <!--delete还没有实现-->
-            <button class="layui-btn" type="button" onclick="permissionDelete()">删除站点</button>
-        </div>
-        <br/>
         <div class="layui-col-md">
-            请输入站点进行搜索：
+            请输入设备类型进行搜索：
             <div class="layui-inline">
                 <input class="layui-input" name="id" id="searchValue" autocomplete="off">
             </div>
             <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
         </div>
     </div>
-
     <table id="table" lay-filter="table"></table>
     <script src="../layui.js"></script>
     <script th:inline="none">
@@ -40,7 +38,7 @@
             table.render({
                 elem: '#table',
                 /*接口需修改*/
-                url: 'stationDate',
+                url: 'cameraDate',
                 page: true // 开启分页
                 ,
                 width: 1000,
@@ -51,23 +49,30 @@
                         title: '序号'
                     }, {
                         //排序，需修改
-                        field: 'stationid',
-                        title: '站点编号'
-                    }
-                        , {
-                        field: 'name',
-                        title: '站点名称'
+                        field: 'deviceip',
+                        title: '设备IP',
+                        sort: true
+                        /*templet: function(data) {
+                            return layui.util.toDateString(data.datetime);
+                        }*/
                     }, {
-                        field: 'datetime',
-                        title: '建立时间'
+                        field: 'note',
+                        title: '设备类型'
+                    }, {
+                        field: 'kind',
+                        title: '型号'
+                    }, {
+                        field: 'stationid',
+                        title: '站点名称', templet: function (data) {
+                            if (data.stationid == 'jyxd') {
+                                return '<span>芥园西道加油站</span>';
+                            }
+                        }
                     }
 
                     ]
                 ],
 
-            });
-            form.on('switch(sexDemo)', function (obj) {
-                layer.tips(this.value + ' ' + this.name + '：' + obj.elem.checked, obj.othis);
             });
             // 搜索时重载
             var $ = layui.$,
@@ -93,32 +98,8 @@
                 active[type] ? active[type].call(this) : '';
             });
         });
-
-        function plateAdd() {
-            layui.use('layer', function () {
-                var layer = layui.layer;
-                layer.open({
-                    type: 2,
-                    title: '添加车牌',
-                    content: 'project_add',
-                    area: ['100%', '100%']
-                });
-            });
-        }
-
-        function plateDelete() {
-            layui.use('layer', function () {
-                var layer = layui.layer;
-                layer.open({
-                    type: 2,
-                    title: '添加车牌',
-                    content: 'project_delete',
-                    area: ['100%', '100%']
-                });
-            });
-        }
-
     </script>
 </div>
+</body>
 
 </html>

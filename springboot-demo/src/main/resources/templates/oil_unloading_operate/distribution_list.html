@@ -40,7 +40,7 @@
             table.render({
                 elem: '#table',
                 /*接口需修改*/
-                url: 'stationDate',
+                url: 'distributionDate',
                 page: true // 开启分页
                 ,
                 width: 1000,
@@ -50,16 +50,31 @@
                         type: 'numbers',
                         title: '序号'
                     }, {
+                        field: 'nodeno',
+                        title: '油站代码',
+                        sort: true
+                    }, {
                         //排序，需修改
-                        field: 'stationid',
-                        title: '站点编号'
+                        field: 'oils_id',
+                        title: '油品ID'
+
+
                     }
                         , {
-                        field: 'name',
-                        title: '站点名称'
+                        field: 'xql',
+                        title: '配送量（kg）'
                     }, {
-                        field: 'datetime',
-                        title: '建立时间'
+                        field: 'cp_no',
+                        title: '配送车牌号'
+                    }, {
+                        field: 'ps_date',
+                        title: '配送日期'
+                    }, {
+                        field: 'depot_code',
+                        title: '油库代码'
+                    }, {
+                        field: 'psd_id',
+                        title: '配送单ID'
                     }
 
                     ]
