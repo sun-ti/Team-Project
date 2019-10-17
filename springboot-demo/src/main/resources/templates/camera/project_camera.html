@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../css/layui.css"/>
+    <link rel="stylesheet" href="../css/layui.css" />
 
     <style>
         .layui-table-cell .layui-form-checkbox[lay-skin="primary"] {
@@ -16,22 +16,31 @@
 </head>
 
 <body>
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-</fieldset>
 <div>
     <div class="layui-row" style="width: 1000">
-        <div class="layui-col-md">
-            请输入设备类型进行搜索：
+        <div class="layui-col-md6">
+            <div class="layui-btn-group">
+                <button type="button" class="layui-btn layui-btn-primary" onclick="cameraAdd()">添加</button>
+            </div>
+        </div>
+        <div class="layui-col-md6">
+            搜索权限：
             <div class="layui-inline">
                 <input class="layui-input" name="id" id="searchValue" autocomplete="off">
             </div>
             <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
         </div>
     </div>
+
+    <script id="barDemo" type="text/html">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
     <table id="table" lay-filter="table"></table>
     <script src="../layui.js"></script>
     <script th:inline="none">
-        layui.use(['table',], function () {
+        layui.use(['table', ], function() {
 
             var table = layui.table;
 
@@ -44,7 +53,8 @@
                 width: 1000,
                 limits: [10],
                 cols: [
-                    [{
+                    [/* {type: 'checkbox'}
+                        ,*/{
                         type: 'numbers',
                         title: '序号'
                     }, {
@@ -63,12 +73,10 @@
                         title: '型号'
                     }, {
                         field: 'stationid',
-                        title: '站点名称', templet: function (data) {
-                            if (data.stationid == 'jyxd') {
-                                return '<span>芥园西道加油站</span>';
-                            }
-                        }
-                    }
+                        title: '站点名称'
+                    },{fixed: 'right',
+                        title:'操作',
+                        toolbar: '#barDemo', width:150}
 
                     ]
                 ],
@@ -77,7 +85,7 @@
             // 搜索时重载
             var $ = layui.$,
                 active = {
-                    reload: function () {
+                    reload: function() {
                         var searchValue = $('#searchValue');
 
                         //执行重载
@@ -93,11 +101,51 @@
                     }
                 };
 
-            $('#searchBtn').on('click', function () {
+            $('#searchBtn').on('click', function() {
                 var type = $(this).data('type');
                 active[type] ? active[type].call(this) : '';
             });
+            //监听行工具事件
+            table.on('tool(table)', function(obj){
+
+                if(obj.event === 'del'){
+
+                    layer.confirm('真的删除行么', function(index){
+                        var uuid = new String();
+                        uuid = obj.data.uuid;
+                        $.ajax({
+                            type: "post",
+                            dataType: "json",
+                            url: "delCamera",
+                            data: {uuid:uuid}
+                        });
+                        obj.del();
+                        layer.close(index);
+                    });
+                } /*else if(obj.event === 'edit'){
+                    layer.prompt({
+                        formType: 2
+                        ,value: data.email
+                    }, function(value, index){
+                        obj.update({
+                            email: value
+                        });
+                        layer.close(index);
+                    });
+                }*/
+            });
         });
+        function cameraAdd() {
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                layer.open({
+                    type: 2
+                    , title: '添加摄像头'
+                    , content: 'addCamera'
+                    , area: ['100%', '100%']
+                });
+            });
+        }
     </script>
 </div>
 </body>

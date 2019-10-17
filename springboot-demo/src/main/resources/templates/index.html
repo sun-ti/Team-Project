@@ -5,7 +5,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>天津石油加油站智能视频监控及预警分析云平台</title>
+    <style>
+        #divs{
+            font-size: 50px;
+
+        }
+    </style>
     <link rel="stylesheet" href="./css/layui.css">
+
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -71,9 +78,16 @@
                 <li class="layui-this" lay-id="111">欢迎页</li>
             </ul>
             <div class="layui-tab-content">
-                <div class="layui-tab-item layui-show">欢迎来到天津石油加油站智能视频监控及预警分析云平台</div>
+                <div class="layui-tab-item layui-show" id="divs">
+                    <img src="picture/logo.jpg" width="200" height="200" >
+                    <br>
+                    欢迎使用高清视频监控及智能预警分析系统
             </div>
+
+            </div>
+
         </div>
+
     </div>
 
     <div class="layui-footer">
@@ -93,7 +107,7 @@
             if ($(this).attr("type") == "3" && exist == 0) {
                 var content = '<iframe style="height: 90%;width: 100%;position: absolute" src="' +
                     $(this).attr("lay-href") +
-                    '" scrolling="yes" frameborder="0"></iframe>';
+                    '" scrolling="no" frameborder="0"></iframe>';
 
                 element.tabAdd('demo', {
                     title: data[0].text
