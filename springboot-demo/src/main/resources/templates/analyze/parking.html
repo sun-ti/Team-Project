@@ -8,7 +8,7 @@
 <div>
     <div class="layui-form" style="width: 1000">
         <div class="layui-form-item">
-            <label class="layui-form-label">筛选</label>
+<!--            <label class="layui-form-label">筛选</label>-->
             <div class="layui-input-inline">
                 <select id="stationSelect">
                     <option value="" selected="">请选择站点</option>
@@ -23,15 +23,29 @@
         </div>
 
     </div>
-    <div id="chart1" style="width: 900px;height:600px;"></div>
-    <br/><br/><br/>
-    <div id="chart2" style="width: 900px;height:600px;"></div>
+<!--    <div id="chart1" style="width: 900px;height:600px;"></div>-->
+<!--    <br/><br/><br/>-->
+<!--    <div id="chart2" style="width: 900px;height:600px;"></div>-->
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">车辆站内平均停留时间的变化趋势</li>
+            <li>车辆站内平均停留时间和加油次数的变化关系</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div id="chart1" style="width: 900px;height:600px;"></div>
+            </div>
+            <div class="layui-tab-item">
+                <div id="chart2" style="width: 900px;height:600px;"></div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
     <script src="../layui.js"></script>
     <script type="text/javascript" th:inline="none">
         var host = "http://49.233.36.65:8080"
-        layui.use('form', function () {
+        layui.use(['form','element'], function () {
             // 搜索时重载
             var $ = layui.$
             var form = layui.form
@@ -96,15 +110,6 @@
                     }
                 })
             }
-            var getTop = function (max) {
-                var maxTop = 1;
-                console.log(max)
-                while(max > maxTop){
-                    maxTop*=10
-                }
-                console.log('maxTop'+maxTop)
-                return maxTop;
-            }
 
             // 基于准备好的dom，初始化echarts实例
             var myChart1 = echarts.init(document.getElementById('chart1'));
@@ -113,7 +118,7 @@
             //data1(入站车辆数）data2(加油量) data3(加油次数)
             var xdata = [], data1 = [], data2 = [], data3 = [],top1=0,top2=0,top3=0
 
-            var colors = ['#5793f3', '#d14a61', '#675bba'];
+            var colors = ['#63b0f3', '#b8d140', '#55ba50'];
 
 
             var fullGraph = function (data) {
@@ -123,13 +128,14 @@
                 data3.splice(0, data3.length)
                 for (item of data) {
                     xdata.push(item.year + '-' + item.month)
-                    data1.push(item.staytime_mean)
+                    data1.push(item.staytime_mean.toFixed(2))
                     data2.push(item.add_oil_count)
                 }
 
                 var option1 = {
+                    color: colors,
                     title: {
-                        text: '车辆站内平均停留时间'
+                        // text: '车辆站内平均停留时间'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -162,7 +168,6 @@
                     xAxis: [
                         {
                             type: 'category',
-                            boundaryGap: false,
                             data: xdata
                         }
                     ],
@@ -178,7 +183,7 @@
                     series: [
                         {
                             name: '平均停留时间',
-                            type: 'line',
+                            type: 'bar',
                             areaStyle: {},
                             data: data1,
                             markLine: {
@@ -201,7 +206,7 @@
                 var option2 = {
                     color: colors,
                     title: {
-                        text: '平均停留时间和加油次数的变化关系'
+                        // text: '平均停留时间和加油次数的变化关系'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -271,8 +276,9 @@
                     ],
                     series: [
                         {
-                            name:'入站率',
-                            type:'bar',
+                            name:'平均停留时间',
+                            type:'line',
+                            // barGap:0,
                             data:data1
                         },
                         {

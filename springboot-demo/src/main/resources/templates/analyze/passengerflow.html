@@ -8,7 +8,7 @@
 <div>
     <div class="layui-form" style="">
         <div class="layui-form-item">
-            <label class="layui-form-label">筛选</label>
+<!--            <label class="layui-form-label">筛选</label>-->
             <div class="layui-input-inline">
                 <select id="stationSelect">
                     <option value="" selected="">请选择站点</option>
@@ -21,24 +21,36 @@
             </div>
             <button class="layui-btn" data-type="reload" id="searchBtn">搜索</button>
         </div>
-
     </div>
-    <div id="chart1" style="width: 900px;height:600px;"></div>
-    <br/>
-    <br/>
-    <div id="chart2" style="width: 900px;height:600px;"></div>
-    <br/>
-    <br/>
-    <div id="chart3" style="width: 900px;height:600px;"></div>
-    <br/>
-    <br/>
-    <div id="chart4" style="width: 900px;height:600px;"></div>
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">入站车流量变化趋势</li>
+            <li>入站车流量和加油次数对比</li>
+            <li>车辆进站次数排名</li>
+            <li>各类客户加油次数的变化趋势</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div id="chart1" style="width: 900px;height:600px;"></div>
+            </div>
+            <div class="layui-tab-item">
+                <div id="chart2" style="width: 900px;height:600px;"></div>
+            </div>
+            <div class="layui-tab-item">
+                <div id="chart3" style="width: 900px;height:600px;"></div>
+            </div>
+            <div class="layui-tab-item">
+                <div id="chart4" style="width: 900px;height:600px;"></div>
+            </div>
+        </div>
+    </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/4.3.0/echarts.min.js"></script>
     <script src="../layui.js"></script>
     <script type="text/javascript" th:inline="none">
         var host = "http://49.233.36.65:8080"
-        layui.use('form', function () {
+        layui.use(['form','element'], function () {
             // 搜索时重载
             var $ = layui.$
             var form = layui.form
@@ -106,15 +118,6 @@
                         fullGraph(data)
                     }
                 })
-            }
-            var getTop = function (max) {
-                var maxTop = 1;
-                console.log(max)
-                while (max > maxTop) {
-                    maxTop *= 10
-                }
-                console.log('maxTop' + maxTop)
-                return maxTop;
             }
             var getRankData = function (year, stationid) {
                 if (year === '' || year == null) {
@@ -193,7 +196,7 @@
             //data1(入站车辆数）data2(加油量) data3(加油次数) // data4 车牌 data5 这个车的进站数 //data6 类型客户统计横坐标，data7类型1，data8类型2
             var xdata = [], data1 = [], data2 = [], data3 = [],data4=[],data5=[], data6=[],data7=[],data8=[], top1 = 0, top2 = 0, top3 = 0,min=0,max=0
 
-            var colors = ['#5793f3', '#d14a61', '#675bba'];
+            var colors = ['#63b0f3', '#b8d140', '#55ba50'];
 
 
             var fullGraph = function (data) {
@@ -207,12 +210,10 @@
                     data2.push(item.quantity)
                     data3.push(item.count)
                 }
-                top1 = getTop(Math.max.apply(null, data1))
-                top2 = getTop(Math.max.apply(null, data2))
-                top3 = getTop(Math.max.apply(null, data3))
                 var option1 = {
+                    color:colors,
                     title: {
-                        text: '入站车流量变化趋势'
+                        // text: '入站车流量变化趋势'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -245,7 +246,6 @@
                     xAxis: [
                         {
                             type: 'category',
-                            boundaryGap: false,
                             data: xdata
                         }
                     ],
@@ -260,7 +260,7 @@
                     series: [
                         {
                             name: '入站车流量',
-                            type: 'line',
+                            type: 'bar',
                             areaStyle: {},
                             data: data1,
                             markLine: {
@@ -278,12 +278,11 @@
 
                     ]
                 };
-                //入站车辆数量和加油量、加油次数的变化关系
 
                 var option2 = {
                     color: colors,
                     title: {
-                        text: '入站车流量、加油量和加油次数对比'
+                        // text: '入店比变化趋势'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -308,7 +307,7 @@
                         }
                     },
                     legend: {
-                        data: ['入站车流量', '加油量', '加油次数']
+                        data:['入站车流量','加油次数']
                     },
                     xAxis: [
                         {
@@ -324,8 +323,8 @@
                             type: 'value',
                             name: '入站车流量',
                             min: 0,
-                            max: top1,
-                            position: 'right',
+                            // max: top1,
+                            position: 'left',
                             axisLine: {
                                 lineStyle: {
                                     color: colors[0]
@@ -337,29 +336,13 @@
                         },
                         {
                             type: 'value',
-                            name: '加油量',
+                            name: '加油次数',
                             min: 0,
-                            max: top2,
+                            // max: top2,
                             position: 'right',
-                            offset: 60,
                             axisLine: {
                                 lineStyle: {
                                     color: colors[1]
-                                }
-                            },
-                            axisLabel: {
-                                formatter: '{value} L'
-                            }
-                        },
-                        {
-                            type: 'value',
-                            name: '加油次数',
-                            min: 0,
-                            max: top3,
-                            position: 'left',
-                            axisLine: {
-                                lineStyle: {
-                                    color: colors[2]
                                 }
                             },
                             axisLabel: {
@@ -369,21 +352,16 @@
                     ],
                     series: [
                         {
-                            name: '入站车流量',
-                            type: 'bar',
-                            data: data1
+                            name:'入站车流量',
+                            type:'line',
+                            barGap:0,
+                            data:data1
                         },
                         {
-                            name: '加油量',
-                            type: 'bar',
+                            name:'加油次数',
+                            type:'bar',
                             yAxisIndex: 1,
-                            data: data2
-                        },
-                        {
-                            name: '加油次数',
-                            type: 'bar',
-                            yAxisIndex: 2,
-                            data: data3
+                            data:data3
                         }
                     ]
                 };
@@ -407,7 +385,7 @@
 
                 var option3 = {
                     title: {
-                        text: '车辆进站次数年排名',
+                        // text: '车辆进站次数排名',
 
                     },
                     tooltip: {
@@ -467,7 +445,7 @@
                 var option4 = {
                     color: colors,
                     title: {
-                        text: '各类客户加油次数的变化趋势'
+                        // text: '各类客户加油次数的变化趋势'
                     },
                     tooltip: {
                         trigger: 'axis',
@@ -523,6 +501,7 @@
                         {
                             name: '优质客户',
                             type: 'bar',
+                            barGap: 0,
                             data: data7
                         },
                         {
