@@ -91,9 +91,9 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
-		}
-		
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and state=0";	
+		}else
+			where="where state=0";
 		//	进行相应的查询内容;
 		sql   = "select * from device "+where+" order by autoid desc limit "+first+","+nlimitcount;
 		sqlall= "select count(autoid) from device "+where;
@@ -109,7 +109,7 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 	public String updateItem() {
 		
 		String uuid=null,deviceip=null,stationid=null,kind=null,note=null,sql="";
-		
+		int    count=0;
 		try {
 		
 			uuid   	 = util_Net.getRequest().getParameter("uuid");
@@ -145,13 +145,13 @@ public class Query_Device extends Util_DBase implements Utils_DBase{
 				set+=" "+item+",";
 			}
 			
-			set = "set"+set.substring(0, set.length()-",".length());
+			set   = "set"+set.substring(0, set.length()-",".length());
 			
-			sql	= "update device "+set+" where uuid='"+uuid+"'";
-		
+			sql	  = "update device "+set+" where uuid='"+uuid+"'";
+			count = update(sql);
 		}		
 		
-		return util_Net.sendResult("0", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", count, "null");
 	}
 	
 	//	进行新增的操作;

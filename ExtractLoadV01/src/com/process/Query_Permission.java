@@ -21,7 +21,7 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 	}
 	
 	public String queryCount() {
-		String 	  sql	 	= "select count(*) from permission";
+		String 	  sql	 	= "select count(*) from permission where PERMISSION_DEL=0";
 		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
 	}
 	
@@ -102,8 +102,9 @@ public class Query_Permission extends Util_DBase implements Utils_DBase{
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
-		}
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and PERMISSION_DEL=0";	
+		}else
+			where="where PERMISSION_DEL=0";
 		
 		//	进行相应的查询内容;
 		sql   = "select * from permission "+where+" order by PERMISSION_AutoID desc limit "+first+","+nlimitcount;

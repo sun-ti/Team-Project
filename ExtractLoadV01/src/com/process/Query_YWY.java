@@ -106,8 +106,9 @@ public class Query_YWY extends Util_DBase implements Utils_DBase{
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
-		}
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and state=0";	
+		}else
+			where="where state=0";
 		
 		//	进行相应的查询内容;
 		sql   = "select * from ywy "+where+" order by autoid desc limit "+first+","+nlimitcount;
@@ -125,6 +126,7 @@ public class Query_YWY extends Util_DBase implements Utils_DBase{
 		
 		String uuid = null, nodeno = null, xql = null, ps_date = null, cp_no = null, depot_code = null, psd_id = null,
 				oils_id = null,sql="";
+		int    count=0;
 		
 		try {
 		
@@ -180,11 +182,12 @@ public class Query_YWY extends Util_DBase implements Utils_DBase{
 			
 			set = "set"+set.substring(0, set.length()-",".length());
 			
-			sql	= "update station "+set+" where uuid='"+uuid+"'";
-		
+			sql	= "update ywy "+set+" where uuid='"+uuid+"'";
+			System.out.println(sql);
+			count=update(sql);
 		}		
 		
-		return util_Net.sendResult("0", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", count, "null");
 	}
 	
 	//	进行新增的操作;
