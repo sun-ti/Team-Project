@@ -22,7 +22,7 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 	}
 	//	4.获得相应的数据的差
 	public String queryCount() {
-		String 	  sql	 	= "select count(*) from user";
+		String 	  sql	 	= "select count(*) from role where ROLE_DEL=0";
 		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
 	}
 
@@ -57,8 +57,9 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		String uuid	   		  = getUUID();
 
 		String sql	   		  = "insert into role_permission(ROLE_UUID,PERMISSION_UUID,RP_CREATE_TIME,RP_DEL,RP_UUID) values('"+roleUuid+"','"+permissionUuid+"','"+datetime+"',0,'"+uuid+"')";
+		int    count		  = update(sql);
 		
-		return util_Net.sendResult("0", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK", count, "null");
 	}
 	
 	//	7.根据角色删除新增权限;
@@ -67,9 +68,11 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		String 	  roleid 	   = util_Net.getRequest().getParameter("roleUuid");
 		String 	  permissionid = util_Net.getRequest().getParameter("permissionUuid");
 		
-		String 	  sql	 	   = "delete from role_permission where ROLE_UUID='"+roleid+"' and PERMISSION_UUID='"+permissionid+"'";
+		String 	  sql	 	   = "update role_permission set RP_DEL=1 where ROLE_UUID='"+roleid+"' and PERMISSION_UUID='"+permissionid+"'";
 		
-		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+		int 	  count		   = update(sql);
+		
+		return util_Net.sendResult("0", "OK", count, "null");
 	}
 	
 	// 进行查询的操作;
@@ -95,24 +98,24 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 		//	判断字段;
 		//		lcommand判断是否存在;
 		if(autoid!=null&&!autoid.trim().equals("")) {
-			list.add("ROLE_AutoID="+autoid);
+			list.add("a.ROLE_AutoID="+autoid);
 		}
 		
 		//	stationid判断是否存在;
 		if(name!=null&&!name.trim().equals("")) {
-			list.add("ROLE_NAME='"+name+"'");
+			list.add("a.ROLE_NAME='"+name+"'");
 		}
 		//	deviceip判断是否存在;		
 		if(uuid!=null&&!uuid.trim().equals("")) {
-			list.add("ROLE_UUID='"+uuid+"'");
+			list.add("a.ROLE_UUID='"+uuid+"'");
 		}
 		//	deviceip判断是否存在;		
 		if(del!=null&&!del.trim().equals("")) {
-			list.add("ROLE_DEL="+del);
+			list.add("a.ROLE_DEL="+del);
 		}
 		//	deviceip判断是否存在;		
 		if(createtime!=null&&!createtime.trim().equals("")) {
-			list.add("ROLE_CREATE_TIME='"+createtime+"'");
+			list.add("a.ROLE_CREATE_TIME='"+createtime+"'");
 		}
 		
 		//	currentpage判断是否存在;
@@ -129,16 +132,16 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length())+" and a.ROLE_UUID=c.ROLE_UUID and b.PERMISSION_UUID=c.PERMISSION_UUID";	
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and a.ROLE_UUID=c.ROLE_UUID and b.PERMISSION_UUID=c.PERMISSION_UUID and c.RP_DEL=0";	
 		}else {
-			where="where a.ROLE_UUID=c.ROLE_UUID and b.PERMISSION_UUID=c.PERMISSION_UUID";
+			where="where a.ROLE_UUID=c.ROLE_UUID and b.PERMISSION_UUID=c.PERMISSION_UUID and a.ROLE_DEL=0";
 		}
 		
 		//	进行相应的查询内容;
 		sql   = "select a.*,b.PERMISSION_NAME,b.PERMISSION_UUID from role a,permission b,role_permission c "+where+" order by a.ROLE_AutoID desc limit "+first+","+nlimitcount;
 
 		sqlall= "select count(a.ROLE_AutoID) from role a,permission b,role_permission c "+where+" order by a.ROLE_AutoID desc";
-
+//System.out.println(sql);
 		//	数据库查询操作;
 		JSONArray 	 array = select(sql);
 
@@ -182,7 +185,8 @@ public class Query_Role extends Util_DBase implements Utils_DBase {
 			// TODO: handle exception
 		}
 				
-		sql			   = "insert into role (ROLE_AutoID,ROLE_NAME,ROLE_UUID,ROLE_DEL,ROLE_CREATE_TIME) values('"+name+"','"+uuid+"',0,'"+datetime+"')";
+		sql			   = "insert into role (ROLE_NAME,ROLE_UUID,ROLE_DEL,ROLE_CREATE_TIME) values('"+name+"','"+uuid+"',0,'"+datetime+"')";
+		
 		
 		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}

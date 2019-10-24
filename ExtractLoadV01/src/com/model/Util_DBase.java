@@ -16,6 +16,7 @@ import net.sf.json.JSONObject;
 public class Util_DBase extends Util implements Utils_DBase{
 	// 数据库的驱动的类;
 	public String 				driver   = "com.mysql.jdbc.Driver";
+//	private String 				driver 	 = "com.mysql.cj.jdbc.Driver";
 	// 数据库的驱动链接;
 	//
 	public String 				url 	 = null;
@@ -32,6 +33,7 @@ public class Util_DBase extends Util implements Utils_DBase{
 			//	初始化工具
 			Util_Init util_Init	=	new Util_Init(util_Net);
 			this.url			=	"jdbc:mysql://"+util_Init.getHTTP_IP()+":"+util_Init.getDB_PORT()+"/"+util_Init.getDB_NAME()+"?useUnicode=true&characterEncoding="+util_Init.getDB_ENCODING();
+//			this.url			=	"jdbc:mysql://"+util_Init.getHTTP_IP()+":"+util_Init.getDB_PORT()+"/"+util_Init.getDB_NAME()+"?useUnicode=true&characterEncoding="+util_Init.getDB_ENCODING()+"&useSSL=false&serverTimezone=UTC";
 //			System.out.println(this.url);
 			//  构造函数的驱动类;
 			Class.forName(driver);

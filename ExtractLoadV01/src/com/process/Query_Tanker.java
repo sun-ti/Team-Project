@@ -129,13 +129,14 @@ public class Query_Tanker extends Util_DBase implements Utils_DBase{
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
-		}
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and state=0";	
+		}else
+			where="where state=0";
 		
 		//	进行相应的查询内容;
 		sql   = "select * from jyj "+where+" order by autoid desc limit "+first+","+nlimitcount;
 		sqlall= "select count(autoid) from jyj "+where+" order by autoid";
-
+//		System.out.println(sql);
 		//	数据库查询操作;
 		JSONArray 	 array = select(sql);
 		//	进行整数的结果;

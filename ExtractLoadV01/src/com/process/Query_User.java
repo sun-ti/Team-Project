@@ -23,7 +23,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 
     //	4.获得相应的数据的总数;
 	public String queryCount() {
-		String 	  sql	 	= "select count(*) from user";
+		String 	  sql	 	= "select count(*) from user where USER_DEL=0";
 		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
 	}
 	
@@ -58,8 +58,8 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		String 	  ur_id	 = getUUID();
 		String 	  datetime=getCurrentDatetime(System.currentTimeMillis(), Util.TAG_DATETIME);
 		
-		String 	  sql	 	= "insert into user_role(USER_UUID,ROLE_UUID,UR_ID,UR_CREATE_TIME,UR_DEL) values ('"+userid+"','"+roleid+"','"+ur_id+"','"+datetime+"',0)";
-		
+		String 	  sql	 	= "insert into user_role(USER_UUID,ROLE_UUID,UR_UUID,UR_CREATE_TIME,UR_DEL) values ('"+userid+"','"+roleid+"','"+ur_id+"','"+datetime+"',0)";
+		System.out.println(sql);
 		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	//	7.根据用户删除角色;
@@ -68,9 +68,10 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		String 	  userid = util_Net.getRequest().getParameter("userUuid");
 		String 	  roleid = util_Net.getRequest().getParameter("roleUuid");
 		
-		String 	  sql	 	= "delete from user_role where USER_UUID='"+userid+"' and ROLE_UUID='"+roleid+"'";
-		
-		return util_Net.sendResult("0", "OK", getQueryCount(sql), getQueryCount(sql)+"");
+		String 	  sql	 = "update user_role set UR_DEL=1 where USER_UUID='"+userid+"' and ROLE_UUID='"+roleid+"'";
+		int 	  count	 = 0;
+		count			 = super.update(sql);
+		return util_Net.sendResult("0", "OK", count, "null");
 	}
 	//	8.根据用户查询权限;
 	public String queryPermissionAccordingUser() {
@@ -124,7 +125,6 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		}
 
 		//	判断字段;
-
 		if(autoid!=null&&!autoid.trim().equals("")) {
 			list.add("USER_AutoID="+autoid);
 		}
@@ -173,11 +173,13 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
-		}
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and USER_DEL=0";	
+		}else
+			where="where USER_DEL=0";
 		
 		//	进行相应的查询内容;
 		sql   = "select * from user "+where+" order by USER_AutoID desc limit "+first+","+nlimitcount;
+
 		sqlall= "select count(USER_AutoID) from user "+where+" order by USER_AutoID desc";
 	
 		//	数据库查询操作;
@@ -191,7 +193,7 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 	public String updateItem() {
 
 		String  username = null, password = null, uuid = null, sql = "";
-		
+		int 	count	 = 0;
 		try {
 
 			username = util_Net.getRequest().getParameter("username");
@@ -220,9 +222,10 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 			
 			sql	= "update user "+set+" where USER_UUID='"+uuid+"'";
 		
+			count=update(sql);
 		}		
 		
-		return util_Net.sendResult("0", "OK", update(sql), "null");
+		return util_Net.sendResult("0", "OK",count, "null");
 	}
 	
 	//	进行新增的操作;
@@ -239,8 +242,8 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 			// TODO: handle exception
 		}
 				
-		sql="insert into user (USER_AutoID,USERNAME,PASSWORD,USER_CREATE_TIME,USER_REFRESH_TIME,USER_REFRESH_MARK,USER_DEL,USER_UUID) values('"+username+"','"+password+"','"+time+"','"+time+"',0,0,'"+uuid+"')";
-				
+		sql="insert into user (USERNAME,PASSWORD,USER_CREATE_TIME,USER_REFRESH_TIME,USER_REFRESH_MARK,USER_DEL,USER_UUID) values('"+username+"','"+password+"','"+time+"','"+time+"',0,0,'"+uuid+"')";
+
 		return util_Net.sendResult("0", "OK", update(sql), "null");
 	}
 	

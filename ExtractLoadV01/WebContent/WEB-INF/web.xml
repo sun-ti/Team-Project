@@ -132,6 +132,29 @@
 		<servlet-name>QueryServlet_YWY</servlet-name>
 		<url-pattern>/YWY</url-pattern>
 	</servlet-mapping>
+	
+	<!-- 公司 -->
+	<servlet>
+		<servlet-name>QueryServlet_ZuZhi_GongSi</servlet-name>
+		<servlet-class>com.controller.QueryServlet_ZuZhi_GongSi</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_ZuZhi_GongSi</servlet-name>
+		<url-pattern>/GongSi</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- 区域 -->
+	<servlet>
+		<servlet-name>QueryServlet_ZuZhi_QuYu</servlet-name>
+		<servlet-class>com.controller.QueryServlet_ZuZhi_QuYu</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>QueryServlet_ZuZhi_QuYu</servlet-name>
+		<url-pattern>/QuYu</url-pattern>
+	</servlet-mapping>
 		
 	<filter>
 		<filter-name>WebFilter</filter-name>

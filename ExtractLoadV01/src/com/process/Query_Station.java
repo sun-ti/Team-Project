@@ -80,9 +80,10 @@ public class Query_Station extends Util_DBase implements Utils_DBase{
 			for(String item:list) {
 				where+=" "+item+" and";
 			}
-			where="where"+where.subSequence(0, where.length()-"and".length());	
-		}
-		
+			where="where"+where.subSequence(0, where.length()-"and".length())+" and state=0";	
+		}else
+			where="where state=0";
+			
 		//	进行相应的查询内容;
 		sql   = "select * from station "+where+" order by datetime1 desc limit "+first+","+nlimitcount;
 		sqlall= "select count(autoid) from station "+where+" order by datetime1 desc";
