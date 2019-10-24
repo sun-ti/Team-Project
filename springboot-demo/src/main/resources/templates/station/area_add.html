@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../css/layui.css">
+</head>
+<div>
+    <form class="layui-form layui-form-pane" id="addForm" th:object="${list}" action="" method="post"
+          style="width: 500px; position: relative; left:35%;padding-top: 150px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">片区名称</label>
+            <div class="layui-input-inline">
+                <input type="text" th:field="*{areaname}" lay-verify="required"
+                       placeholder="" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">组织编码</label>
+            <div class="layui-input-inline">
+                <input type="text" th:field="*{areaid}" lay-verify="required"
+                       placeholder="" autocomplete="off" class="layui-input"
+                       value="">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="addArea">确认</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+    <script src="./layui.js"></script>
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            form.on('submit(addArea)', function (data) {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload(); // 刷新父页面
+            });
+        });
+    </script>
+</div>
+
+</html >

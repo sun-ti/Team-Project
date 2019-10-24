@@ -19,14 +19,14 @@
     <div class="layui-row" style="width: 1000">
         <div class="layui-col-md5">
             <div class="layui-btn-group">
-                <button type="button" class="layui-btn layui-btn-primary" onclick="/*oilAdd()*/">添加</button>
+                <button type="button" class="layui-btn layui-btn-primary" onclick="areaAdd()">添加</button>
             </div>
         </div>
 
         <div class="layui-col-md3">
 
             <div class="layui-inline">
-                <input class="layui-input" name="id" id="searchValue" placeholder="油品名称" autocomplete="off">
+                <input class="layui-input" name="id" id="searchValue" placeholder="片区名称" autocomplete="off">
             </div>
             <button class="layui-btn" data-type="reload"  id="searchBtn">搜索</button>
         </div>
@@ -46,7 +46,7 @@
             table.render({
                 elem: '#table',
                 /*接口需修改*/
-                url: 'oilData',
+                url: 'areaData',
 
                 page: true // 开启分页
                 ,
@@ -62,17 +62,14 @@
                         type: 'numbers',
                         title: '序号'
                     },  {
-                        field: '1',
-                        title: '油品代码 ',
+                        field: 'areaname',
+                        title: '片区名称',
+
+                    }, {
+                        field: 'areaid',
+                        title: '组织编号',
+                        /*width:200,*/
                         sort: true,
-                    }, {
-                        field: '2',
-                        title: '油品名称',
-
-                    }, {
-                        field: '3',
-                        title: '油品简称',
-
                     }, {fixed: 'right',
                         title:'操作',
                         toolbar: '#barDemo',width:60}
@@ -93,7 +90,7 @@
                             },
                             where: {
 
-                                oilName: searchValue.val()
+                                areaName: searchValue.val()
                             }
                         }, 'data');
                     }
@@ -114,7 +111,7 @@
                         $.ajax({
                             type: "post",
                             dataType: "json",
-                            url: "deloil",
+                            url: "delArea",
                             data: {uuid:uuid}
                         });
                         obj.del();
@@ -133,13 +130,13 @@
                 }*/
             });
         });
-        function oilAdd() {
+        function areaAdd() {
             layui.use('layer', function () {
                 var layer = layui.layer;
                 layer.open({
                     type: 2
-                    , title: '添加油品'
-                    , content: 'addoil'
+                    , title: '添加片区'
+                    , content: 'addArea'
                     , area: ['100%', '100%']
                 });
             });

@@ -156,7 +156,7 @@ public class ToneController {
     @ResponseBody
     @RequestMapping("/blacklistDate")
     public String getblacklistDate(HttpServletRequest request) throws IOException {
-        String url = "http://" + "49.233.36.65:8080" + "ExtractLoadV01/Monitor";
+        String url = "http://" + "49.233.36.65:8080" + "/ExtractLoadV01/Monitor";
 
         HttpMethod method = HttpMethod.GET;
         Map<String, String> params = new HashMap<>();
