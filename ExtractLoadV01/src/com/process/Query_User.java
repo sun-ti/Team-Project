@@ -125,7 +125,6 @@ public class Query_User extends Util_DBase implements Utils_DBase{
 		}
 
 		//	判断字段;
-
 		if(autoid!=null&&!autoid.trim().equals("")) {
 			list.add("USER_AutoID="+autoid);
 		}

@@ -51,4 +51,7 @@ https://blog.csdn.net/weixin_43815544/article/details/85124683
 //19.设置字符的表示集合保持一致;
 https://www.cnblogs.com/china-flint/p/9685578.html
 
+//20.环境不匹配的情况;
+https://blog.csdn.net/qq_35793285/article/details/85775627
+
 
