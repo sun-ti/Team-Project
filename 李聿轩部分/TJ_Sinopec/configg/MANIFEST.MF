@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: run.ProStartApplication
+Class-Path: . lib/mysql-connector-java-5.1.45.jar lib/mysql-connector-java-8.0.17.jar lib/gson-2.2.2.jar
+Created-By: YuxuanLee

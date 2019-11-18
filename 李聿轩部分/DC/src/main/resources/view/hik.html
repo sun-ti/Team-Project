@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>车牌识别摄像头测试</title>
+    <!-- jquery-3.3.1 version -->
+    <script src="assets/js/vendor/jquery-3.2.1.min.js"></script>
+    <!-- bootstra.min js -->
+    <script src="assets/js/bootstrap.min.js"></script>
+    <!-- mmenu js -->
+    <script src="assets/js/jquery.mmenu.js"></script>
+    <!-- easing js -->
+    <script src="assets/js/jquery.easing.min.js"></script>
+    <!-- jquery-ui js -->
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <!-- jquery.countdown js -->
+    <script src="assets/js/jquery.countdown.min.js"></script>
+    <style>
+        div{
+            width:30%;
+            height:300px;
+            border:1px solid gray;
+            display:inline-table;
+            vertical-align: middle;
+        }
+        img{
+            display:block;
+            width:100%;
+        }
+        ul{
+            font-size:10px;
+            list-style: decimal-leading-zero;
+            margin:0 auto;
+            height:100%;
+            overflow-y: scroll;
+            padding: 0px 0px 0px 25px;
+        }
+    </style>
+</head>
+<body style="width:90%">
+    <div>
+        <img id="catchimg1" src="">
+    </div>
+    <div>
+        <img id="catchimg" src="">
+    </div>
+    <div style="overflow: scroll;">
+        <ul id="list"/>
+    </div>
+    <br/><br/>
+    <input type="button" id="btn1" data='{"deviceIP":"172.30.9.14","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动入口">
+    <input type="button" id="btn2" data='{"deviceIP":"172.30.9.15","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动出口">
+    <input type="button" id="btn3" data='{"deviceIP":"172.30.9.16","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道1">
+    <input type="button" id="btn4" data='{"deviceIP":"172.30.9.17","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道2">
+    <input type="button" id="btn5" data='{"deviceIP":"172.30.9.18","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道3">
+    <input type="button" id="btn6" data='{"deviceIP":"172.30.9.19","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道-1">
+    <input type="button" id="btn7" data='{"deviceIP":"172.30.9.20","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车道-3">
+    <input type="button" id="btn8" data='{"deviceIP":"172.30.9.13","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":1}' value="启动车流统计">
+    <input type="button" id="btn9" data='{"deviceIP":"172.30.9.11","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":2}' value="启动客流统计">
+    <input type="button" id="btn10" data='{"deviceIP":"172.30.9.12","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":3}' value="启动人脸识别">
+    <input type="button" id="btn11" data='{"deviceIP":"172.30.9.21","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":4}' value="启动西侧卸油区">
+    <input type="button" id="btn12" data='{"deviceIP":"172.30.9.22","port":8000,"userName":"admin","passWord":"1234qwer","deviceType":4}' value="启动东侧卸油区">
+<script>
+    $(function(){
+        // 启停设备
+        $("input[type='button']").click(function(e){
+            var btn = $(this);
+            if(btn.css("color")=="green"){
+                $.ajax({
+                    url:"hkacl",
+                    type:"post",
+                    data:JSON.parse($(this).attr("data")),
+                    success:function(data){
+                        if(data.suc)
+                            btn.css("color","black");
+                        else
+                            alert(data.msg);
+                    },error:function(e){
+                        alert(e);
+                    }
+                })
+            }else{
+                $.ajax({
+                    url:"hkac",
+                    type:"post",
+                    data:JSON.parse($(this).attr("data")),
+                    success:function(data){
+                        if(data.suc)
+                            btn.css("color","green");
+                        else
+                            alert(data.msg);
+                    },error:function(e){
+                        alert(e);
+                    }
+                })
+            }
+        })
+        alert("${msg}");
+        var i = 0;
+        var iRet = setInterval(function(){
+            $.ajax({
+                url:"hkcp",
+                type:"get",
+                success:function(data){
+                    if(data.cp){
+                        $("#catchimg").attr("src",data.pic);
+                        $("#catchimg1").attr("src",data.cppic);
+                        var li = "<li>"+data.cp+"</li>";
+                        $("#list").append(li);
+                        document.getElementById('list').scrollTop = document.getElementById('list').scrollHeight;
+                    }
+                }
+            })
+        },2000);
+
+    })
+</script>
+</body>
+</html>

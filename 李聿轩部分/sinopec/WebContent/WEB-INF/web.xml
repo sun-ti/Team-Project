@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>ExtractLoadV01</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- 检测接口 -->
+	<servlet>
+		<servlet-name>Computer</servlet-name>
+		<servlet-class>service.Computer</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Computer</servlet-name>
+		<url-pattern>/services/getEntrancePlates</url-pattern>
+	</servlet-mapping>
+	<!-- 检测接口2 -->
+	<servlet>
+		<servlet-name>Computer2</servlet-name>
+		<servlet-class>service.Computer2</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Computer2</servlet-name>
+		<url-pattern>/services/submitOrder</url-pattern>
+	</servlet-mapping>
+
+</web-app>

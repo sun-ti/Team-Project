@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: run.ProStartApplication
+Class-Path: . lib/mysql-connector-java-5.1.45.jar lib/mysql-connector-java-8.0.17.jar lib/gson-2.2.2.jar lib/wsdl4j-1.5.1.jar lib/axis.jar lib/axis-jaxrpc-1.4.jar lib/activation.jar lib/commons-discovery.jar lib/commons-logging.jar lib/saaj.jar lib/mail.jar
+Created-By: YuxuanLee
